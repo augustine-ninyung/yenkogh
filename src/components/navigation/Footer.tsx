@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -18,13 +17,9 @@ export const Footer: React.FC = () => {
                 <span>GH</span>
               </span>
             </Link>
-            <p className="text-[#757B81] dark:text-white/70 text-sm leading-relaxed mb-6 max-w-sm">
+            <p className="text-[#757B81] dark:text-white/70 text-sm leading-relaxed max-w-sm">
               Ghana's premier smart tourism and transportation discovery platform. Explore historical landmarks, pristine natural wonders, vibrant festivals, and plan your entire journey with confidence.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#090C11] dark:text-[#FFD300] bg-[#FFD300]/30 dark:bg-[#FFD300]/10 border border-[#FFD300]/60 dark:border-[#FFD300]/20 px-3 py-1.5 rounded-full w-fit">
-              <Sparkles size={14} />
-              <span>Akwaaba! Welcome to the Black Star of Africa</span>
-            </div>
           </div>
 
           {/* Quick Links */}

@@ -88,9 +88,6 @@ export const Navbar: React.FC = () => {
                   GH
                 </span>
               </span>
-              <span className="text-[10px] font-semibold tracking-widest uppercase bg-[#FFD300]/20 text-[#FFD300] border border-[#FFD300]/30 px-1.5 py-0.5 rounded">
-                Ghana
-              </span>
             </Link>
 
             {/* Desktop Navigation */}
