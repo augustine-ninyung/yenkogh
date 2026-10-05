@@ -1,255 +1,126 @@
-import React, { useState } from 'react';
-import { Plus, Search, Trash2 } from 'lucide-react';
-import { events as initialEvents } from '@/data/events';
-import { formatDateRange, formatCurrency } from '@/utils/formatters';
-import { useToast } from '@/context/ToastContext';
-import { Button } from '@/components/ui/Button';
-import { Modal } from '@/components/ui/Modal';
-import type { Event } from '@/types';
+import React from 'react';
+import { ResourceManager } from '@/components/admin/ResourceManager';
+import { StatusDot } from '@/components/admin/adminUi';
+import { EVENT_CATEGORY_OPTIONS, formatAdminDate, labelFromId, optionLabel } from '@/components/admin/adminFormat';
+import type { ResourceConfig } from '@/components/admin/resourceForm';
 
-export const AdminEventsPage: React.FC = () => {
-  const { addToast } = useToast();
-  const [eventList, setEventList] = useState<Event[]>(initialEvents);
-  const [search, setSearch] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Form State
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState<Event['category']>('festival');
-  const [location, setLocation] = useState('');
-  const [region] = useState('Greater Accra');
-  const [startDate, setStartDate] = useState('2026-11-01');
-  const [endDate, setEndDate] = useState('2026-11-03');
-  const [isFree, setIsFree] = useState(true);
-  const [price, setPrice] = useState('50');
-
-  const filtered = eventList.filter((e) =>
-    e.name.toLowerCase().includes(search.toLowerCase()) ||
-    e.location.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleDelete = (id: string, eventName: string) => {
-    if (window.confirm(`Delete ${eventName}?`)) {
-      setEventList(eventList.filter((e) => e.id !== id));
-      addToast({
-        variant: 'info',
-        title: 'Event Deleted',
-        message: `${eventName} has been removed.`,
-      });
-    }
-  };
-
-  const handleCreate = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newEvent: Event = {
-      id: `evt-${Date.now()}`,
-      slug: name.toLowerCase().replace(/\s+/g, '-'),
-      name,
-      category,
-      description: `${name} in ${location}, ${region}.`,
-      shortDescription: `Annual celebration in ${location}.`,
-      imageUrl: 'https://images.unsplash.com/photo-1589825743636-23a879d4b8e2?w=800&q=80',
-      startDate,
-      endDate,
-      location,
-      region,
-      regionCode: region.substring(0, 2).toUpperCase(),
-      isFree,
-      ticketPrice: isFree ? 0 : parseFloat(price),
-      activities: ['Procession', 'Drumming and dancing', 'Feasting'],
-      relatedDestinations: [],
-      featured: false,
-      tags: [category, region.toLowerCase()],
-    };
-
-    setEventList([newEvent, ...eventList]);
-    setIsModalOpen(false);
-    setName('');
-    setLocation('');
-    addToast({
-      variant: 'success',
-      title: 'Event Published',
-      message: `${name} has been added to the calendar.`,
-    });
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-[#090C11] dark:text-white">
-            Manage Festivals & Events ({eventList.length})
-          </h1>
-          <p className="text-xs text-[#757B81]">Review, create, and schedule cultural celebrations</p>
-        </div>
-
-        <Button variant="primary" size="sm" onClick={() => setIsModalOpen(true)} className="font-bold">
-          <Plus size={16} />
-          <span>New Event</span>
-        </Button>
-      </div>
-
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
-        <input
-          type="text"
-          placeholder="Filter events..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#262B32] text-xs sm:text-sm"
-        />
-      </div>
-
-      <div className="rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/10 text-[#757B81] uppercase text-[11px] font-semibold">
-              <tr>
-                <th className="py-3 px-4">Event Name</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Location</th>
-                <th className="py-3 px-4">Dates</th>
-                <th className="py-3 px-4">Admission</th>
-                <th className="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-              {filtered.map((e) => (
-                <tr key={e.id} className="hover:bg-gray-50/50 dark:hover:bg-white/5">
-                  <td className="py-3 px-4 font-semibold text-[#090C11] dark:text-white">
-                    {e.name}
-                  </td>
-                  <td className="py-3 px-4 capitalize text-[#757B81]">{e.category}</td>
-                  <td className="py-3 px-4 text-[#757B81]">{e.location}</td>
-                  <td className="py-3 px-4 text-xs font-medium">
-                    {formatDateRange(e.startDate, e.endDate)}
-                  </td>
-                  <td className="py-3 px-4">
-                    {e.isFree ? (
-                      <span className="text-emerald-500 font-bold">Free</span>
-                    ) : (
-                      <span className="font-bold">{formatCurrency(e.ticketPrice || 0)}</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <button
-                      onClick={() => handleDelete(e.id, e.name)}
-                      className="p-1 text-[#757B81] hover:text-red-500 transition-colors"
-                      aria-label="Delete event"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Event">
-        <form onSubmit={handleCreate} className="space-y-4 text-xs sm:text-sm">
-          <div>
-            <label className="font-semibold block mb-1">Event Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Fetu Afahye Festival"
-              className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="font-semibold block mb-1">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value as Event['category'])}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
-              >
-                <option value="traditional">Traditional & Harvest</option>
-                <option value="cultural">Cultural</option>
-                <option value="art">Art & Exhibition</option>
-                <option value="music">Music</option>
-                <option value="food">Food</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="font-semibold block mb-1">Town / Location</label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="Cape Coast"
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="font-semibold block mb-1">Start Date</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
-                required
-              />
-            </div>
-            <div>
-              <label className="font-semibold block mb-1">End Date</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="isFreeCheck"
-              checked={isFree}
-              onChange={(e) => setIsFree(e.target.checked)}
-              className="w-4 h-4 rounded text-[#FFD300]"
-            />
-            <label htmlFor="isFreeCheck" className="font-semibold cursor-pointer">
-              Free Admission
-            </label>
-          </div>
-
-          {!isFree && (
-            <div>
-              <label className="font-semibold block mb-1">Ticket Price (GH₵)</label>
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
-              />
-            </div>
-          )}
-
-          <div className="pt-2 flex justify-end gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="primary" size="sm">
-              Schedule Event
-            </Button>
-          </div>
-        </form>
-      </Modal>
-    </div>
-  );
+/** Where an event sits relative to today. */
+const timingOf = (start: string, end: string): 'upcoming' | 'ongoing' | 'past' => {
+  const today = new Date().toISOString().slice(0, 10);
+  return start > today ? 'upcoming' : end < today ? 'past' : 'ongoing';
 };
+
+const TIMING_TONE = { upcoming: 'blue', ongoing: 'green', past: 'grey' } as const;
+
+const config: ResourceConfig = {
+  table: 'events',
+  singular: 'event',
+  plural: 'events',
+  title: 'Events',
+  description: 'Dated happenings: this year\'s edition of a festival, a concert, a food fair. Each has its own dates, so a festival that moves every year gets a new event each time.',
+  searchColumns: ['name', 'location', 'short_description'],
+  searchPlaceholder: 'Search events by name or place...',
+  defaultSort: { column: 'start_date', ascending: false },
+  publishable: true,
+  featurable: true,
+  publicPath: (row) => `/events/${row.id}`,
+  columns: [
+    {
+      key: 'name',
+      header: 'Event',
+      sortColumn: 'name',
+      render: (row) => (
+        <div className="min-w-[11rem]">
+          <p className="font-semibold text-[#090C11] dark:text-white">{row.name}</p>
+          <p className="text-xs text-[#757B81]">{String(row.location || '')}</p>
+        </div>
+      ),
+    },
+    {
+      key: 'dates',
+      header: 'Dates',
+      sortColumn: 'start_date',
+      render: (row) => {
+        const timing = timingOf(String(row.start_date), String(row.end_date));
+        return (
+          <div className="whitespace-nowrap">
+            <p>
+              {formatAdminDate(String(row.start_date))}
+              {row.end_date !== row.start_date && ` – ${formatAdminDate(String(row.end_date))}`}
+            </p>
+            <span className="inline-flex items-center gap-1.5 text-xs text-[#757B81] capitalize">
+              <StatusDot tone={TIMING_TONE[timing]} />
+              {timing}
+            </span>
+          </div>
+        );
+      },
+    },
+    { key: 'region', header: 'Region', sortColumn: 'region_id', className: 'hidden md:table-cell', render: (row) => labelFromId(String(row.region_id)) },
+    { key: 'category', header: 'Category', sortColumn: 'category', className: 'hidden lg:table-cell', render: (row) => optionLabel(EVENT_CATEGORY_OPTIONS, row.category) },
+  ],
+  filters: [
+    { key: 'region_id', label: 'Regions', optionsFrom: 'regions' },
+    { key: 'category', label: 'Categories', options: EVENT_CATEGORY_OPTIONS },
+    {
+      key: 'timing',
+      label: 'Dates',
+      options: [
+        { value: 'upcoming', label: 'Upcoming' },
+        { value: 'ongoing', label: 'Happening now' },
+        { value: 'past', label: 'Past' },
+      ],
+    },
+  ],
+  defaults: { is_free: true },
+  validate: (values) => {
+    const errors: Record<string, string> = {};
+    if (values.start_date && values.end_date && String(values.end_date) < String(values.start_date)) {
+      errors.end_date = 'The end date cannot be before the start date.';
+    }
+    if (!values.is_free && !(Number(values.ticket_price) > 0)) {
+      errors.ticket_price = 'Enter a ticket price, or tick "Free to attend".';
+    }
+    return errors;
+  },
+  // A free event has no price to keep
+  prepare: (row) => (row.is_free ? { ...row, ticket_price: null } : row),
+  sections: [
+    {
+      title: 'Basics',
+      fields: [
+        { key: 'name', label: 'Name', type: 'text', required: true, maxLength: 120 },
+        { key: 'slug', label: 'Slug', type: 'text', required: true, maxLength: 120, hint: 'Filled in from the name. Include the year, e.g. homowo-festival-2027.' },
+        { key: 'category', label: 'Category', type: 'select', required: true, options: EVENT_CATEGORY_OPTIONS },
+        { key: 'region_id', label: 'Region', type: 'select', required: true, optionsFrom: 'regions' },
+        { key: 'location', label: 'Town or city', type: 'text', required: true, maxLength: 120 },
+        { key: 'details.venue', label: 'Venue', type: 'text', maxLength: 160 },
+      ],
+    },
+    {
+      title: 'Dates and tickets',
+      fields: [
+        { key: 'start_date', label: 'Start date', type: 'date', required: true },
+        { key: 'end_date', label: 'End date', type: 'date', required: true, hint: 'The same as the start date for a one-day event.' },
+        { key: 'is_free', label: 'Free to attend', type: 'boolean' },
+        { key: 'ticket_price', label: 'Ticket price (GH₵)', type: 'number', min: 0, nullable: true },
+      ],
+    },
+    {
+      title: 'Details',
+      fields: [
+        { key: 'short_description', label: 'Short description', type: 'textarea', maxLength: 300, rows: 2, wide: true },
+        { key: 'description', label: 'Full description', type: 'textarea', maxLength: 5000, rows: 6, wide: true },
+        { key: 'image_url', label: 'Photo', type: 'image', wide: true },
+        { key: 'details.activities', label: 'Highlights and programme', type: 'list', wide: true, rows: 4, hint: 'One per line.' },
+        { key: 'details.transportInfo', label: 'Getting there', type: 'textarea', maxLength: 1000, rows: 2, wide: true },
+        { key: 'details.website', label: 'Website', type: 'url' },
+        { key: 'details.tags', label: 'Tags', type: 'list', rows: 2, hint: 'One per line.' },
+      ],
+    },
+  ],
+};
+
+export const AdminEventsPage: React.FC = () => <ResourceManager config={config} />;
 
 export default AdminEventsPage;

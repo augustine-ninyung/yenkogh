@@ -151,6 +151,8 @@ export interface Transportation {
 
 export type UserRole = 'user' | 'admin';
 
+export type AccountStatus = 'active' | 'suspended';
+
 export interface UserPreferences {
   currency: string;
   language: string;
@@ -166,6 +168,8 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  /** Suspended accounts cannot sign in or change anything. Absent means active. */
+  status?: AccountStatus;
   avatar?: string;
   bio?: string;
   preferences: UserPreferences;

@@ -1,4 +1,4 @@
-import type { User } from '@/types';
+import type { AccountStatus, User, UserRole } from '@/types';
 import { supabase } from '@/lib/supabase';
 
 // ---------------------------------------------------------------------------
@@ -31,6 +31,7 @@ export interface ProfileRow {
   name: string;
   email: string;
   role: User['role'];
+  status: AccountStatus;
   avatar: string | null;
   bio: string | null;
   preferences: User['preferences'];
@@ -47,6 +48,7 @@ export const profileToUser = (row: ProfileRow): User => ({
   name: row.name,
   email: row.email,
   role: row.role,
+  status: row.status ?? 'active',
   avatar: row.avatar ?? avatarFor(row.name),
   bio: row.bio ?? undefined,
   preferences: row.preferences,
@@ -54,6 +56,8 @@ export const profileToUser = (row: ProfileRow): User => ({
   savedEvents: row.saved_events ?? [],
   createdAt: row.created_at,
 });
+
+const SUSPENDED_MESSAGE = 'This account has been suspended. Contact support if you think this is a mistake.';
 
 /**
  * Loads a signed-in person's profile. The database creates the row at sign-up;
@@ -135,18 +139,34 @@ function generateFakeToken(userId: string): string {
   return `${header}.${payload}.${signature}`;
 }
 
+const OVERRIDES_KEY = 'yenkogh_user_overrides';
+
+type UserOverride = { role?: UserRole; status?: AccountStatus };
+
+/** Local fallback: role and status changes an admin has made, by user id. */
+function readOverrides(): Record<string, UserOverride> {
+  try {
+    return JSON.parse(localStorage.getItem(OVERRIDES_KEY) || '{}') as Record<string, UserOverride>;
+  } catch {
+    return {};
+  }
+}
+
 /** Read all registered users from localStorage (merged with mock list). */
 function getAllUsers(): User[] {
+  let users: User[];
   try {
     const stored = localStorage.getItem('yenkogh_registered_users');
     const registered: User[] = stored ? JSON.parse(stored) : [];
     // Merge: registered users take precedence over mock users with the same id
     const registeredIds = new Set(registered.map((u) => u.id));
     const base = MOCK_USERS.filter((u) => !registeredIds.has(u.id));
-    return [...base, ...registered];
+    users = [...base, ...registered];
   } catch {
-    return [...MOCK_USERS];
+    users = [...MOCK_USERS];
   }
+  const overrides = readOverrides();
+  return users.map((u) => ({ status: 'active' as const, ...u, ...overrides[u.id] }));
 }
 
 /** Persist a newly registered user. */
@@ -187,10 +207,15 @@ export const authService = {
     if (supabase) {
       const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (error || !data.user) throw new Error(error?.message ?? 'Could not sign in.');
-      return fetchProfile(data.user.id, {
+      const profile = await fetchProfile(data.user.id, {
         email: data.user.email ?? email.trim(),
         name: (data.user.user_metadata?.name as string | undefined) ?? email.split('@')[0],
       });
+      if (profile.status === 'suspended') {
+        await supabase.auth.signOut();
+        throw new Error(SUSPENDED_MESSAGE);
+      }
+      return profile;
     }
 
     await delay(800);
@@ -220,6 +245,10 @@ export const authService = {
 
     if (!passwordOk) {
       throw new Error('Incorrect password. Please try again.');
+    }
+
+    if (user.status === 'suspended') {
+      throw new Error(SUSPENDED_MESSAGE);
     }
 
     const token = generateFakeToken(user.id);
@@ -310,6 +339,11 @@ export const authService = {
       email: session.user.email ?? '',
       name: (session.user.user_metadata?.name as string | undefined) ?? '',
     });
+    // Suspended while signed in elsewhere: end this session too
+    if (user.status === 'suspended') {
+      await supabase.auth.signOut();
+      return null;
+    }
     return { user, token: session.access_token };
   },
 
@@ -347,6 +381,21 @@ export const authService = {
     if (supabase) return;
     localStorage.setItem(USER_KEY, JSON.stringify(user));
     updateStoredUser(user);
+  },
+
+  /** Local fallback only: every account in this browser, with admin changes applied. */
+  _listLocalUsers(): User[] {
+    return supabase ? [] : getAllUsers();
+  },
+
+  /** Local fallback only: record a role or status change made in the admin area. */
+  _setLocalUserOverride(userId: string, change: UserOverride): User {
+    const overrides = readOverrides();
+    overrides[userId] = { ...overrides[userId], ...change };
+    localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
+    const updated = getAllUsers().find((u) => u.id === userId);
+    if (!updated) throw new Error('Account not found.');
+    return updated;
   },
 
   /** Internal: read the password map from localStorage. */

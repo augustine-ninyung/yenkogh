@@ -34,6 +34,10 @@ import AdminDestinationsPage from '@/pages/admin/AdminDestinationsPage';
 import AdminEventsPage from '@/pages/admin/AdminEventsPage';
 import AdminTransportPage from '@/pages/admin/AdminTransportPage';
 import AdminUsersPage from '@/pages/admin/AdminUsersPage';
+import AdminRegionsPage from '@/pages/admin/AdminRegionsPage';
+import AdminFestivalsPage from '@/pages/admin/AdminFestivalsPage';
+import AdminFeedbackPage from '@/pages/admin/AdminFeedbackPage';
+import AdminAuditPage from '@/pages/admin/AdminAuditPage';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -47,11 +51,16 @@ export const AppRoutes: React.FC = () => {
         <Route path="events/:id" element={<EventDetailPage />} />
         <Route path="festivals" element={<Navigate to="/events?view=festivals" replace />} />
         <Route path="festivals/:id" element={<FestivalDetailPage />} />
-        <Route path="transportation" element={<TransportationPage />} />
-        <Route path="planner" element={<AIPlannerPage />} />
-        <Route path="budget" element={<BudgetPlannerPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+
+        {/* Members only, shown inside the public layout */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="transportation" element={<TransportationPage />} />
+          <Route path="planner" element={<AIPlannerPage />} />
+          <Route path="budget" element={<BudgetPlannerPage />} />
+        </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Route>
 
@@ -75,7 +84,11 @@ export const AppRoutes: React.FC = () => {
           <Route path="destinations" element={<AdminDestinationsPage />} />
           <Route path="events" element={<AdminEventsPage />} />
           <Route path="transportation" element={<AdminTransportPage />} />
+          <Route path="regions" element={<AdminRegionsPage />} />
+          <Route path="festivals" element={<AdminFestivalsPage />} />
           <Route path="users" element={<AdminUsersPage />} />
+          <Route path="feedback" element={<AdminFeedbackPage />} />
+          <Route path="audit" element={<AdminAuditPage />} />
         </Route>
       </Route>
     </Routes>

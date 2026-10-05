@@ -20,6 +20,7 @@ import { ImageGallery } from '@/components/ui/ImageGallery';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { RegionFestivals } from '@/components/festivals/RegionFestivals';
 import { Button } from '@/components/ui/Button';
+import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { Spinner } from '@/components/ui/Spinner';
 
 export const DestinationDetailPage: React.FC = () => {
@@ -405,6 +406,10 @@ export const DestinationDetailPage: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mt-10">
+          <FeedbackDialog subjectType="destination" subjectId={destination.id} subjectName={destination.name} />
         </div>
 
         {/* Nearby Destinations */}

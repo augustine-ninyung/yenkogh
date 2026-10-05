@@ -8,6 +8,7 @@ import { DestinationCard } from '@/components/cards/DestinationCard';
 import { FESTIVAL_CATEGORY_META } from '@/components/festivals/festivalMeta';
 import { FestivalCard } from '@/components/cards/FestivalCard';
 import { Button } from '@/components/ui/Button';
+import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { tripService } from '@/services/tripService';
@@ -315,6 +316,8 @@ export const FestivalDetailPage: React.FC = () => {
               ))}
             </ul>
           </div>
+
+          <FeedbackDialog subjectType="festival" subjectId={festival.id} subjectName={festival.name} />
         </aside>
       </div>
 

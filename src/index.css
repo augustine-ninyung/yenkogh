@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Dark styles follow the `dark` class that ThemeContext puts on <html>.
+   Without this, Tailwind 4 ties `dark:` to the operating system setting
+   and the theme toggle has no effect. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -41,4 +46,12 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Browser autofill paints inputs pale blue; keep them on the dark surface in dark mode */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff;
+  caret-color: #ffffff;
+  box-shadow: 0 0 0 1000px #262b32 inset;
 }

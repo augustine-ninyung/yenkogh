@@ -1,90 +1,67 @@
-import React, { useState } from 'react';
-import { Search, Trash2 } from 'lucide-react';
-import { transportation as initialTransport } from '@/data/transportation';
-import { useToast } from '@/context/ToastContext';
-import type { Transportation } from '@/types';
+import React from 'react';
+import { ResourceManager } from '@/components/admin/ResourceManager';
+import { TRANSPORT_TYPE_OPTIONS, formatAdminDate, optionLabel } from '@/components/admin/adminFormat';
+import type { ResourceConfig } from '@/components/admin/resourceForm';
 
-export const AdminTransportPage: React.FC = () => {
-  const { addToast } = useToast();
-  const [transportList, setTransportList] = useState<Transportation[]>(initialTransport);
-  const [search, setSearch] = useState('');
+const listLength = (value: unknown) => (Array.isArray(value) ? value.length : 0);
 
-  const filtered = transportList.filter((t) =>
-    t.name.toLowerCase().includes(search.toLowerCase()) ||
-    t.type.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleDelete = (id: string, name: string) => {
-    if (window.confirm(`Delete ${name}?`)) {
-      setTransportList(transportList.filter((t) => t.id !== id));
-      addToast({
-        variant: 'info',
-        title: 'Transport Option Deleted',
-        message: `${name} has been removed.`,
-      });
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-[#090C11] dark:text-white">
-            Transportation Registry ({transportList.length})
-          </h1>
-          <p className="text-xs text-[#757B81]">Manage travel providers, routes, and fare estimates</p>
-        </div>
-      </div>
-
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
-        <input
-          type="text"
-          placeholder="Filter transport..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#262B32] text-xs sm:text-sm"
-        />
-      </div>
-
-      <div className="rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/10 text-[#757B81] uppercase text-[11px] font-semibold">
-              <tr>
-                <th className="py-3 px-4">Transport Mode</th>
-                <th className="py-3 px-4">Type</th>
-                <th className="py-3 px-4">Sample Routes</th>
-                <th className="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-              {filtered.map((t) => (
-                <tr key={t.id} className="hover:bg-gray-50/50 dark:hover:bg-white/5">
-                  <td className="py-3 px-4 font-semibold text-[#090C11] dark:text-white">
-                    {t.name}
-                  </td>
-                  <td className="py-3 px-4 capitalize text-[#757B81]">{t.type.replace('-', ' ')}</td>
-                  <td className="py-3 px-4 text-[#757B81]">
-                    {t.routes?.length || 0} routes mapped
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <button
-                      onClick={() => handleDelete(t.id, t.name)}
-                      className="p-1 text-[#757B81] hover:text-red-500 transition-colors"
-                      aria-label="Delete transport mode"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
+const config: ResourceConfig = {
+  table: 'transport_options',
+  singular: 'transport option',
+  plural: 'transport options',
+  title: 'Transportation',
+  description: 'Ways of getting around, with their providers and routes. Each route carries a fare range and travel time for the Transportation guide, the trip planner and budgets.',
+  searchColumns: ['name', 'description'],
+  searchPlaceholder: 'Search transport options...',
+  defaultSort: { column: 'name', ascending: true },
+  publishable: true,
+  featurable: false,
+  columns: [
+    {
+      key: 'name',
+      header: 'Option',
+      sortColumn: 'name',
+      render: (row) => <p className="font-semibold text-[#090C11] dark:text-white min-w-[10rem]">{row.name}</p>,
+    },
+    { key: 'type', header: 'Type', sortColumn: 'type', render: (row) => optionLabel(TRANSPORT_TYPE_OPTIONS, row.type) },
+    { key: 'routes', header: 'Routes', className: 'hidden md:table-cell', render: (row) => listLength(row.details?.routes) },
+    { key: 'providers', header: 'Providers', className: 'hidden lg:table-cell', render: (row) => listLength(row.details?.providers) },
+    { key: 'updated', header: 'Updated', sortColumn: 'updated_at', className: 'hidden lg:table-cell whitespace-nowrap', render: (row) => formatAdminDate(row.updated_at) },
+  ],
+  filters: [{ key: 'type', label: 'Types', options: TRANSPORT_TYPE_OPTIONS }],
+  defaults: {},
+  sections: [
+    {
+      title: 'Basics',
+      fields: [
+        { key: 'name', label: 'Name', type: 'text', required: true, maxLength: 120, placeholder: 'e.g. Intercity Bus (STC / VIP)' },
+        { key: 'type', label: 'Type', type: 'select', required: true, options: TRANSPORT_TYPE_OPTIONS },
+        { key: 'description', label: 'Description', type: 'textarea', maxLength: 5000, rows: 4, wide: true },
+        { key: 'image_url', label: 'Photo', type: 'image', wide: true },
+      ],
+    },
+    {
+      title: 'Providers and booking',
+      fields: [
+        { key: 'details.providers', label: 'Providers', type: 'list', rows: 3, hint: 'One per line.' },
+        { key: 'details.bookingInfo', label: 'Booking, hours and contacts', type: 'textarea', maxLength: 1000, rows: 3 },
+      ],
+    },
+    {
+      title: 'Routes',
+      fields: [{ key: 'details.routes', label: 'Routes, fares and travel times', type: 'routes', wide: true }],
+    },
+    {
+      title: 'Advice for travellers',
+      fields: [
+        { key: 'details.safetyTips', label: 'Safety tips', type: 'list', wide: true, rows: 3, hint: 'One per line.' },
+        { key: 'details.pros', label: 'Good for', type: 'list', rows: 3, hint: 'One per line.' },
+        { key: 'details.cons', label: 'Drawbacks', type: 'list', rows: 3, hint: 'One per line.' },
+      ],
+    },
+  ],
 };
+
+export const AdminTransportPage: React.FC = () => <ResourceManager config={config} />;
 
 export default AdminTransportPage;

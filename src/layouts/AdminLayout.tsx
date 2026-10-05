@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, NavLink, Navigate, useNavigate, Link } from 'react-router-dom';
 import {
   BarChart3,
   MapPin,
+  Map,
+  PartyPopper,
   Calendar,
   Truck,
   Users,
+  MessageSquareWarning,
+  ScrollText,
+  ExternalLink,
   LogOut,
   Menu,
   X,
@@ -15,16 +20,25 @@ import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
 import { ToastContainer } from '@/components/ui/Toast';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { auditApi } from '@/services/adminApi';
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 
 const adminNavItems = [
   { to: '/admin', label: 'Dashboard', icon: BarChart3, exact: true },
   { to: '/admin/destinations', label: 'Destinations', icon: MapPin },
+  { to: '/admin/regions', label: 'Regions', icon: Map },
+  { to: '/admin/festivals', label: 'Festivals', icon: PartyPopper },
   { to: '/admin/events', label: 'Events', icon: Calendar },
   { to: '/admin/transportation', label: 'Transportation', icon: Truck },
   { to: '/admin/users', label: 'Users', icon: Users },
+  { to: '/admin/feedback', label: 'Feedback', icon: MessageSquareWarning },
+  { to: '/admin/audit', label: 'Audit log', icon: ScrollText },
 ];
+
+// Marks that this browser session's admin visit has been written to the audit log
+const LOGIN_LOGGED_KEY = 'yenkogh_admin_login_logged';
 
 // ─── Sidebar nav link ─────────────────────────────────────────────────────────
 
@@ -59,9 +73,18 @@ export const AdminLayout: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isAdmin = isAuthenticated && user?.role === 'admin';
 
-  // Access control — redirect non-admins
-  if (!isAuthenticated || user?.role !== 'admin') {
+  // One audit entry per session, not one per page view
+  useEffect(() => {
+    if (!isAdmin || sessionStorage.getItem(LOGIN_LOGGED_KEY) === user?.id) return;
+    sessionStorage.setItem(LOGIN_LOGGED_KEY, user?.id ?? '');
+    void auditApi.logAdminLogin();
+  }, [isAdmin, user?.id]);
+
+  // Keeps non-admins out of the screens. The data itself is guarded by the backend,
+  // which refuses admin requests from anyone else whatever the browser shows.
+  if (!isAdmin) {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -89,7 +112,7 @@ export const AdminLayout: React.FC = () => {
       </div>
 
       {/* Nav links */}
-      <nav className="flex-1 px-3 py-4 space-y-1" aria-label="Admin navigation">
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1" aria-label="Admin navigation">
         {adminNavItems.map((item) => (
           <AdminNavLink
             key={item.to}
@@ -161,7 +184,7 @@ export const AdminLayout: React.FC = () => {
       </aside>
 
       {/* ── Main content ── */}
-      <div className="flex-1 lg:ml-60 flex flex-col min-h-screen">
+      <div className="flex-1 min-w-0 lg:ml-60 flex flex-col min-h-screen">
         {/* Top bar */}
         <header className="flex items-center gap-4 px-4 sm:px-6 py-3 bg-white dark:bg-[#262B32] border-b border-gray-200 dark:border-white/10 sticky top-0 z-20">
           {/* Mobile menu button */}
@@ -189,8 +212,15 @@ export const AdminLayout: React.FC = () => {
             </span>
           </div>
 
-          {/* Right side: user info */}
+          {/* Right side: site link, theme, user info */}
           <div className="ml-auto flex items-center gap-3">
+            <Link
+              to="/"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-[#757B81] hover:text-[#090C11] dark:hover:text-white"
+            >
+              View site <ExternalLink size={14} />
+            </Link>
+            <ThemeToggle />
             {user && (
               <>
                 <div className="hidden sm:block text-right">

@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { User, Mail, Lock, ArrowRight, Check } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { validateName, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/validators';
 import { Button } from '@/components/ui/Button';
+import { AuthShell } from '@/components/auth/AuthShell';
+import { AuthField } from '@/components/auth/AuthField';
 import { EmailConfirmationRequiredError } from '@/services/authService';
+import { cn } from '@/utils/cn';
+
+const PHOTO = { id: '1727023663921-967d01f69c7e', caption: 'Black Star Gate, Accra', credit: 'Nana Kwandoh' };
+
+// Mirrors validatePassword, so the checklist and the error message never disagree
+const PASSWORD_RULES: { label: string; test: (p: string) => boolean }[] = [
+  { label: '8 or more characters', test: (p) => p.length >= 8 },
+  { label: 'A letter', test: (p) => /[a-zA-Z]/.test(p) },
+  { label: 'A number', test: (p) => /[0-9]/.test(p) },
+];
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { register, isLoading } = useAuth();
   const { addToast } = useToast();
 
@@ -16,8 +29,22 @@ export const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Someone sent here from a members-only page goes back to it once registered
+  const requested = (location.state as { from?: { pathname?: string; search?: string } } | null)?.from;
+  const destination = requested?.pathname ? `${requested.pathname}${requested.search ?? ''}` : '/dashboard';
+
+  // A field's error goes away as soon as the person starts correcting it
+  const editing = (field: string, set: (value: string) => void) => (value: string) => {
+    set(value);
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +73,7 @@ export const RegisterPage: React.FC = () => {
         title: 'Account Created!',
         message: 'Welcome to YɛnkɔGH. Start discovering Ghana today!',
       });
-      navigate('/dashboard');
+      navigate(destination, { replace: true });
     } catch (err) {
       if (err instanceof EmailConfirmationRequiredError) {
         addToast({
@@ -54,7 +81,7 @@ export const RegisterPage: React.FC = () => {
           title: 'Confirm Your Email',
           message: err.message,
         });
-        navigate('/login');
+        navigate('/login', { state: location.state });
         return;
       }
       addToast({
@@ -66,125 +93,107 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="pt-28 pb-20 min-h-screen bg-gray-50 dark:bg-[#090C11] flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-6">
-        <div className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-xl space-y-6">
-          <div className="text-center">
-            <Link to="/" className="inline-block font-['Playfair_Display',serif] text-3xl font-bold mb-2">
-              <span className="text-[#FFD300]">Yɛnkɔ</span>
-              <span className="text-[#090C11] dark:text-white">GH</span>
-            </Link>
-            <h1 className="text-xl font-bold text-[#090C11] dark:text-white">
-              Create Your Travel Account
-            </h1>
-            <p className="text-xs text-[#757B81] mt-1">
-              Join thousands exploring Ghana's wonders with smart tools
-            </p>
-          </div>
+    <AuthShell
+      title="Create your account"
+      subtitle="Free to join. Plan trips, save places and keep a budget for each one."
+      headline="Everything you need to see Ghana, in one account."
+      photo={PHOTO}
+      footer={
+        <>
+          Already have an account?{' '}
+          <Link to="/login" state={location.state} className="font-bold text-[#090C11] dark:text-white underline decoration-[#FFD300] decoration-2 underline-offset-4 hover:decoration-4">
+            Sign in
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        <AuthField
+          label="Full name"
+          icon={User}
+          value={name}
+          onChange={editing('name', setName)}
+          error={errors.name}
+          placeholder="Kofi Mensah"
+          autoComplete="name"
+          autoFocus
+        />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-1.5 uppercase">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Kofi Mensah"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
-                  required
-                />
-              </div>
-              {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
-            </div>
+        <AuthField
+          label="Email address"
+          icon={Mail}
+          type="email"
+          value={email}
+          onChange={editing('email', setEmail)}
+          error={errors.email}
+          placeholder="kofi@example.com"
+          autoComplete="email"
+        />
 
-            <div>
-              <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-1.5 uppercase">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="kofi@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
-                  required
-                />
-              </div>
-              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
-            </div>
-
-            <div>
-              <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-1.5 uppercase">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Min. 8 characters"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#757B81]"
+        <div>
+          <AuthField
+            label="Password"
+            icon={Lock}
+            type="password"
+            value={password}
+            onChange={editing('password', setPassword)}
+            error={errors.password}
+            placeholder="Create a password"
+            autoComplete="new-password"
+          />
+          <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5" aria-label="Password requirements">
+            {PASSWORD_RULES.map((rule) => {
+              const met = rule.test(password);
+              return (
+                <li
+                  key={rule.label}
+                  className={cn(
+                    'flex items-center gap-1.5 text-xs transition-colors',
+                    met ? 'text-green-700 dark:text-green-400 font-medium' : 'text-[#757B81] dark:text-white/50'
+                  )}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
-            </div>
-
-            <div>
-              <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-1.5 uppercase">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Repeat your password"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
-                  required
-                />
-              </div>
-              {errors.confirmPassword && (
-                <p className="text-xs text-red-500 mt-1">{errors.confirmPassword}</p>
-              )}
-            </div>
-
-            <Button
-              type="submit"
-              variant="primary"
-              fullWidth
-              size="lg"
-              isLoading={isLoading}
-              className="font-bold"
-            >
-              Create Account
-            </Button>
-          </form>
-
-          <div className="text-center text-xs text-[#757B81]">
-            Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-[#FFD300] hover:underline">
-              Sign in
-            </Link>
-          </div>
+                  <span
+                    className={cn(
+                      'flex items-center justify-center w-3.5 h-3.5 rounded-full border',
+                      met ? 'bg-green-600 border-green-600 text-white' : 'border-gray-300 dark:border-white/30'
+                    )}
+                  >
+                    {met && <Check size={10} strokeWidth={3} />}
+                  </span>
+                  {rule.label}
+                  <span className="sr-only">{met ? '(met)' : '(not met yet)'}</span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      </div>
-    </div>
+
+        <AuthField
+          label="Confirm password"
+          icon={Lock}
+          type="password"
+          value={confirmPassword}
+          onChange={editing('confirmPassword', setConfirmPassword)}
+          error={errors.confirmPassword}
+          placeholder="Type it again"
+          autoComplete="new-password"
+        />
+
+        <Button
+          type="submit"
+          variant="primary"
+          fullWidth
+          size="lg"
+          isLoading={isLoading}
+          className="h-12 font-bold"
+        >
+          <span className="inline-flex items-center gap-2">
+            Create account
+            <ArrowRight size={18} />
+          </span>
+        </Button>
+      </form>
+    </AuthShell>
   );
 };
 
