@@ -14,7 +14,7 @@ export function useEvents(params?: EventFilterParams): UseEventsResult {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const fetch = useCallback(async () => {
     setIsLoading(true);
     setError(null);

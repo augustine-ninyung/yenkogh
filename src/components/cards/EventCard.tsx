@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Heart, ArrowRight, Tag } from 'lucide-react';
+import { Calendar, MapPin, Heart, ArrowRight } from 'lucide-react';
 import type { Event } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';

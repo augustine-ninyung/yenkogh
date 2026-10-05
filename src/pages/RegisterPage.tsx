@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { validateName, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/validators';
@@ -46,11 +46,11 @@ export const RegisterPage: React.FC = () => {
         message: 'Welcome to YɛnkɔGH. Start discovering Ghana today!',
       });
       navigate('/dashboard');
-    } catch (err: any) {
+    } catch (err) {
       addToast({
         variant: 'error',
         title: 'Registration Error',
-        message: err.message || 'Could not register account.',
+        message: (err instanceof Error && err.message) ||'Could not register account.',
       });
     }
   };

@@ -1,14 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BarChart3,
   MapPin,
   Calendar,
   Truck,
   Users,
-  TrendingUp,
   ArrowRight,
-  ShieldCheck,
   Plus,
 } from 'lucide-react';
 import { destinations } from '@/data/destinations';

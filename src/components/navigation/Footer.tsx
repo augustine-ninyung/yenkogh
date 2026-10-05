@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Mail, Phone, Heart, Compass, Globe, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (

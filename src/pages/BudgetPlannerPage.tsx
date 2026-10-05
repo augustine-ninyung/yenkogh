@@ -1,15 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Wallet,
   Plus,
   Trash2,
   PieChart as PieIcon,
-  DollarSign,
-  AlertCircle,
-  CheckCircle2,
-  ArrowRight,
-  TrendingDown,
-  TrendingUp,
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useAuth } from '@/context/AuthContext';
@@ -123,7 +116,7 @@ export const BudgetPlannerPage: React.FC = () => {
         title: 'Budget Saved!',
         message: 'Your travel budget has been securely saved to your dashboard.',
       });
-    } catch (err) {
+    } catch {
       addToast({
         variant: 'error',
         title: 'Save Failed',
@@ -344,7 +337,7 @@ export const BudgetPlannerPage: React.FC = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip formatter={(value: any) => formatCurrency(Number(value))} />
+                      <Tooltip formatter={(value) =>formatCurrency(Number(value))} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>

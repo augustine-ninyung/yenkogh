@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, Trash2, Calendar } from 'lucide-react';
+import { Plus, Search, Trash2 } from 'lucide-react';
 import { events as initialEvents } from '@/data/events';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
 import { useToast } from '@/context/ToastContext';
@@ -17,7 +17,7 @@ export const AdminEventsPage: React.FC = () => {
   const [name, setName] = useState('');
   const [category, setCategory] = useState<Event['category']>('festival');
   const [location, setLocation] = useState('');
-  const [region, setRegion] = useState('Greater Accra');
+  const [region] = useState('Greater Accra');
   const [startDate, setStartDate] = useState('2026-11-01');
   const [endDate, setEndDate] = useState('2026-11-03');
   const [isFree, setIsFree] = useState(true);
@@ -166,7 +166,7 @@ export const AdminEventsPage: React.FC = () => {
               <label className="font-semibold block mb-1">Category</label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value as any)}
+                onChange={(e) => setCategory(e.target.value as Event['category'])}
                 className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
               >
                 <option value="traditional">Traditional & Harvest</option>

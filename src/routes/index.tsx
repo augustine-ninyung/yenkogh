@@ -16,6 +16,7 @@ import ExplorePage from '@/pages/ExplorePage';
 import DestinationDetailPage from '@/pages/DestinationDetailPage';
 import EventsPage from '@/pages/EventsPage';
 import EventDetailPage from '@/pages/EventDetailPage';
+import FestivalDetailPage from '@/pages/FestivalDetailPage';
 import TransportationPage from '@/pages/TransportationPage';
 import AIPlannerPage from '@/pages/AIPlannerPage';
 import BudgetPlannerPage from '@/pages/BudgetPlannerPage';
@@ -44,6 +45,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="explore/:id" element={<DestinationDetailPage />} />
         <Route path="events" element={<EventsPage />} />
         <Route path="events/:id" element={<EventDetailPage />} />
+        <Route path="festivals" element={<Navigate to="/events?view=festivals" replace />} />
+        <Route path="festivals/:id" element={<FestivalDetailPage />} />
         <Route path="transportation" element={<TransportationPage />} />
         <Route path="planner" element={<AIPlannerPage />} />
         <Route path="budget" element={<BudgetPlannerPage />} />

@@ -6,7 +6,6 @@ import {
   Heart,
   Share2,
   ChevronLeft,
-  Tag,
   Bus,
   CheckCircle2,
   ExternalLink,
@@ -15,7 +14,6 @@ import { useEvent } from '@/hooks/useEvents';
 import { useFavorites } from '@/context/FavoritesContext';
 import { useToast } from '@/context/ToastContext';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
-import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 

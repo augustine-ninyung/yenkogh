@@ -290,7 +290,16 @@ Use real Ghana destinations, activities, food (waakye, jollof rice, fufu, kelewe
       // Strip possible markdown fences before parsing
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]) as Itinerary;
+        const parsed = JSON.parse(jsonMatch[0]) as Itinerary;
+        // Only trust the response if it has the shape the planner page renders
+        if (
+          Array.isArray(parsed.days) &&
+          parsed.days.length > 0 &&
+          parsed.days.every((d) => Array.isArray(d.items))
+        ) {
+          return parsed;
+        }
+        console.warn('Gemini response had an unexpected shape, using mock itinerary.');
       }
     } catch (err) {
       console.warn('Gemini API call failed, using mock itinerary:', err);

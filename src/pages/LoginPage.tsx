@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { validateEmail, validatePassword } from '@/utils/validators';
@@ -18,7 +18,7 @@ export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-  const from = (location.state as any)?.from?.pathname || '/dashboard';
+  const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,11 +44,11 @@ export const LoginPage: React.FC = () => {
         message: 'Signed in successfully. Welcome back to YɛnkɔGH.',
       });
       navigate(from, { replace: true });
-    } catch (err: any) {
+    } catch (err) {
       addToast({
         variant: 'error',
         title: 'Sign In Failed',
-        message: err.message || 'Invalid credentials. Please verify and try again.',
+        message: (err instanceof Error && err.message) ||'Invalid credentials. Please verify and try again.',
       });
     }
   };

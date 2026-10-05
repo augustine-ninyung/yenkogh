@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import {
-  User,
-  Mail,
-  Heart,
-  Calendar,
-  Settings,
-  Shield,
   Save,
-  CheckCircle2,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
@@ -61,7 +54,7 @@ export const ProfilePage: React.FC = () => {
         title: 'Profile Updated',
         message: 'Your traveler profile changes have been saved.',
       });
-    } catch (err) {
+    } catch {
       addToast({
         variant: 'error',
         title: 'Update Failed',

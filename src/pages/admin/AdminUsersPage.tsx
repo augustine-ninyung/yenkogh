@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Search, UserCheck, Shield } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { mockUsers } from '@/data/mockUsers';
 import { Avatar } from '@/components/ui/Avatar';
 import type { User } from '@/types';
 
 export const AdminUsersPage: React.FC = () => {
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const [users] = useState<User[]>(mockUsers);
   const [search, setSearch] = useState('');
 
   const filtered = users.filter((u) =>

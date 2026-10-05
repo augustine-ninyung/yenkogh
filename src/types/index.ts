@@ -320,3 +320,57 @@ export interface Toast {
   message?: string;
   duration?: number;
 }
+
+// ─── Festival types ───────────────────────────────────────────────────────────
+
+export type FestivalCategory =
+  | 'harvest'
+  | 'migration'
+  | 'purification'
+  | 'ancestral'
+  | 'war-commemoration'
+  | 'initiation'
+  | 'religious'
+  | 'fire'
+  | 'fishing'
+  | 'hunting'
+  | 'heritage'
+  | 'arts'
+  | 'development';
+
+/**
+ * How much could be confirmed from published sources:
+ * - detailed:  history, timing and activities are all documented
+ * - basic:     place, people and timing are documented, little else
+ * - name-only: a source confirms the festival exists, but gives no details
+ */
+export type FestivalCompleteness = 'detailed' | 'basic' | 'name-only';
+
+export interface Festival {
+  id: string;
+  name: string;
+  alternateNames: string[];
+  region: string;
+  /** Other regions where the same festival is also celebrated */
+  otherRegions: string[];
+  traditionalArea: string;
+  town: string;
+  ethnicGroup: string;
+  category: FestivalCategory;
+  month: string;
+  usualDate: string;
+  duration: string;
+  description: string;
+  historicalSignificance: string;
+  culturalSignificance: string;
+  activities: string[];
+  attractionsNearby: string[];
+  /** Empty when no verified, freely licensed photo of the festival was found */
+  image: string;
+  /** Page that carries the photo's author and licence (attribution is required) */
+  imageCredit: string;
+  sources: string[];
+  completeness: FestivalCompleteness;
+  /** Conflicts between sources, or anything a reader should double-check */
+  notes: string;
+}

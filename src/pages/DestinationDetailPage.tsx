@@ -6,13 +6,10 @@ import {
   Clock,
   Heart,
   Share2,
-  Calendar,
   Sparkles,
   ShieldAlert,
-  ArrowRight,
   Bus,
   CheckCircle2,
-  Info,
   ChevronLeft,
 } from 'lucide-react';
 import { useDestination, useDestinations } from '@/hooks/useDestinations';
@@ -21,7 +18,6 @@ import { useToast } from '@/context/ToastContext';
 import { formatCurrency } from '@/utils/formatters';
 import { ImageGallery } from '@/components/ui/ImageGallery';
 import { DestinationCard } from '@/components/cards/DestinationCard';
-import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 

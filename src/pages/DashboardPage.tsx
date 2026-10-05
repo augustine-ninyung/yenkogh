@@ -2,14 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Compass,
-  Calendar,
-  Heart,
-  MapPin,
-  Wallet,
   Sparkles,
   ArrowRight,
   Plus,
-  Clock,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
@@ -23,7 +18,6 @@ import { TripCard } from '@/components/cards/TripCard';
 import { BudgetCard } from '@/components/cards/BudgetCard';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { formatCurrency } from '@/utils/formatters';
 import type { Trip, Budget } from '@/types';
 
 export const DashboardPage: React.FC = () => {

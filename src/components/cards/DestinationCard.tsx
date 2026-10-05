@@ -15,7 +15,6 @@ interface DestinationCardProps {
 export const DestinationCard: React.FC<DestinationCardProps> = ({
   destination,
   className,
-  variant = 'default',
 }) => {
   const { isDestinationSaved, toggleDestination } = useFavorites();
   const isSaved = isDestinationSaved(destination.id);

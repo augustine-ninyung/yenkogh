@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, Home, ArrowLeft } from 'lucide-react';
+import { Compass, Home } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 export const NotFoundPage: React.FC = () => {

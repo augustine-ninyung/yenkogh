@@ -1,7 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, Calendar, Filter, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { EventCard } from '@/components/cards/EventCard';
+import { FestivalBrowser } from '@/components/festivals/FestivalBrowser';
+import { festivals } from '@/data/festivals';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Badge } from '@/components/ui/Badge';
 import { useEvents } from '@/hooks/useEvents';
@@ -24,6 +26,7 @@ export const EventsPage: React.FC = () => {
   const queryParam = searchParams.get('q') || '';
   const categoryParam = (searchParams.get('cat') as EventCategory) || 'all';
   const regionParam = searchParams.get('region') || '';
+  const view = searchParams.get('view') === 'festivals' ? 'festivals' : 'events';
 
   const [searchQuery, setSearchQuery] = useState(queryParam);
   const [selectedCategory, setSelectedCategory] = useState<EventCategory | 'all'>(categoryParam);
@@ -81,6 +84,32 @@ export const EventsPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* View switch: dated events, or the full calendar of traditional festivals */}
+        <div className="inline-flex p-1 mb-8 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-200 dark:border-white/10">
+          {([
+            { value: 'events', label: 'Upcoming Events', count: isLoading ? null : events.length },
+            { value: 'festivals', label: 'Traditional Festivals', count: festivals.length },
+          ] as const).map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setSearchParams(tab.value === 'festivals' ? { view: 'festivals' } : {})}
+              aria-pressed={view === tab.value}
+              className={`px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                view === tab.value
+                  ? 'bg-[#FFD300] text-[#090C11] shadow-sm'
+                  : 'text-[#757B81] dark:text-white/70 hover:text-[#262B32] dark:hover:text-white'
+              }`}
+            >
+              {tab.label}
+              {tab.count !== null && <span className="ml-2 opacity-60">{tab.count}</span>}
+            </button>
+          ))}
+        </div>
+
+        {view === 'festivals' ? (
+          <FestivalBrowser />
+        ) : (
+          <>
         {/* Search & Filter Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="relative w-full md:w-96">
@@ -162,6 +191,8 @@ export const EventsPage: React.FC = () => {
               onClick: clearFilters,
             }}
           />
+        )}
+          </>
         )}
       </div>
     </div>

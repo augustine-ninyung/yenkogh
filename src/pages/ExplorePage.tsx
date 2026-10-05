@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, SlidersHorizontal, MapPin, X, ArrowUpDown } from 'lucide-react';
+import { Search, Filter, X } from 'lucide-react';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { DestinationCardSkeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -44,7 +44,7 @@ export const ExplorePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  const { destinations, isLoading, error } = useDestinations();
+  const { destinations, isLoading } = useDestinations();
 
   // Filter & Search Logic
   const filteredDestinations = useMemo(() => {

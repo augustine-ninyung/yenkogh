@@ -1,22 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Bus,
   Search,
-  ArrowRight,
   ShieldCheck,
-  AlertTriangle,
-  Clock,
-  Wallet,
-  Car,
-  Plane,
-  Ship,
   CheckCircle2,
 } from 'lucide-react';
 import { useTransportation, useTransportSearch } from '@/hooks/useTransportation';
 import { TransportCard } from '@/components/cards/TransportCard';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { formatCurrency } from '@/utils/formatters';
 import type { TransportType } from '@/types';
 
 const CITIES = [
@@ -45,7 +36,7 @@ export const TransportationPage: React.FC = () => {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
 
-  const { transportation, isLoading } = useTransportation();
+  const { transportation } = useTransportation();
   const { results: routeResults, search: executeRouteSearch } = useTransportSearch('', '');
 
   const [hasSearched, setHasSearched] = useState(false);

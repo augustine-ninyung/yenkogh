@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Sparkles,
   Calendar,
   MapPin,
-  Users,
-  Wallet,
-  Clock,
   Compass,
-  ArrowRight,
   CheckCircle2,
   Bookmark,
-  Share2,
   RefreshCw,
-  Plus,
-  Trash2,
 } from 'lucide-react';
 import { aiPlannerService } from '@/services/aiPlannerService';
 import { tripService } from '@/services/tripService';
@@ -25,7 +18,7 @@ import { formatCurrency, formatDate } from '@/utils/formatters';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
-import type { PlannerInput, Itinerary, TransportType } from '@/types';
+import type { PlannerInput, Itinerary } from '@/types';
 
 const INTERESTS_OPTIONS = [
   'Historical Castles & Slavery Heritage',
@@ -59,7 +52,7 @@ export const AIPlannerPage: React.FC = () => {
     'Local Food (Waakye, Jollof, Fufu)',
   ]);
   const [accommodationType, setAccommodationType] = useState<'budget' | 'mid-range' | 'luxury'>('mid-range');
-  const [specialRequests, setSpecialRequests] = useState('');
+  const [specialRequests] = useState('');
 
   // Planner Generation State
   const [isGenerating, setIsGenerating] = useState(false);
@@ -160,7 +153,7 @@ export const AIPlannerPage: React.FC = () => {
         message: 'Your itinerary is now stored in My Trips.',
       });
       navigate('/dashboard/trips');
-    } catch (err) {
+    } catch {
       addToast({
         variant: 'error',
         title: 'Save Failed',

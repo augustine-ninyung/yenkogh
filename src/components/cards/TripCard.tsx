@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Trash2, ArrowRight, Clock } from 'lucide-react';
+import { Calendar, MapPin, Users, Trash2, ArrowRight } from 'lucide-react';
 import type { Trip } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatDateRange } from '@/utils/formatters';

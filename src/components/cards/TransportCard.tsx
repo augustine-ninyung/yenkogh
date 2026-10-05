@@ -5,9 +5,7 @@ import {
   Car,
   Plane,
   Ship,
-  Bike,
   CheckCircle,
-  Clock,
   ArrowRight,
   ShieldCheck,
 } from 'lucide-react';

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Search, Trash2, Truck } from 'lucide-react';
+import { Search, Trash2 } from 'lucide-react';
 import { transportation as initialTransport } from '@/data/transportation';
-import { formatCurrency } from '@/utils/formatters';
 import { useToast } from '@/context/ToastContext';
-import { Button } from '@/components/ui/Button';
 import type { Transportation } from '@/types';
 
 export const AdminTransportPage: React.FC = () => {

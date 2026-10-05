@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, Edit2, Trash2, MapPin, Eye } from 'lucide-react';
+import { Plus, Search, Trash2 } from 'lucide-react';
 import { destinations as initialDestinations } from '@/data/destinations';
 import { formatCurrency } from '@/utils/formatters';
 import { useToast } from '@/context/ToastContext';
@@ -183,7 +183,7 @@ export const AdminDestinationsPage: React.FC = () => {
               <label className="font-semibold block mb-1">Category</label>
               <select
                 value={type}
-                onChange={(e) => setType(e.target.value as any)}
+                onChange={(e) => setType(e.target.value as Destination['type'])}
                 className="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11]"
               >
                 <option value="historical">Historical</option>
