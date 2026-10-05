@@ -8,6 +8,7 @@ import { Pagination } from '@/components/ui/Pagination';
 import { Badge } from '@/components/ui/Badge';
 import { useDestinations } from '@/hooks/useDestinations';
 import { regions } from '@/data/regions';
+import { RegionFestivals } from '@/components/festivals/RegionFestivals';
 import type { DestinationType, SortOption } from '@/types';
 
 const DESTINATION_TYPES: { label: string; value: DestinationType | 'all' }[] = [
@@ -392,6 +393,11 @@ export const ExplorePage: React.FC = () => {
             )}
           </main>
         </div>
+
+        {/* Festivals for the selected region, or a preview from across Ghana */}
+        <RegionFestivals
+          regionName={regions.find((r) => r.code === selectedRegion || r.name.toLowerCase() === selectedRegion.toLowerCase())?.name}
+        />
       </div>
     </div>
   );

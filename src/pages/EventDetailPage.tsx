@@ -9,8 +9,10 @@ import {
   Bus,
   CheckCircle2,
   ExternalLink,
+  ArrowRight,
 } from 'lucide-react';
 import { useEvent } from '@/hooks/useEvents';
+import { getFestivalForEvent } from '@/data/festivals';
 import { useFavorites } from '@/context/FavoritesContext';
 import { useToast } from '@/context/ToastContext';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
@@ -47,6 +49,7 @@ export const EventDetailPage: React.FC = () => {
   }
 
   const isSaved = isEventSaved(event.id);
+  const festival = getFestivalForEvent(event.id);
 
   const handleSave = () => {
     toggleEvent(event.id);
@@ -137,6 +140,15 @@ export const EventDetailPage: React.FC = () => {
               <p className="text-sm sm:text-base text-[#757B81] dark:text-white/80 leading-relaxed whitespace-pre-line">
                 {event.description}
               </p>
+              {festival && (
+                <Link
+                  to={`/festivals/${festival.id}`}
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#262B32] dark:text-white hover:text-[#FFD300] transition-colors"
+                >
+                  Read the history and traditions of {festival.name}
+                  <ArrowRight className="w-4 h-4 text-[#FFD300]" />
+                </Link>
+              )}
             </div>
 
             {event.activities && event.activities.length > 0 && (

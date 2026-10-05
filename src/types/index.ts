@@ -210,6 +210,37 @@ export interface Itinerary {
   generatedAt: string;
 }
 
+// ─── Accommodation types ──────────────────────────────────────────────────────
+
+export type AccommodationTier = 'budget' | 'mid-range' | 'luxury';
+
+export type AccommodationType = 'hotel' | 'resort' | 'lodge' | 'guesthouse' | 'hostel' | 'apartment';
+
+export interface Accommodation {
+  id: string;
+  name: string;
+  town: string;
+  region: string;
+  type: AccommodationType;
+  tier: AccommodationTier;
+  /** True for a typical option of this kind, not a named property */
+  generic?: boolean;
+}
+
+/** A stay added to a trip: one place, for the nights spent at one stop. */
+export interface TripAccommodation {
+  accommodationId: string;
+  name: string;
+  town: string;
+  type: AccommodationType;
+  /** The itinerary stop this stay covers */
+  stop: string;
+  nights: number;
+  rooms: number;
+  /** Indicative nightly price per room in GHS, not a quoted rate */
+  pricePerNight: number;
+}
+
 export interface Trip {
   id: string;
   userId: string;
@@ -220,6 +251,10 @@ export interface Trip {
   numberOfTravelers: number;
   status: 'planning' | 'upcoming' | 'ongoing' | 'completed';
   itinerary?: Itinerary;
+  /** Festival this trip is planned around, if any (id from data/festivals) */
+  festivalId?: string;
+  /** Places to stay the traveller added to the plan */
+  accommodations?: TripAccommodation[];
   budgetId?: string;
   notes?: string;
   createdAt: string;
@@ -307,6 +342,8 @@ export interface PlannerInput {
   transportPreference: TransportType[];
   accommodationType: 'budget' | 'mid-range' | 'luxury';
   specialRequests?: string;
+  /** Festival the trip is built around; its name also appears in destinations as a stop */
+  festival?: { name: string; town: string; usualDate: string };
 }
 
 // ─── Toast / Notification types ───────────────────────────────────────────────

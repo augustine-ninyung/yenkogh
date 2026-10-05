@@ -18,6 +18,7 @@ import { useToast } from '@/context/ToastContext';
 import { formatCurrency } from '@/utils/formatters';
 import { ImageGallery } from '@/components/ui/ImageGallery';
 import { DestinationCard } from '@/components/cards/DestinationCard';
+import { RegionFestivals } from '@/components/festivals/RegionFestivals';
 import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 
@@ -419,6 +420,9 @@ export const DestinationDetailPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Festivals in this region */}
+        <RegionFestivals regionName={destination.region} />
       </div>
     </div>
   );

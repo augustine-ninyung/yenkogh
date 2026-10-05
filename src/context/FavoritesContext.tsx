@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { userService } from '@/services/userService';
 
 interface FavoritesState {
   savedDestinations: string[];
@@ -58,8 +59,13 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     return readFromStorage();
   });
 
+  // Set while the favourites on screen still belong to the previous person (or to nobody),
+  // so they are never written onto the account that has just signed in.
+  const awaitingSeed = useRef(true);
+
   // Re-seed from the user profile whenever auth state changes (login / logout).
   useEffect(() => {
+    awaitingSeed.current = true;
     if (user) {
       setState({
         savedDestinations: user.savedDestinations ?? [],
@@ -74,6 +80,19 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   // Persist to localStorage on every state change.
   useEffect(() => {
     writeToStorage(state);
+  }, [state]);
+
+  // Save a signed-in person's favourites to their profile.
+  useEffect(() => {
+    if (awaitingSeed.current) {
+      awaitingSeed.current = false;
+      return;
+    }
+    if (!user) return;
+    userService.saveFavorites(user.id, state).catch(() => {
+      // The local copy is still intact; the next change will try again
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs on favourites changes only
   }, [state]);
 
   const toggleDestination = useCallback((id: string) => {

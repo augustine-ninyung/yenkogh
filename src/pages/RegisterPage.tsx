@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { validateName, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/validators';
 import { Button } from '@/components/ui/Button';
+import { EmailConfirmationRequiredError } from '@/services/authService';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -47,6 +48,15 @@ export const RegisterPage: React.FC = () => {
       });
       navigate('/dashboard');
     } catch (err) {
+      if (err instanceof EmailConfirmationRequiredError) {
+        addToast({
+          variant: 'info',
+          title: 'Confirm Your Email',
+          message: err.message,
+        });
+        navigate('/login');
+        return;
+      }
       addToast({
         variant: 'error',
         title: 'Registration Error',

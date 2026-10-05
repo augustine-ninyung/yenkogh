@@ -1,10 +1,18 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Clock, Landmark, ChevronLeft, CheckCircle2, ExternalLink, Info, Compass } from 'lucide-react';
-import { getFestivalById, getFestivalsByRegion } from '@/data/festivals';
+import React, { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Calendar, MapPin, Users, Clock, Landmark, ChevronLeft, CheckCircle2, ExternalLink, Info, Compass, ArrowRight, Sparkles, Bookmark, AlertTriangle } from 'lucide-react';
+import { getFestivalById, getFestivalsByRegion, getEventIdForFestival } from '@/data/festivals';
+import { destinations } from '@/data/destinations';
+import { regions } from '@/data/regions';
+import { DestinationCard } from '@/components/cards/DestinationCard';
 import { FESTIVAL_CATEGORY_META } from '@/components/festivals/festivalMeta';
 import { FestivalCard } from '@/components/cards/FestivalCard';
 import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/context/ToastContext';
+import { tripService } from '@/services/tripService';
+import { addDays, getFestivalDateConflict, getFestivalWindow, getNextFestivalStart, toIsoDate } from '@/utils/tripPlanning';
+import { Modal } from '@/components/ui/Modal';
 import { cn } from '@/utils/cn';
 
 const FESTIVALS_URL = '/events?view=festivals';
@@ -26,6 +34,15 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
 
 export const FestivalDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const { addToast } = useToast();
+  const [tripState, setTripState] = useState<'idle' | 'saving' | 'saved'>('idle');
+  // "Add to My Trips" asks for the traveller's own dates first
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const [tripStart, setTripStart] = useState('');
+  const [tripEnd, setTripEnd] = useState('');
+  const [tripTravelers, setTripTravelers] = useState(1);
   const festival = getFestivalById(id || '');
 
   if (!festival) {
@@ -40,10 +57,63 @@ export const FestivalDetailPage: React.FC = () => {
     );
   }
 
+  const todayIso = toIsoDate(new Date());
+  const festivalWindow = getFestivalWindow(festival);
+  const dateConflict = getFestivalDateConflict(festival, tripStart, tripEnd);
+  const nextFestivalStart = getNextFestivalStart(festival);
+  const datesChosen = Boolean(tripStart && tripEnd && tripEnd >= tripStart);
+
+  const openDateModal = () => {
+    if (!isAuthenticated || !user) {
+      addToast({
+        variant: 'info',
+        title: 'Account Required',
+        message: 'Please log in to add this festival to your trips.',
+      });
+      navigate('/login');
+      return;
+    }
+    setIsDateModalOpen(true);
+  };
+
+  // Saves a trip for this festival on the chosen dates; the itinerary can be built later in the planner
+  const handleAddToTrips = async () => {
+    if (!user || !datesChosen) return;
+    setTripState('saving');
+    try {
+      await tripService.create(user.id, {
+        userId: user.id,
+        name: `Trip to the ${festival.name}`,
+        destinations: [festival.name],
+        startDate: tripStart,
+        endDate: tripEnd,
+        numberOfTravelers: tripTravelers,
+        status: 'planning',
+        festivalId: festival.id,
+      });
+      setTripState('saved');
+      setIsDateModalOpen(false);
+      addToast({
+        variant: 'success',
+        title: 'Added to My Trips',
+        message: `${festival.name} is saved to your trips.`,
+      });
+    } catch {
+      setTripState('idle');
+      addToast({ variant: 'error', title: 'Could Not Save', message: 'Please try again.' });
+    }
+  };
+
   const meta = FESTIVAL_CATEGORY_META[festival.category];
   const Icon = meta.icon;
   const related = getFestivalsByRegion(festival.region)
     .filter((f) => f.id !== festival.id)
+    .slice(0, 3);
+
+  const eventId = getEventIdForFestival(festival.id);
+  const regionCode = regions.find((r) => r.name === festival.region)?.code;
+  const places = destinations
+    .filter((d) => d.region === festival.region || festival.otherRegions.includes(d.region))
     .slice(0, 3);
 
   // Only facts that are actually on record are shown
@@ -166,6 +236,38 @@ export const FestivalDetailPage: React.FC = () => {
 
         {/* Sidebar */}
         <aside className="space-y-6">
+          <div className="rounded-2xl border border-[#FFD300]/50 bg-[#FFD300]/10 p-6">
+            <h2 className="font-bold mb-1">Want to attend?</h2>
+            <p className="text-sm text-[#757B81] dark:text-white/70 mb-4">
+              Build a day-by-day trip around this festival, with places to stay nearby.
+            </p>
+            <div className="space-y-2.5">
+              <Link to={`/planner?festival=${festival.id}`} className="block">
+                <Button variant="primary" className="w-full gap-2 font-bold">
+                  <Sparkles size={16} />
+                  Plan a trip to this festival
+                </Button>
+              </Link>
+              {tripState === 'saved' ? (
+                <Link to="/dashboard/trips" className="block">
+                  <Button variant="outline" className="w-full gap-2">
+                    <CheckCircle2 size={16} />
+                    Added. View My Trips
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={openDateModal}
+                >
+                  <Bookmark size={16} />
+                  Add to My Trips
+                </Button>
+              )}
+            </div>
+          </div>
+
           <div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-[#262B32] p-6">
             <h2 className="font-bold mb-4">At a glance</h2>
             {facts.length > 0 ? (
@@ -185,6 +287,13 @@ export const FestivalDetailPage: React.FC = () => {
             )}
             {!festival.month && facts.length > 0 && (
               <p className="mt-4 text-xs text-[#757B81] dark:text-white/50">The time of year is not on record.</p>
+            )}
+            {eventId && (
+              <Link to={`/events/${eventId}`} className="block mt-6">
+                <Button variant="primary" className="w-full">
+                  See this year's event
+                </Button>
+              </Link>
             )}
           </div>
 
@@ -209,6 +318,27 @@ export const FestivalDetailPage: React.FC = () => {
         </aside>
       </div>
 
+      {places.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+            <h2 className="text-2xl font-bold">Places to explore in the {festival.region} Region</h2>
+            {regionCode && (
+              <Link
+                to={`/explore?region=${regionCode}`}
+                className="inline-flex items-center gap-2 text-sm font-semibold hover:gap-3 transition-all shrink-0"
+              >
+                Explore the region <ArrowRight className="w-4 h-4 text-[#FFD300]" />
+              </Link>
+            )}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {places.map((d) => (
+              <DestinationCard key={d.id} destination={d} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {related.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold mb-6">More festivals in the {festival.region} Region</h2>
@@ -219,6 +349,68 @@ export const FestivalDetailPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Dates for "Add to My Trips" */}
+      <Modal isOpen={isDateModalOpen} onClose={() => setIsDateModalOpen(false)} title={`When are you going to the ${festival.name}?`} size="md">
+        <div className="space-y-4">
+          <p className="text-sm text-[#757B81] dark:text-white/80">
+            {festivalWindow
+              ? <>This festival is held: <strong>{festivalWindow.label}</strong>. Pick dates that include it.</>
+              : 'This festival follows a traditional calendar with no fixed month, so we cannot check your dates against it. Find out when it is next held before choosing.'}
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">Start date</label>
+              <input type="date" value={tripStart} min={todayIso} onChange={(e) => setTripStart(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">End date</label>
+              <input type="date" value={tripEnd} min={tripStart || todayIso} onChange={(e) => setTripEnd(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">Travelers</label>
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={tripTravelers}
+                onChange={(e) => setTripTravelers(parseInt(e.target.value) || 1)}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
+              />
+            </div>
+          </div>
+
+          {dateConflict && (
+            <div role="alert" className="flex gap-2.5 rounded-xl border border-red-300 bg-red-50 dark:bg-red-900/15 p-3 text-sm text-red-800 dark:text-red-200">
+              <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+              <span>{dateConflict}</span>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-2.5 pt-1">
+            {dateConflict && nextFestivalStart && (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const length = Math.round((new Date(tripEnd).getTime() - new Date(tripStart).getTime()) / 86400000);
+                  setTripStart(nextFestivalStart);
+                  setTripEnd(addDays(nextFestivalStart, length));
+                }}
+              >
+                Move my dates to the festival
+              </Button>
+            )}
+            <Button
+              variant={dateConflict ? 'outline' : 'primary'}
+              onClick={handleAddToTrips}
+              disabled={!datesChosen || tripState === 'saving'}
+            >
+              {tripState === 'saving' ? 'Adding...' : dateConflict ? 'Save these dates anyway' : 'Add to My Trips'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { User, AuthState } from '@/types';
 import { authService } from '@/services/authService';
+import { supabase, isBackendConfigured } from '@/lib/supabase';
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -13,15 +14,52 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(() => authService.getCurrentUser());
-  const [isLoading, setIsLoading] = useState(false);
+  // With a backend the session is restored asynchronously, so routes wait for it
+  const [isLoading, setIsLoading] = useState(isBackendConfigured);
   const [token, setToken] = useState<string | null>(() => authService.getToken());
+
+  // Backend: restore the session on load, and follow sign-outs and token refreshes
+  useEffect(() => {
+    if (!supabase) return;
+    let cancelled = false;
+
+    authService
+      .restoreSession()
+      .then((session) => {
+        if (cancelled) return;
+        setUser(session?.user ?? null);
+        setToken(session?.token ?? null);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setUser(null);
+        setToken(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+        setToken(null);
+      } else if (event === 'TOKEN_REFRESHED' && session) {
+        setToken(session.access_token);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      data.subscription.unsubscribe();
+    };
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     try {
       const loggedInUser = await authService.login(email, password);
       setUser(loggedInUser);
-      setToken(authService.getToken());
+      setToken(isBackendConfigured ? await authService.getSessionToken() : authService.getToken());
     } finally {
       setIsLoading(false);
     }
@@ -32,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const newUser = await authService.register(name, email, password);
       setUser(newUser);
-      setToken(authService.getToken());
+      setToken(isBackendConfigured ? await authService.getSessionToken() : authService.getToken());
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!token,
+        isAuthenticated: !!token && !!user,
         isLoading,
         token,
         login,

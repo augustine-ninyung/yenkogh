@@ -6,6 +6,7 @@ import { useToast } from '@/context/ToastContext';
 import { validateEmail, validatePassword } from '@/utils/validators';
 import { Button } from '@/components/ui/Button';
 import { DEMO_USER_EMAIL, DEMO_USER_PASSWORD, DEMO_ADMIN_EMAIL, DEMO_ADMIN_PASSWORD } from '@/services/authService';
+import { isBackendConfigured } from '@/lib/supabase';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -81,7 +82,8 @@ export const LoginPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Demo Fill Buttons for Examiners/Users */}
+          {/* Quick Demo Fill Buttons for Examiners/Users (the demo accounts are local-only) */}
+          {!isBackendConfigured && (
           <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 space-y-2">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-900 dark:text-amber-200">
               <Sparkles size={14} className="text-amber-600 dark:text-amber-400" />
@@ -104,6 +106,7 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
           </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

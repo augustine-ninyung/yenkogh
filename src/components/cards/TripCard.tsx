@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Trash2, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, Users, Trash2, ArrowRight, Download, PartyPopper, BedDouble, Wallet } from 'lucide-react';
 import type { Trip } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatDateRange } from '@/utils/formatters';
+import { getFestivalById } from '@/data/festivals';
+import { downloadTripPdf } from '@/utils/tripDownload';
 
 interface TripCardProps {
   trip: Trip;
@@ -28,6 +30,28 @@ const statusBadge = (status: Trip['status']) => {
 
 export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className }) => {
   const badge = statusBadge(trip.status);
+  const festival = getFestivalById(trip.festivalId ?? '');
+  const stays = trip.accommodations ?? [];
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!trip.itinerary) return;
+    setIsDownloading(true);
+    try {
+      await downloadTripPdf({
+        title: trip.name,
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        numberOfTravelers: trip.numberOfTravelers,
+        destinations: trip.destinations,
+        itinerary: trip.itinerary,
+        stays,
+        festival,
+      });
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <div
@@ -72,6 +96,20 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className })
             <Users size={14} className="text-[#FFD300] shrink-0" />
             <span>{trip.numberOfTravelers} {trip.numberOfTravelers === 1 ? 'Traveler' : 'Travelers'}</span>
           </div>
+
+          {festival && (
+            <div className="flex items-center gap-2">
+              <PartyPopper size={14} className="text-[#FFD300] shrink-0" />
+              <span className="truncate">{festival.name}</span>
+            </div>
+          )}
+
+          {stays.length > 0 && (
+            <div className="flex items-center gap-2">
+              <BedDouble size={14} className="text-[#FFD300] shrink-0" />
+              <span className="truncate">{stays.map((s) => s.name).join(', ')}</span>
+            </div>
+          )}
         </div>
 
         {trip.itinerary && (
@@ -86,12 +124,29 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className })
         )}
       </div>
 
-      <div className="pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-end">
+      <div className="pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-end gap-2">
+        {trip.itinerary && (
+          <button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-[#090C11] dark:text-white hover:border-[#FFD300] transition-all disabled:opacity-60"
+          >
+            <Download size={13} />
+            <span>{isDownloading ? 'Preparing...' : 'Download'}</span>
+          </button>
+        )}
         <Link
-          to={`/planner?tripId=${trip.id}`}
+          to={`/budget?trip=${trip.id}`}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 text-[#090C11] dark:text-white hover:border-[#FFD300] transition-all"
+        >
+          <Wallet size={13} />
+          <span>Budget</span>
+        </Link>
+        <Link
+          to={trip.itinerary ? `/planner?tripId=${trip.id}` : `/planner?festival=${trip.festivalId ?? ''}`}
           className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/10 text-[#090C11] dark:text-white hover:bg-[#FFD300] hover:text-[#090C11] transition-all"
         >
-          <span>View Itinerary</span>
+          <span>{trip.itinerary ? 'View Itinerary' : 'Plan Itinerary'}</span>
           <ArrowRight size={13} />
         </Link>
       </div>

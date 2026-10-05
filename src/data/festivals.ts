@@ -1,4 +1,4 @@
-import type { Festival } from '@/types';
+import type { EventCategory, Festival, FestivalCategory } from '@/types';
 
 // Traditional and cultural festivals of Ghana, grouped by region.
 //
@@ -1982,6 +1982,44 @@ export const getFestivalsByRegion = (region: string): Festival[] =>
 
 export const getFestivalById = (id: string): Festival | undefined =>
   festivals.find((f) => f.id === id);
+
+// Dated events in events.ts that are this year's edition of a festival listed here
+const EVENT_FESTIVAL_LINKS: Record<string, string> = {
+  'homowo-festival-2026': 'homowo',
+  'chale-wote-2026': 'chale-wote',
+  'panafest-2026': 'panafest',
+  'hogbetsotso-2026': 'hogbetsotso',
+  'aboakyir-2026': 'aboakyer',
+  'damba-festival-2026': 'damba',
+  'bakatue-festival-2026': 'bakatue',
+  'asafotufiam-2026': 'asafotufiam',
+  'kundum-festival-2026': 'kundum',
+};
+
+/** The festival whose background a dated event belongs to, if any. */
+export const getFestivalForEvent = (eventId: string): Festival | undefined =>
+  getFestivalById(EVENT_FESTIVAL_LINKS[eventId] ?? '');
+
+/** Id of the dated event for a festival, if one is scheduled. */
+export const getEventIdForFestival = (festivalId: string): string | undefined =>
+  Object.keys(EVENT_FESTIVAL_LINKS).find((eventId) => EVENT_FESTIVAL_LINKS[eventId] === festivalId);
+
+/** Where each festival category sits among the Events page's category filters. */
+export const FESTIVAL_EVENT_CATEGORY: Record<FestivalCategory, EventCategory> = {
+  harvest: 'traditional',
+  migration: 'traditional',
+  purification: 'traditional',
+  ancestral: 'traditional',
+  'war-commemoration': 'traditional',
+  initiation: 'traditional',
+  fire: 'traditional',
+  hunting: 'traditional',
+  fishing: 'traditional',
+  heritage: 'cultural',
+  development: 'cultural',
+  arts: 'art',
+  religious: 'religious',
+};
 
 export const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',

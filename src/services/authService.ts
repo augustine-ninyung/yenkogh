@@ -1,4 +1,5 @@
 import type { User } from '@/types';
+import { supabase } from '@/lib/supabase';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -6,13 +7,75 @@ import type { User } from '@/types';
 const TOKEN_KEY = 'yenkogh_token';
 const USER_KEY = 'yenkogh_user';
 
+// Demo accounts exist only in the local fallback (no backend configured)
 export const DEMO_USER_EMAIL = 'user@yenkogh.com';
 export const DEMO_USER_PASSWORD = 'password123';
 export const DEMO_ADMIN_EMAIL = 'admin@yenkogh.com';
 export const DEMO_ADMIN_PASSWORD = 'admin123';
 
+/** Thrown after sign-up when the account must be confirmed by email before logging in. */
+export class EmailConfirmationRequiredError extends Error {
+  constructor() {
+    super('Check your email and follow the link to confirm your account, then log in.');
+    this.name = 'EmailConfirmationRequiredError';
+  }
+}
+
 // ---------------------------------------------------------------------------
-// Mock user store (used when no external mockUsers data is available)
+// Backend (Supabase) helpers
+// ---------------------------------------------------------------------------
+
+/** A row of the `profiles` table. */
+export interface ProfileRow {
+  id: string;
+  name: string;
+  email: string;
+  role: User['role'];
+  avatar: string | null;
+  bio: string | null;
+  preferences: User['preferences'];
+  saved_destinations: string[];
+  saved_events: string[];
+  created_at: string;
+}
+
+const avatarFor = (name: string) =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FFD300&color=090C11`;
+
+export const profileToUser = (row: ProfileRow): User => ({
+  id: row.id,
+  name: row.name,
+  email: row.email,
+  role: row.role,
+  avatar: row.avatar ?? avatarFor(row.name),
+  bio: row.bio ?? undefined,
+  preferences: row.preferences,
+  savedDestinations: row.saved_destinations ?? [],
+  savedEvents: row.saved_events ?? [],
+  createdAt: row.created_at,
+});
+
+/**
+ * Loads a signed-in person's profile. The database creates the row at sign-up;
+ * if it is somehow missing, it is created here so login never dead-ends.
+ */
+async function fetchProfile(userId: string, fallback: { email: string; name: string }): Promise<User> {
+  if (!supabase) throw new Error('Backend is not configured.');
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (data) return profileToUser(data as ProfileRow);
+
+  const { data: created, error: createError } = await supabase
+    .from('profiles')
+    .insert({ id: userId, name: fallback.name, email: fallback.email })
+    .select('*')
+    .single();
+  if (createError) throw new Error(createError.message);
+  return profileToUser(created as ProfileRow);
+}
+
+// ---------------------------------------------------------------------------
+// Mock user store (used when no backend is configured)
 // ---------------------------------------------------------------------------
 const MOCK_USERS: User[] = [
   {
@@ -48,7 +111,7 @@ const MOCK_USERS: User[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Local helpers
 // ---------------------------------------------------------------------------
 
 /** Simulate network latency */
@@ -117,10 +180,19 @@ function updateStoredUser(user: User): void {
 export const authService = {
   /**
    * Authenticate a user with email + password.
-   * Checks against mock users and any registered users in localStorage.
-   * Stores the authenticated user and a fake JWT in localStorage.
+   * With a backend this signs in through Supabase Auth. Without one it checks
+   * the mock users and any registered users in localStorage.
    */
   async login(email: string, password: string): Promise<User> {
+    if (supabase) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error || !data.user) throw new Error(error?.message ?? 'Could not sign in.');
+      return fetchProfile(data.user.id, {
+        email: data.user.email ?? email.trim(),
+        name: (data.user.user_metadata?.name as string | undefined) ?? email.split('@')[0],
+      });
+    }
+
     await delay(800);
 
     const normalised = email.trim().toLowerCase();
@@ -159,8 +231,24 @@ export const authService = {
 
   /**
    * Register a new user.  Rejects if the email is already in use.
+   * With a backend, throws EmailConfirmationRequiredError when the project
+   * requires the address to be confirmed before the first login.
    */
   async register(name: string, email: string, password: string): Promise<User> {
+    if (supabase) {
+      const cleanName = name.trim();
+      const cleanEmail = email.trim().toLowerCase();
+      const { data, error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
+        // Read by the database trigger that creates the profile row
+        options: { data: { name: cleanName, avatar: avatarFor(cleanName) } },
+      });
+      if (error || !data.user) throw new Error(error?.message ?? 'Could not create the account.');
+      if (!data.session) throw new EmailConfirmationRequiredError();
+      return fetchProfile(data.user.id, { email: cleanEmail, name: cleanName });
+    }
+
     await delay(1000);
 
     const normalised = email.trim().toLowerCase();
@@ -174,7 +262,7 @@ export const authService = {
       id: `user-${Date.now()}`,
       name: name.trim(),
       email: normalised,
-      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name.trim())}&background=FFD300&color=090C11`,
+      avatar: avatarFor(name.trim()),
       role: 'user',
       savedDestinations: [],
       savedEvents: [],
@@ -199,14 +287,42 @@ export const authService = {
     return newUser;
   },
 
-  /** Clear all auth state from localStorage. */
+  /** End the session. */
   logout(): void {
+    if (supabase) {
+      void supabase.auth.signOut();
+      return;
+    }
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   },
 
-  /** Return the currently authenticated user, or null. */
+  /**
+   * Backend only: the person already signed in on this device, with their
+   * session token, or null. Used to restore the session when the app loads.
+   */
+  async restoreSession(): Promise<{ user: User; token: string } | null> {
+    if (!supabase) return null;
+    const { data } = await supabase.auth.getSession();
+    const session = data.session;
+    if (!session) return null;
+    const user = await fetchProfile(session.user.id, {
+      email: session.user.email ?? '',
+      name: (session.user.user_metadata?.name as string | undefined) ?? '',
+    });
+    return { user, token: session.access_token };
+  },
+
+  /** Backend only: the current session token, or null. */
+  async getSessionToken(): Promise<string | null> {
+    if (!supabase) return null;
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  },
+
+  /** Local fallback only: the user stored in this browser, or null. */
   getCurrentUser(): User | null {
+    if (supabase) return null;
     try {
       const raw = localStorage.getItem(USER_KEY);
       return raw ? (JSON.parse(raw) as User) : null;
@@ -215,18 +331,20 @@ export const authService = {
     }
   },
 
-  /** Return the stored fake JWT, or null. */
+  /** Local fallback only: the stored fake JWT, or null. */
   getToken(): string | null {
+    if (supabase) return null;
     return localStorage.getItem(TOKEN_KEY);
   },
 
-  /** True when a token exists in localStorage. */
+  /** Local fallback only: true when a token exists in localStorage. */
   isAuthenticated(): boolean {
     return Boolean(authService.getToken());
   },
 
-  /** Persist an updated user object (called by userService). */
+  /** Local fallback only: persist an updated user object (called by userService). */
   _updateCurrentUser(user: User): void {
+    if (supabase) return;
     localStorage.setItem(USER_KEY, JSON.stringify(user));
     updateStoredUser(user);
   },
