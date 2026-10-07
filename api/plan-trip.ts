@@ -822,19 +822,40 @@ export const buildUserPrompt = (request: ResolvedRequest, retrieved: Retrieved):
 
 type FetchLike = (url: string, init?: Record<string, unknown>) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; text(): Promise<string> }>;
 
+// Answers that mean "busy, try again" rather than "this request is wrong"
+const BUSY = new Set([429, 500, 502, 503, 504]);
+
+const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 const callModel = async (request: ResolvedRequest, retrieved: Retrieved, options: PlanOptions): Promise<unknown> => {
-  const model = options.model || 'gemini-flash-latest';
-  const response = await options.fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': options.apiKey },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents: [{ role: 'user', parts: [{ text: buildUserPrompt(request, retrieved) }] }],
-      generationConfig: { temperature: 0.4, responseMimeType: 'application/json', responseSchema: RESPONSE_SCHEMA },
-    }),
-    signal: options.signal,
+  const body = JSON.stringify({
+    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+    contents: [{ role: 'user', parts: [{ text: buildUserPrompt(request, retrieved) }] }],
+    generationConfig: { temperature: 0.4, responseMimeType: 'application/json', responseSchema: RESPONSE_SCHEMA },
   });
-  if (!response.ok) throw new Error(`model responded ${response.status}`);
+  const ask = (model: string) =>
+    options.fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': options.apiKey },
+      body,
+      signal: options.signal,
+    });
+
+  // The chosen model twice, then a lighter one: a busy model usually clears in
+  // a moment, and when it does not, another model is often free.
+  const primary = options.model || 'gemini-flash-latest';
+  const fallback = options.fallbackModel ?? 'gemini-flash-lite-latest';
+  const attempts = [primary, primary, ...(fallback && fallback !== primary ? [fallback] : [])];
+  const tried: string[] = [];
+  let response = await ask(attempts[0]);
+  for (let i = 1; !response.ok && i < attempts.length; i++) {
+    tried.push(`${attempts[i - 1]}: ${response.status}`);
+    // A busy model is worth waiting for; any other refusal of the first choice goes straight to the fallback
+    if (BUSY.has(response.status)) await wait(options.retryDelayMs ?? 1500);
+    else if (attempts[i] === attempts[i - 1]) continue;
+    response = await ask(attempts[i]);
+  }
+  if (!response.ok) throw new Error(`model responded ${response.status}${tried.length ? ` after ${tried.join(', ')}` : ''}`);
   const data = (await response.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
   const text = (data.candidates?.[0]?.content?.parts ?? []).map((p) => p.text ?? '').join('');
   const json = text.match(/\{[\s\S]*\}/);
@@ -903,6 +924,10 @@ export interface PlanOptions {
   /** Empty when no language model is configured */
   apiKey: string;
   model?: string;
+  /** Tried when the chosen model stays busy; an empty string switches this off */
+  fallbackModel?: string;
+  /** Pause before trying a busy model again */
+  retryDelayMs?: number;
   fetch: FetchLike;
   today: string;
   signal?: unknown;
@@ -1052,6 +1077,7 @@ interface ServerEnv {
   supabaseKey: string;
   apiKey: string;
   model: string;
+  fallbackModel: string | undefined;
 }
 
 const readEnv = (): ServerEnv => {
@@ -1061,6 +1087,7 @@ const readEnv = (): ServerEnv => {
     supabaseKey: env.SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || '',
     apiKey: env.GEMINI_API_KEY || '',
     model: env.GEMINI_MODEL || '',
+    fallbackModel: env.GEMINI_FALLBACK_MODEL,
   };
 };
 
@@ -1186,6 +1213,7 @@ export default async function handler(req: IncomingRequest, res: OutgoingRespons
       const result = await planTrip(body as PlanRequest, knowledge, {
         apiKey: env.apiKey,
         model: env.model,
+        fallbackModel: env.fallbackModel,
         fetch: fetcher,
         today: new Date().toISOString().slice(0, 10),
         signal: abort.signal,

@@ -38,6 +38,7 @@ const knowledge = knowledgeFromRows(rows);
 const offline: PlanOptions = {
   apiKey: '',
   today: TODAY,
+  retryDelayMs: 0,
   fetch: () => Promise.reject(new Error('no network in tests')),
 };
 
@@ -45,6 +46,7 @@ const offline: PlanOptions = {
 const withModel = (answer: unknown, seen: { prompt?: string } = {}): PlanOptions => ({
   apiKey: 'test-key',
   today: TODAY,
+  retryDelayMs: 0,
   fetch: async (_url, init) => {
     seen.prompt = String((init as { body: string }).body);
     return {
@@ -275,6 +277,50 @@ test('a model outage falls back to the catalogue plan', async () => {
   const result = await planTrip({ prompt: '2 days at Kakum' }, knowledge, failing);
   assert.equal(result.source, 'catalogue');
   assert.equal(result.itinerary.days[0].location, 'Kakum National Park');
+});
+
+// A model that answers each call with the next status in the list; 200 carries a good plan
+const flaky = (statuses: number[], calls: string[]): PlanOptions => ({
+  ...offline,
+  apiKey: 'test-key',
+  model: 'main-model',
+  fallbackModel: 'light-model',
+  fetch: async (url) => {
+    calls.push(url.includes('main-model') ? 'main' : url.includes('light-model') ? 'light' : url);
+    const status = statuses[calls.length - 1] ?? 503;
+    const answer = { title: 'Kakum', summary: '', days: [{ location: 'Kakum National Park', description: '', items: [meal('08:00', 'Breakfast', 25)] }] };
+    return { ok: status === 200, status, json: async () => ({ candidates: [{ content: { parts: [{ text: JSON.stringify(answer) }] } }] }), text: async () => '' };
+  },
+});
+
+test('a busy model is tried again before giving up', async () => {
+  const calls: string[] = [];
+  const result = await planTrip({ prompt: '1 day at Kakum' }, knowledge, flaky([503, 200], calls));
+  assert.equal(result.source, 'ai');
+  assert.deepEqual(calls, ['main', 'main']);
+});
+
+test('a model that stays busy hands over to the lighter model', async () => {
+  const calls: string[] = [];
+  const result = await planTrip({ prompt: '1 day at Kakum' }, knowledge, flaky([503, 503, 200], calls));
+  assert.equal(result.source, 'ai');
+  assert.deepEqual(calls, ['main', 'main', 'light']);
+});
+
+test('a model the key cannot use goes straight to the lighter model', async () => {
+  const calls: string[] = [];
+  const result = await planTrip({ prompt: '1 day at Kakum' }, knowledge, flaky([404, 200], calls));
+  assert.equal(result.source, 'ai');
+  assert.deepEqual(calls, ['main', 'light']);
+});
+
+test('when every model is busy the plan comes from the catalogue, and the log says what was tried', async () => {
+  const calls: string[] = [];
+  const logged: string[] = [];
+  const result = await planTrip({ prompt: '1 day at Kakum' }, knowledge, { ...flaky([503, 503, 503], calls), log: (m) => logged.push(m) });
+  assert.equal(result.source, 'catalogue');
+  assert.deepEqual(calls, ['main', 'main', 'light']);
+  assert.match(logged[0], /model responded 503 after main-model: 503, main-model: 503/);
 });
 
 test('odd values in a model answer are cleaned up', async () => {
