@@ -128,6 +128,11 @@ export const LoginPage: React.FC = () => {
           error={errors.password}
           placeholder="Your password"
           autoComplete="current-password"
+          labelAside={
+            <Link to="/forgot-password" className="text-sm font-medium text-[#757B81] hover:text-[#090C11] dark:hover:text-white underline underline-offset-2">
+              Forgot password?
+            </Link>
+          }
         />
 
         <Button

@@ -130,6 +130,7 @@ export const destinationToRow = (d: Destination, position: number, regions: Regi
   review_count: d.reviewCount,
   featured: d.featured,
   details: {
+    imageCredit: d.imageCredit,
     gallery: d.gallery,
     activities: d.activities,
     thingsToDo: d.thingsToDo,
@@ -250,6 +251,7 @@ export const rowToDestination = (row: DestinationRow, regions: RegionLookup): De
     description: row.description,
     shortDescription: row.short_description,
     imageUrl: row.image_url,
+    imageCredit: optionalText(d.imageCredit),
     gallery: list(d.gallery),
     // Postgres numerics arrive as strings
     rating: Number(row.rating),

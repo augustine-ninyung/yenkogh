@@ -1,5 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
+// A failed email link (expired, already used) comes back with the reason in the address.
+// Read it before the client starts, because the client tidies the address up.
+const linkParams = new URLSearchParams(window.location.hash.slice(1));
+const linkError = linkParams.get('error_description') ?? linkParams.get('error');
+
 const url = import.meta.env.VITE_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -14,3 +19,6 @@ const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 export const supabase = url && anonKey ? createClient(url, anonKey) : null;
 
 export const isBackendConfigured = supabase !== null;
+
+/** Why the email link that opened this page cannot be used, or null if there is no problem. */
+export const authLinkError: string | null = supabase ? linkError : 'Password reset by email needs the live site.';

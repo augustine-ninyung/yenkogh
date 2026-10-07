@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { User, Mail, Lock, ArrowRight, Check } from 'lucide-react';
+import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { validateName, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/validators';
 import { Button } from '@/components/ui/Button';
 import { AuthShell } from '@/components/auth/AuthShell';
 import { AuthField } from '@/components/auth/AuthField';
+import { PasswordChecklist } from '@/components/auth/PasswordChecklist';
 import { EmailConfirmationRequiredError } from '@/services/authService';
-import { cn } from '@/utils/cn';
 
 const PHOTO = { id: '1727023663921-967d01f69c7e', caption: 'Black Star Gate, Accra', credit: 'Nana Kwandoh' };
-
-// Mirrors validatePassword, so the checklist and the error message never disagree
-const PASSWORD_RULES: { label: string; test: (p: string) => boolean }[] = [
-  { label: '8 or more characters', test: (p) => p.length >= 8 },
-  { label: 'A letter', test: (p) => /[a-zA-Z]/.test(p) },
-  { label: 'A number', test: (p) => /[0-9]/.test(p) },
-];
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -141,31 +134,7 @@ export const RegisterPage: React.FC = () => {
             placeholder="Create a password"
             autoComplete="new-password"
           />
-          <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5" aria-label="Password requirements">
-            {PASSWORD_RULES.map((rule) => {
-              const met = rule.test(password);
-              return (
-                <li
-                  key={rule.label}
-                  className={cn(
-                    'flex items-center gap-1.5 text-xs transition-colors',
-                    met ? 'text-green-700 dark:text-green-400 font-medium' : 'text-[#757B81] dark:text-white/50'
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'flex items-center justify-center w-3.5 h-3.5 rounded-full border',
-                      met ? 'bg-green-600 border-green-600 text-white' : 'border-gray-300 dark:border-white/30'
-                    )}
-                  >
-                    {met && <Check size={10} strokeWidth={3} />}
-                  </span>
-                  {rule.label}
-                  <span className="sr-only">{met ? '(met)' : '(not met yet)'}</span>
-                </li>
-              );
-            })}
-          </ul>
+          <PasswordChecklist password={password} />
         </div>
 
         <AuthField

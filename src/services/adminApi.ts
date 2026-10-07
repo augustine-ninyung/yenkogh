@@ -4,6 +4,7 @@ import { authService } from '@/services/authService';
 import { hydrateContent } from '@/services/content/contentStore';
 import { localDb, type LocalFeedbackRow } from '@/services/content/localDb';
 import type { ContentStatus, ContentTable, RowByTable } from '@/services/content/resources';
+import { localDestinationViews } from '@/services/viewService';
 
 // Everything the admin area asks of the backend, and the feedback form on the
 // public site. With Supabase connected each call goes to the database, where
@@ -662,6 +663,9 @@ export interface DashboardStats {
   feedback: { total: number; pending: number };
   byRegion: { name: string; destinations: number; festivals: number; events: number }[];
   signupsByMonth: { month: string; users: number }[];
+  /** Destination pages opened most in the last 30 days, busiest first */
+  mostViewed: { id: string; name: string; views: number }[];
+  viewsLast30Days: number;
 }
 
 function localStats(): DashboardStats {
@@ -680,6 +684,16 @@ function localStats(): DashboardStats {
   const months = Array.from({ length: 6 }, (_, i) => monthKey(new Date(now.getFullYear(), now.getMonth() - (5 - i), 1)));
   const live = <T extends { status: ContentStatus }>(rows: T[]) => rows.filter((r) => r.status !== 'archived');
   const today = todayIso();
+
+  const since = new Date(Date.now() - 29 * 86400000).toISOString().slice(0, 10);
+  const viewed = Object.entries(localDestinationViews())
+    .map(([id, days]) => ({
+      id,
+      name: localDb.rows('destinations').find((d) => d.id === id)?.name ?? id,
+      views: Object.entries(days).reduce((sum, [day, n]) => sum + (day >= since ? n : 0), 0),
+    }))
+    .filter((v) => v.views > 0)
+    .sort((a, b) => b.views - a.views || a.name.localeCompare(b.name));
 
   return {
     users: {
@@ -714,6 +728,8 @@ function localStats(): DashboardStats {
       month,
       users: profiles.filter((p) => monthKey(new Date(p.created_at)) === month).length,
     })),
+    mostViewed: viewed.slice(0, 5),
+    viewsLast30Days: viewed.reduce((sum, v) => sum + v.views, 0),
   };
 }
 
@@ -722,7 +738,8 @@ export const statsApi = {
     if (supabase) {
       const { data, error } = await supabase.rpc('admin_dashboard_stats');
       if (error) throw toApiError(error);
-      return data as DashboardStats;
+      // A database set up before view counting was added does not send these yet
+      return { mostViewed: [], viewsLast30Days: 0, ...(data as Partial<DashboardStats>) } as DashboardStats;
     }
     requireLocalAdmin();
     return localStats();

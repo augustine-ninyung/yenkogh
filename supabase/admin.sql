@@ -559,6 +559,40 @@ begin
 end;
 $$;
 
+-- ─── Destination views ───────────────────────────────────────────────────────
+-- A daily count of how often each destination page is opened, for the admin
+-- dashboard. Nothing about the visitor is stored. There are no policies, so the
+-- table is reached only through the two functions that follow.
+
+create table if not exists public.destination_views (
+  destination_id text not null references public.destinations (id) on update cascade on delete cascade,
+  viewed_on      date not null default current_date,
+  views          integer not null default 0 check (views >= 0),
+  primary key (destination_id, viewed_on)
+);
+
+alter table public.destination_views enable row level security;
+revoke all on public.destination_views from anon, authenticated;
+
+-- Called by the site when a destination page is opened. Accepts an id or a
+-- slug; anything that is not a published destination is ignored.
+create or replace function public.record_destination_view(p_destination text)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into public.destination_views (destination_id, viewed_on, views)
+  select d.id, current_date, 1
+  from public.destinations d
+  where (d.id = p_destination or d.slug = p_destination) and d.status = 'published'
+  limit 1
+  on conflict (destination_id, viewed_on) do update set views = public.destination_views.views + 1;
+$$;
+
+revoke all on function public.record_destination_view(text) from public;
+grant execute on function public.record_destination_view(text) to anon, authenticated;
+
 -- ─── Dashboard figures ───────────────────────────────────────────────────────
 -- One round trip for every number on the admin dashboard.
 
@@ -629,7 +663,21 @@ begin
           (select count(*) from public.profiles p where date_trunc('month', p.created_at) = date_trunc('month', gs)) as n
         from generate_series(date_trunc('month', now()) - interval '5 months', date_trunc('month', now()), interval '1 month') gs
       ) s
-    ), '[]'::jsonb)
+    ), '[]'::jsonb),
+    'mostViewed', coalesce((
+      select jsonb_agg(jsonb_build_object('id', v.id, 'name', v.name, 'views', v.views) order by v.views desc, v.name) from (
+        select d.id, d.name, sum(w.views)::int as views
+        from public.destination_views w
+        join public.destinations d on d.id = w.destination_id
+        where w.viewed_on > current_date - 30
+        group by d.id, d.name
+        order by sum(w.views) desc, d.name
+        limit 5
+      ) v
+    ), '[]'::jsonb),
+    'viewsLast30Days', (
+      select coalesce(sum(views), 0)::int from public.destination_views where viewed_on > current_date - 30
+    )
   );
 end;
 $$;

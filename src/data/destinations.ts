@@ -714,6 +714,225 @@ export const destinations: Destination[] = [
     tags: ['waterfall', 'nature', 'romantic', 'swimming', 'hiking', 'Eastern', 'forest'],
     bestTimeToVisit: 'June to September (rainy season, falls at full power)',
   },
+  // ─── Added October 2026 ─────────────────────────────────────────────────────
+  // Fees and hours for these come from published visitor guides; photos are from
+  // Wikimedia Commons and carry a credit link.
+  {
+    id: 'bunso-eco-park',
+    name: 'Bunso Eco Park (Bunso Arboretum)',
+    slug: 'bunso-eco-park',
+    region: 'Eastern',
+    regionCode: 'EP',
+    type: 'botanical',
+    description:
+      'Bunso Eco Park, long known as the Bunso Arboretum, is a forest reserve just south of the town of Bunso in the Eastern Region, off the Accra to Kumasi road. It protects a patch of semi-deciduous forest with a large collection of indigenous and introduced trees, and is a favourite stop for school groups, birdwatchers and families. Its canopy walkway was the second to be built in Ghana after Kakum, and the park has added a zipline, a children\'s walkway and horse riding.',
+    shortDescription:
+      'A forest reserve in the Eastern Region with Ghana\'s second canopy walkway, nature trails and a zipline.',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bunso_Canopy_walkway.jpg?width=1200',
+    imageCredit: 'https://commons.wikimedia.org/wiki/File:Bunso_Canopy_walkway.jpg',
+    gallery: [],
+    // Not yet rated by travellers
+    rating: 0,
+    reviewCount: 0,
+    activities: [
+      { id: 'a1', name: 'Canopy Walkway', description: 'Cross the suspended walkway through the treetops. There is a lower one for young children.', duration: '45 mins', cost: 25 },
+      { id: 'a2', name: 'Zipline', description: 'A short zipline through the forest.', duration: '20 mins', cost: 20 },
+      { id: 'a3', name: 'Horse Riding', description: 'A guided ride on the park grounds.', duration: '20 mins', cost: 10 },
+      { id: 'a4', name: 'Guided Tree and Bird Walk', description: 'Walk the arboretum trails with a guide who names the trees, herbs and birds.', duration: '1 hour', cost: 0 },
+    ],
+    thingsToDo: [
+      'Walk the canopy walkway',
+      'Follow the arboretum trails and learn the medicinal plants',
+      'Look for forest birds and butterflies',
+      'Picnic under the trees',
+    ],
+    estimatedCostPerPerson: 80,
+    openingHours: 'Daily: 6:00 AM – 6:00 PM',
+    entryFee: 5,
+    safetyInfo: 'Wear closed shoes; the trails are slippery after rain. Entry fees differ for Ghanaians, students and visitors from abroad and change from time to time; the prices shown are those most recently reported. Confirm at the gate.',
+    // No fares are given where none could be confirmed
+    transportOptions: [
+      { type: 'Trotro', description: 'Kumasi-bound trotro or bus from Accra (Circle or Madina); get down at Bunso junction, then a short taxi ride', duration: '2 hours' },
+      { type: 'Taxi', description: 'Shared or chartered taxi from Koforidua', duration: '1 hour' },
+    ],
+    nearbyDestinations: ['boti-falls', 'aburi-botanical-gardens'],
+    latitude: 6.2706,
+    longitude: -0.4614,
+    featured: false,
+    tags: ['nature', 'forest', 'canopy walkway', 'botanical', 'birds', 'family', 'Eastern', 'hiking'],
+    bestTimeToVisit: 'November to March (dry season)',
+  },
+  {
+    id: 'kumasi-zoo',
+    name: 'Kumasi Zoo',
+    slug: 'kumasi-zoo',
+    region: 'Ashanti',
+    regionCode: 'AH',
+    type: 'wildlife',
+    description:
+      'The Kumasi Zoological Gardens sit in the middle of Kumasi, between the Kejetia terminal and the Centre for National Culture. Opened in the 1950s, it is one of the oldest zoos in Ghana and keeps primates, big cats, reptiles and birds native to West Africa. The tall trees over the zoo are also home to a very large colony of fruit bats, which fill the sky above the city at dusk.',
+    shortDescription:
+      'One of Ghana\'s oldest zoos, in the heart of Kumasi, known for its primates and its huge colony of fruit bats.',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Chimpazee_at_the_Kumasi_Zoo.jpg?width=1200',
+    imageCredit: 'https://commons.wikimedia.org/wiki/File:Chimpazee_at_the_Kumasi_Zoo.jpg',
+    gallery: [],
+    // Not yet rated by travellers
+    rating: 0,
+    reviewCount: 0,
+    activities: [
+      { id: 'a1', name: 'Self-guided Zoo Walk', description: 'See chimpanzees, monkeys, lions, crocodiles, snakes and birds at your own pace.', duration: '1.5 hours', cost: 0 },
+      { id: 'a2', name: 'Fruit Bat Watching', description: 'Watch the bat colony roosting in the trees, and taking off towards evening.', duration: '30 mins', cost: 0 },
+    ],
+    thingsToDo: [
+      'See the chimpanzees and other primates',
+      'Look up at the fruit bat colony',
+      'Combine it with the Kumasi Cultural Centre next door',
+    ],
+    estimatedCostPerPerson: 100,
+    openingHours: 'Daily: 9:00 AM – 5:00 PM',
+    entryFee: 60,
+    safetyInfo: 'Do not feed or tease the animals, and keep children away from the enclosures. A separate fee is charged for professional photography and filming. Entry fees differ for Ghanaians, students and visitors from abroad and change from time to time; the fee shown is the adult visitor rate reported in 2026. Confirm at the gate.',
+    // No fares are given where none could be confirmed
+    transportOptions: [
+      { type: 'Walk', description: 'A few minutes on foot from the Kejetia terminal or the Kumasi Cultural Centre', duration: '10 mins' },
+      { type: 'Ride-hailing', description: 'Bolt, Uber or Yango from anywhere in Kumasi', duration: '10–30 mins' },
+    ],
+    nearbyDestinations: ['kumasi-cultural-centre', 'manhyia-palace'],
+    latitude: 6.6996,
+    longitude: -1.6262,
+    featured: false,
+    tags: ['wildlife', 'zoo', 'animals', 'family', 'Kumasi', 'Ashanti', 'bats'],
+    bestTimeToVisit: 'All year; mornings are cooler and the animals more active',
+  },
+  {
+    id: 'accra-zoo',
+    name: 'Accra Zoo',
+    slug: 'accra-zoo',
+    region: 'Greater Accra',
+    regionCode: 'GA',
+    type: 'wildlife',
+    description:
+      'Accra Zoo is set inside the Achimota Forest, the largest green space left in the capital. The zoo moved here from Kanda in the 2000s and includes an endangered primate breeding centre. It is a quiet, shaded place to see monkeys, lions, antelope, reptiles and birds without leaving the city. The enclosures are about two kilometres along a dirt road from the forest entrance where tickets are sold, so come with a car or be ready to walk.',
+    shortDescription:
+      'A small zoo and primate breeding centre in the shade of Achimota Forest, in the middle of Accra.',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Deer_Achimota_Forest_Zoo_Accra.jpg?width=1200',
+    imageCredit: 'https://commons.wikimedia.org/wiki/File:Deer_Achimota_Forest_Zoo_Accra.jpg',
+    gallery: [],
+    // Not yet rated by travellers
+    rating: 0,
+    reviewCount: 0,
+    activities: [
+      { id: 'a1', name: 'Zoo Walk', description: 'Visit the primates, lions, antelope, reptiles and birds.', duration: '1.5 hours', cost: 0 },
+      { id: 'a2', name: 'Forest Walk', description: 'Walk or jog the shaded tracks of Achimota Forest on the way to the zoo.', duration: '40 mins', cost: 0 },
+    ],
+    thingsToDo: [
+      'See the primate breeding centre',
+      'Walk under the forest canopy',
+      'Bring a picnic for the forest grounds',
+    ],
+    estimatedCostPerPerson: 60,
+    openingHours: 'Daily: 9:00 AM – 4:00 PM',
+    entryFee: 20,
+    safetyInfo: 'The zoo is roughly 2 km inside the forest from the ticket point; arrange a ride or allow 20 to 40 minutes on foot. Do not feed the animals. Entry fees differ for Ghanaians, students and visitors from abroad and change from time to time; the fee shown is the adult visitor rate most recently reported. Confirm at the gate.',
+    // No fares are given where none could be confirmed
+    transportOptions: [
+      { type: 'Ride-hailing', description: 'Bolt, Uber or Yango to the Achimota Forest entrance, Accra', duration: '20–45 mins' },
+      { type: 'Trotro', description: 'Trotro along the Achimota road to the forest gate, then walk or take a taxi in', duration: '30–60 mins' },
+    ],
+    nearbyDestinations: ['kwame-nkrumah-memorial-park', 'labadi-beach'],
+    latitude: 5.6173,
+    longitude: -0.2132,
+    featured: false,
+    tags: ['wildlife', 'zoo', 'animals', 'forest', 'family', 'Accra', 'primates'],
+    bestTimeToVisit: 'All year; go in the morning',
+  },
+  {
+    id: 'shai-hills-resource-reserve',
+    name: 'Shai Hills Resource Reserve',
+    slug: 'shai-hills-resource-reserve',
+    region: 'Greater Accra',
+    regionCode: 'GA',
+    type: 'wildlife',
+    description:
+      'Shai Hills is the closest wildlife reserve to Accra, about 50 kilometres to the north-east on the road to Akosombo. Open savannah surrounds a chain of rocky hills where olive baboons, kob, bushbuck, green monkeys and well over a hundred bird species live. The hills hold caves that were home to the Shai people until the 1890s; guides lead visitors up to them, including the bat-filled Sayu Cave, for wide views over the Accra Plains.',
+    shortDescription:
+      'Savannah, rocky hills, baboons, antelope and historic caves, an hour from Accra.',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Shai_Hills,_Shai-Osudoku_(P1100110).jpg?width=1200',
+    imageCredit: 'https://commons.wikimedia.org/wiki/File:Shai_Hills,_Shai-Osudoku_(P1100110).jpg',
+    gallery: [],
+    // Not yet rated by travellers
+    rating: 0,
+    reviewCount: 0,
+    activities: [
+      { id: 'a1', name: 'Guided Game Drive', description: 'Drive the reserve tracks with a ranger to find kob, baboons and birds. Bring your own vehicle.', duration: '2 hours', cost: 0 },
+      { id: 'a2', name: 'Cave Hike', description: 'Climb with a guide to the caves once lived in by the Shai people.', duration: '2 hours', cost: 0 },
+      { id: 'a3', name: 'Bird Watching', description: 'More than 150 species have been recorded in the reserve.', duration: '2 hours', cost: 0 },
+    ],
+    thingsToDo: [
+      'Meet the baboons at the gate',
+      'Hike to Sayu Cave and its bats',
+      'Look for kob and bushbuck on the plains',
+      'Take in the view from the hilltops',
+    ],
+    estimatedCostPerPerson: 150,
+    openingHours: 'Daily: 8:00 AM – 5:00 PM',
+    entryFee: 50,
+    safetyInfo: 'Go with a guide for the caves and hikes, carry water and wear sturdy shoes. Keep food out of sight of the baboons. Separate charges apply for vehicles and guides. Entry fees differ for Ghanaians, students and visitors from abroad and change from time to time; the fee shown is the adult visitor rate reported in 2026. Confirm at the gate.',
+    // No fares are given where none could be confirmed
+    transportOptions: [
+      { type: 'Trotro', description: 'Trotro from Accra (Madina or Tema) towards Akosombo or Ho; get down at the Shai Hills gate after Afienya', duration: '1.5 hours' },
+      { type: 'Taxi', description: 'Chartered taxi or ride-hailing from Accra, kept for the game drive', duration: '1 hour' },
+    ],
+    nearbyDestinations: ['aburi-botanical-gardens', 'ada-foah', 'lake-volta'],
+    latitude: 5.9,
+    longitude: 0.05,
+    featured: false,
+    tags: ['wildlife', 'safari', 'baboons', 'caves', 'hiking', 'birds', 'nature', 'history', 'Accra'],
+    bestTimeToVisit: 'November to April (dry season)',
+  },
+  {
+    id: 'larabanga-mosque',
+    name: 'Larabanga Mosque',
+    slug: 'larabanga-mosque',
+    region: 'Savannah',
+    regionCode: 'SV',
+    type: 'religious',
+    description:
+      'The whitewashed mud-and-stick mosque at Larabanga is the best-known example of Sudano-Sahelian architecture in Ghana and is widely described as the oldest mosque in the country, with tradition dating it to 1421. Timber poles brace its tapering buttresses and two pyramidal towers. It is still a place of worship for the village, so non-Muslims view it from outside. A short way off is the Mystic Stone, which local tradition says returned to its place each time road builders moved it. Larabanga is on the road into Mole National Park, and the two are usually visited together.',
+    shortDescription:
+      'Ghana\'s most famous mud-built mosque, dated by tradition to 1421, at the gateway to Mole National Park.',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Larabanga_Mosque_Ghana.jpg?width=1200',
+    imageCredit: 'https://commons.wikimedia.org/wiki/File:Larabanga_Mosque_Ghana.jpg',
+    gallery: [],
+    // Not yet rated by travellers
+    rating: 0,
+    reviewCount: 0,
+    activities: [
+      { id: 'a1', name: 'Guided Visit to the Mosque', description: 'A community guide tells the story of the mosque and its founding. Non-Muslims stay outside.', duration: '45 mins', cost: 0 },
+      { id: 'a2', name: 'Mystic Stone', description: 'See the stone that tradition says could not be moved from the roadside.', duration: '20 mins', cost: 0 },
+    ],
+    thingsToDo: [
+      'Hear the founding story from a community guide',
+      'Photograph the mosque from outside',
+      'Visit the Mystic Stone',
+      'Continue to Mole National Park',
+    ],
+    estimatedCostPerPerson: 80,
+    openingHours: 'Daytime visits; avoid prayer times',
+    entryFee: 50,
+    safetyInfo: 'Dress modestly, ask before taking photographs of people, and agree the fee with the official community guides before the tour. Non-Muslims may not enter the mosque. Reported fees range from 10 to 50 cedis depending on the visitor, with a tip expected for the guide; the fee shown is the upper figure.',
+    // No fares are given where none could be confirmed
+    transportOptions: [
+      { type: 'Bus', description: 'Bus or trotro from Tamale to Damongo, then a shared taxi on to Larabanga', duration: '3 hours' },
+      { type: 'Taxi', description: 'Shared taxi or motorbike taxi from Damongo, or from the Mole National Park gate nearby', duration: '20 mins' },
+    ],
+    nearbyDestinations: ['mole-national-park'],
+    latitude: 9.2203,
+    longitude: -1.8603,
+    featured: false,
+    tags: ['mosque', 'religious', 'history', 'architecture', 'heritage', 'culture', 'Savannah', 'north'],
+    bestTimeToVisit: 'November to March (dry season)',
+  },
 ];
 
 export const getFeaturedDestinations = (): Destination[] =>

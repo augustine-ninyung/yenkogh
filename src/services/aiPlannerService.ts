@@ -1,312 +1,109 @@
-import type { PlannerInput, Itinerary, ItineraryDay, ItineraryItem } from '@/types';
+import { supabase } from '@/lib/supabase';
+import { destinations } from '@/data/destinations';
+import { festivals } from '@/data/festivals';
+import { regions } from '@/data/regions';
+import { transportation } from '@/data/transportation';
+import { toIsoDate } from '@/utils/tripPlanning';
+// The planner's rules live with the server function; the browser reuses its
+// pure parts when the app runs without a backend.
+import { PlanError, planTrip } from '../../api/plan-trip';
+import type { PlannerKnowledge, PlanRequest, PlanResult } from '../../api/plan-trip';
+
+export { MAX_PROMPT_LENGTH, MAX_TRIP_DAYS } from '../../api/plan-trip';
+export type { PlanRequest, PlanResult };
 
 const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-function buildMockItinerary(input: PlannerInput): Itinerary {
-  const start = new Date(input.startDate);
-  const end = new Date(input.endDate);
-  const numDays = Math.max(
-    1,
-    Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)),
-  );
-
-  const destinationNames =
-    input.destinations.length > 0 ? input.destinations : ['Accra', 'Cape Coast'];
-
-  const days: ItineraryDay[] = [];
-
-  for (let i = 0; i < numDays; i++) {
-    const destIndex = Math.floor((i * destinationNames.length) / numDays);
-    const location = destinationNames[destIndex] ?? destinationNames[0];
-    const date = new Date(start);
-    date.setDate(date.getDate() + i);
-
-    const items: ItineraryItem[] = [];
-
-    if (i === 0) {
-      // First day — arrival
-      const accommodationCost =
-        input.accommodationType === 'luxury'
-          ? 800
-          : input.accommodationType === 'mid-range'
-            ? 350
-            : 150;
-
-      items.push(
-        {
-          id: `item-${i}-1`,
-          time: '08:00',
-          title: 'Arrival & Check-in',
-          description: `Arrive in ${location} and check in to your accommodation. Get oriented in the neighbourhood.`,
-          type: 'accommodation',
-          cost: accommodationCost,
-        },
-        {
-          id: `item-${i}-2`,
-          time: '10:00',
-          title: 'Local Breakfast',
-          description:
-            'Enjoy a traditional Ghanaian breakfast — waakye, koko, or fresh fruit at a local chop bar.',
-          type: 'meal',
-          cost: 25,
-        },
-        {
-          id: `item-${i}-3`,
-          time: '12:00',
-          title: `Explore ${location}`,
-          description: `Take a walking tour of ${location}. Visit key landmarks and soak in the local atmosphere.`,
-          type: 'activity',
-          cost: 80,
-          location,
-        },
-        {
-          id: `item-${i}-4`,
-          time: '14:00',
-          title: 'Lunch at a Local Restaurant',
-          description:
-            'Try jollof rice, fufu with soup, or grilled tilapia at a recommended local restaurant.',
-          type: 'meal',
-          cost: 60,
-        },
-        {
-          id: `item-${i}-5`,
-          time: '16:00',
-          title: 'Cultural Experience',
-          description: `Visit a local market or cultural site in ${location}. Interact with artisans and vendors.`,
-          type: 'activity',
-          cost: 50,
-          location,
-        },
-        {
-          id: `item-${i}-6`,
-          time: '19:00',
-          title: 'Dinner & Evening',
-          description:
-            'Enjoy dinner at a restaurant featuring Ghanaian cuisine. Experience the vibrant evening atmosphere.',
-          type: 'meal',
-          cost: 80,
-        },
-      );
-    } else if (i === numDays - 1) {
-      // Last day — departure
-      items.push(
-        {
-          id: `item-${i}-1`,
-          time: '07:00',
-          title: 'Early Morning Activity',
-          description: `Final morning in ${location}. Visit any remaining attractions or enjoy a peaceful morning walk.`,
-          type: 'activity',
-          cost: 30,
-          location,
-        },
-        {
-          id: `item-${i}-2`,
-          time: '09:00',
-          title: 'Breakfast',
-          description: 'Final Ghanaian breakfast before departure.',
-          type: 'meal',
-          cost: 25,
-        },
-        {
-          id: `item-${i}-3`,
-          time: '11:00',
-          title: 'Shopping for Souvenirs',
-          description:
-            'Buy Kente cloth, wood carvings, beads, and other Ghanaian handicrafts as souvenirs.',
-          type: 'activity',
-          cost: 150,
-        },
-        {
-          id: `item-${i}-4`,
-          time: '14:00',
-          title: 'Farewell Lunch',
-          description: 'A final meal of your favourite Ghanaian dishes before departure.',
-          type: 'meal',
-          cost: 70,
-        },
-        {
-          id: `item-${i}-5`,
-          time: '16:00',
-          title: 'Transfer & Departure',
-          description:
-            'Transfer to airport or departure point. Safe travels — Akwaaba, come back soon!',
-          type: 'transport',
-          cost: 80,
-        },
-      );
-    } else {
-      // Middle days
-      const prevDestIndex = Math.floor(((i - 1) * destinationNames.length) / numDays);
-      const prevLocation = destinationNames[prevDestIndex] ?? destinationNames[0];
-      const isNewLocation = location !== prevLocation;
-
-      if (isNewLocation) {
-        items.push({
-          id: `item-${i}-1`,
-          time: '07:00',
-          title: `Travel to ${location}`,
-          description: `Depart early from ${prevLocation} and travel to ${location} by road or other transport.`,
-          type: 'transport',
-          cost: 80,
-        });
-      } else {
-        items.push({
-          id: `item-${i}-1`,
-          time: '07:00',
-          title: 'Morning Activity',
-          description: `Start the day with an early activity in ${location} — ideal for wildlife spotting or beat the heat.`,
-          type: 'activity',
-          cost: 60,
-          location,
-        });
-      }
-
-      items.push(
-        {
-          id: `item-${i}-2`,
-          time: '09:00',
-          title: 'Breakfast',
-          description: "Energising breakfast before the day's activities.",
-          type: 'meal',
-          cost: 30,
-        },
-        {
-          id: `item-${i}-3`,
-          time: '10:00',
-          title: `Main Attraction in ${location}`,
-          description: `Visit the main attraction of ${location}. This is the highlight of today's itinerary.`,
-          type: 'activity',
-          cost: 100,
-          location,
-        },
-        {
-          id: `item-${i}-4`,
-          time: '13:00',
-          title: 'Lunch',
-          description:
-            'Lunch at a local restaurant or resort — try regional Ghanaian specialties.',
-          type: 'meal',
-          cost: 60,
-        },
-        {
-          id: `item-${i}-5`,
-          time: '15:00',
-          title: 'Afternoon Exploration',
-          description: `Explore more of ${location} — visit secondary attractions, markets, or relax at your accommodation.`,
-          type: 'activity',
-          cost: 50,
-          location,
-        },
-        {
-          id: `item-${i}-6`,
-          time: '18:00',
-          title: 'Sunset & Dinner',
-          description: 'Watch the beautiful Ghanaian sunset and enjoy dinner.',
-          type: 'meal',
-          cost: 80,
-        },
-      );
-    }
-
-    days.push({
-      day: i + 1,
-      date: date.toISOString().split('T')[0],
-      location,
-      description: `Day ${i + 1} in ${location}`,
-      items,
-    });
-  }
-
-  const totalCost =
-    days.reduce((acc, day) => acc + day.items.reduce((a, item) => a + (item.cost ?? 0), 0), 0) *
-    input.numberOfTravelers;
-
+/** The content this copy of the app is showing, in the shape the planner reads. */
+const localKnowledge = (): PlannerKnowledge => {
+  const capitalOf = (region: string) => regions.find((r) => r.name === region)?.capital ?? '';
   return {
-    id: `itinerary-${Date.now()}`,
-    title: `${numDays}-Day Ghana Adventure: ${destinationNames.join(' · ')}`,
-    days,
-    totalEstimatedCost: totalCost,
-    generatedAt: new Date().toISOString(),
+    destinations: destinations.map((d) => ({
+      id: d.id,
+      name: d.name,
+      region: d.region,
+      capital: capitalOf(d.region),
+      type: d.type,
+      summary: d.shortDescription,
+      entryFee: d.entryFee ?? 0,
+      costPerPerson: d.estimatedCostPerPerson,
+      activities: d.activities.map((a) => ({ name: a.name, cost: a.cost ?? 0, duration: a.duration ?? '' })),
+      thingsToDo: d.thingsToDo,
+      tags: d.tags,
+      openingHours: d.openingHours ?? '',
+      bestTime: d.bestTimeToVisit ?? '',
+      access: d.transportOptions.map((o) => ({
+        mode: o.type,
+        description: o.description,
+        cost: o.estimatedCost ?? '',
+        duration: o.duration ?? '',
+      })),
+    })),
+    festivals: festivals.map((f) => ({
+      id: f.id,
+      name: f.name,
+      region: f.region,
+      town: f.town,
+      month: f.month,
+      usualDate: f.usualDate,
+      summary: f.description.slice(0, 300),
+      activities: f.activities.slice(0, 5),
+    })),
+    transport: transportation.map((t) => ({
+      id: t.id,
+      name: t.name,
+      type: t.type,
+      routes: t.routes.map((r) => ({
+        from: r.from,
+        to: r.to,
+        duration: r.estimatedDuration,
+        min: r.estimatedCost.min,
+        max: r.estimatedCost.max,
+      })),
+    })),
   };
-}
+};
 
 export const aiPlannerService = {
-  async generateItinerary(input: PlannerInput): Promise<Itinerary> {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
-
-    if (!apiKey) {
-      // No API key — simulate AI thinking time then return mock data
-      await delay(2500);
-      return buildMockItinerary(input);
-    }
-
-    try {
-      const { GoogleGenAI } = await import('@google/genai');
-      const client = new GoogleGenAI({ apiKey });
-
-      const prompt = `You are a Ghana travel expert. Create a detailed day-by-day travel itinerary in JSON format.
-
-Trip Details:
-- Destinations: ${input.destinations.join(', ')}
-- Start Date: ${input.startDate}
-- End Date: ${input.endDate}
-- Travelers: ${input.numberOfTravelers}
-- Budget: GHS ${input.budget}
-- Interests: ${input.interests.join(', ')}
-- Accommodation: ${input.accommodationType}
-- Special Requests: ${input.specialRequests ?? 'None'}
-
-Return ONLY valid JSON matching this TypeScript interface:
-interface Itinerary {
-  id: string;
-  title: string;
-  days: Array<{
-    day: number;
-    date: string;
-    location: string;
-    description: string;
-    items: Array<{
-      id: string;
-      time: string;
-      title: string;
-      description: string;
-      type: 'activity' | 'transport' | 'accommodation' | 'meal' | 'free-time';
-      cost: number;
-      location?: string;
-    }>;
-  }>;
-  totalEstimatedCost: number;
-  generatedAt: string;
-}
-
-Use real Ghana destinations, activities, food (waakye, jollof rice, fufu, kelewele), and transport. All costs in GHS.`;
-
-      const interaction = await client.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: prompt,
-      });
-
-      const text = interaction.text ?? '';
-      // Strip possible markdown fences before parsing
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]) as Itinerary;
-        // Only trust the response if it has the shape the planner page renders
-        if (
-          Array.isArray(parsed.days) &&
-          parsed.days.length > 0 &&
-          parsed.days.every((d) => Array.isArray(d.items))
-        ) {
-          return parsed;
-        }
-        console.warn('Gemini response had an unexpected shape, using mock itinerary.');
+  /**
+   * Plans a trip from a description and/or the planner form. With a backend the
+   * server does it (database lookup, then the language model); without one the
+   * plan is assembled in the browser from the content shipped with the app.
+   * Rejects with a message meant for the traveller.
+   */
+  async plan(request: PlanRequest): Promise<PlanResult> {
+    if (!supabase) {
+      await delay(900);
+      try {
+        return await planTrip(request, localKnowledge(), {
+          apiKey: '',
+          fetch: () => Promise.reject(new Error('offline')),
+          today: toIsoDate(new Date()),
+        });
+      } catch (err) {
+        throw new Error(err instanceof PlanError ? err.message : 'Could not plan the trip. Please try again.');
       }
-    } catch (err) {
-      console.warn('Gemini API call failed, using mock itinerary:', err);
     }
 
-    // Fallback to mock if Gemini response couldn't be parsed
-    await delay(1000);
-    return buildMockItinerary(input);
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) throw new Error('Please sign in to plan a trip.');
+
+    let response: Response;
+    try {
+      response = await fetch('/api/plan-trip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(request),
+      });
+    } catch {
+      throw new Error('Could not reach the planner. Check your connection and try again.');
+    }
+
+    const payload = (await response.json().catch(() => null)) as (PlanResult & { error?: string }) | null;
+    if (!response.ok || !payload?.itinerary) {
+      throw new Error(payload?.error ?? 'The planner is not available right now. Please try again shortly.');
+    }
+    return payload;
   },
 };

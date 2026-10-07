@@ -12,6 +12,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { Button } from '@/components/ui/Button';
+import { ChangePasswordForm } from '@/components/auth/ChangePasswordForm';
 
 export const ProfilePage: React.FC = () => {
   const { user, updateUser } = useAuth();
@@ -123,6 +124,7 @@ export const ProfilePage: React.FC = () => {
 
       {/* Tab: Profile Edit */}
       {activeTab === 'profile' && (
+        <div className="space-y-8">
         <form onSubmit={handleSaveProfile} className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-6 max-w-2xl">
           <div className="space-y-4">
             <div>
@@ -202,6 +204,9 @@ export const ProfilePage: React.FC = () => {
             </Button>
           </div>
         </form>
+
+        <ChangePasswordForm />
+        </div>
       )}
 
       {/* Tab: Saved Places */}

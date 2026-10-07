@@ -20,8 +20,10 @@ import {
   Trash2,
   Wallet,
   AlertTriangle,
+  Database,
 } from 'lucide-react';
-import { aiPlannerService } from '@/services/aiPlannerService';
+import { aiPlannerService, MAX_PROMPT_LENGTH, MAX_TRIP_DAYS } from '@/services/aiPlannerService';
+import type { PlanResult } from '@/services/aiPlannerService';
 import { tripService } from '@/services/tripService';
 import { budgetService } from '@/services/budgetService';
 import { useAuth } from '@/context/AuthContext';
@@ -55,7 +57,6 @@ import type {
   Accommodation,
   BudgetCategoryKey,
   BudgetItem,
-  PlannerInput,
   Itinerary,
   TransportType,
   TripAccommodation,
@@ -82,6 +83,12 @@ const TRANSPORT_OPTIONS: { value: TransportType; label: string }[] = [
 ];
 
 const FESTIVAL_INTEREST = 'Traditional Festivals & Royal Durbars';
+
+const PROMPT_EXAMPLES = [
+  '3 days from Accra to Cape Coast for two people with GHS 1500. We love history and beaches.',
+  'A weekend of waterfalls and hiking in the Volta Region, solo, budget 900 cedis.',
+  'Five days in the north to see elephants, 4 people, GHS 8000.',
+];
 
 const EXTRA_CATEGORIES: { value: BudgetCategoryKey; label: string }[] = [
   { value: 'transportation', label: 'Transport' },
@@ -130,6 +137,8 @@ export const AIPlannerPage: React.FC = () => {
   const [accommodationType, setAccommodationType] = useState<'budget' | 'mid-range' | 'luxury'>('mid-range');
   const [transport, setTransport] = useState<TransportType[]>(['bus', 'taxi']);
   const [specialRequests, setSpecialRequests] = useState('');
+  // The trip in the traveller's own words; an alternative to filling in the steps
+  const [tripPrompt, setTripPrompt] = useState('');
   // Costs the traveller adds themselves; saved as lines on the trip's budget
   const [extras, setExtras] = useState<BudgetItem[]>([]);
   const [extraName, setExtraName] = useState('');
@@ -147,6 +156,8 @@ export const AIPlannerPage: React.FC = () => {
   // False until a saved trip's budget has been read, so it is never overwritten with defaults
   const [budgetLoaded, setBudgetLoaded] = useState(false);
   const [showMissPrompt, setShowMissPrompt] = useState(false);
+  // How the plan on screen was produced; empty for a trip opened from My Trips
+  const [planInfo, setPlanInfo] = useState<PlanResult | null>(null);
 
   const festival = getFestivalById(festivalId);
   const festivalWindow = festival ? getFestivalWindow(festival) : null;
@@ -293,6 +304,16 @@ export const AIPlannerPage: React.FC = () => {
       return;
     }
 
+    const tripDays = Math.round((new Date(endDate).getTime() - new Date(startDate).getTime()) / 86400000);
+    if (tripDays > MAX_TRIP_DAYS) {
+      addToast({
+        variant: 'warning',
+        title: 'Trip Too Long',
+        message: `Trips can be planned for 1 to ${MAX_TRIP_DAYS} days. Yours is ${tripDays} days.`,
+      });
+      return;
+    }
+
     if (dateConflict) {
       setShowMissPrompt(true);
       return;
@@ -300,45 +321,77 @@ export const AIPlannerPage: React.FC = () => {
     await generate();
   };
 
-  const generate = async () => {
+  const handleDescribe = async () => {
+    if (tripPrompt.trim().length < 10) {
+      addToast({
+        variant: 'warning',
+        title: 'Tell Us a Little More',
+        message: 'Describe the trip in a sentence: where, how long, how many people and your budget.',
+      });
+      return;
+    }
+    await generate(true);
+  };
+
+  // fromDescription: plan from the traveller's sentence, using the form only for what it leaves out
+  const generate = async (fromDescription = false) => {
     setShowMissPrompt(false);
     setIsGenerating(true);
     setStep('itinerary');
 
     try {
-      const festivalRequest = festival
-        ? `Build the trip around attending the ${festival.name} in ${festival.town || festival.region}.`
-        : '';
-      const input: PlannerInput = {
-        destinations: tripStops,
-        startDate,
-        endDate,
-        numberOfTravelers,
-        budget,
-        interests,
-        transportPreference: transport,
-        accommodationType,
-        specialRequests: [festivalRequest, specialRequests.trim()].filter(Boolean).join(' '),
-        festival: festival
-          ? { name: festival.name, town: festival.town, usualDate: festival.usualDate || festival.month }
-          : undefined,
-      };
+      const result = await aiPlannerService.plan(
+        fromDescription
+          ? {
+              prompt: tripPrompt.trim(),
+              startDate,
+              endDate,
+              numberOfTravelers,
+              budget,
+              accommodationType,
+              transportPreference: transport,
+            }
+          : {
+              destinations: selectedDestinations,
+              festivalId: festival?.id,
+              startDate,
+              endDate,
+              numberOfTravelers,
+              budget,
+              interests,
+              transportPreference: transport,
+              accommodationType,
+              specialRequests: specialRequests.trim(),
+            },
+      );
 
-      const result = await aiPlannerService.generateItinerary(input);
-      setGeneratedItinerary(festival ? addFestivalToItinerary(result, festival) : result);
+      // Show what the planner understood, so saving and the budget use the same figures
+      const planFestival = getFestivalById(result.applied.festivalId ?? '');
+      if (fromDescription) {
+        setFestivalId(planFestival?.id ?? '');
+        setSelectedDestinations(result.applied.destinations);
+      }
+      setStartDate(result.applied.startDate);
+      setEndDate(result.applied.endDate);
+      setNumberOfTravelers(result.applied.numberOfTravelers);
+      setBudget(result.applied.budget);
+      setGeneratedItinerary(planFestival ? addFestivalToItinerary(result.itinerary, planFestival) : result.itinerary);
+      setPlanInfo(result);
       // Stops may have changed, so earlier stay choices no longer apply
       setStays([]);
       addToast({
         variant: 'success',
         title: 'Itinerary Ready!',
-        message: 'Your custom Ghana journey has been synthesized successfully.',
+        message:
+          result.source === 'ai'
+            ? 'Your plan was written from the YɛnkɔGH catalogue.'
+            : 'Your plan was put together from the YɛnkɔGH catalogue.',
       });
     } catch (err) {
-      console.error(err);
       addToast({
         variant: 'error',
-        title: 'Planning Error',
-        message: 'Could not generate itinerary. Please try again.',
+        title: 'Could Not Plan This Trip',
+        message: (err instanceof Error && err.message) || 'Could not generate itinerary. Please try again.',
       });
       setStep('form');
     } finally {
@@ -550,6 +603,56 @@ export const AIPlannerPage: React.FC = () => {
         {step === 'form' ? (
           /* Planning Input Wizard Form */
           <form onSubmit={handleGenerate} className="space-y-8">
+            {/* Describe the trip in a sentence */}
+            <div className={cn(cardClass, 'border-[#FFD300]/60 dark:border-[#FFD300]/40')}>
+              <div>
+                <h2 className="text-lg font-bold flex items-center gap-2">
+                  <Sparkles size={18} className="text-[#FFD300]" />
+                  <label htmlFor="trip-prompt">Describe your trip</label>
+                </h2>
+                <p className="text-xs sm:text-sm text-[#757B81] mt-1">
+                  Say it in your own words: how long, where from, where to, how many people and what you want to spend. Anything you leave out is taken from the steps below.
+                </p>
+              </div>
+              <textarea
+                id="trip-prompt"
+                value={tripPrompt}
+                onChange={(e) => setTripPrompt(e.target.value)}
+                rows={3}
+                maxLength={MAX_PROMPT_LENGTH}
+                placeholder={PROMPT_EXAMPLES[0]}
+                className={cn(inputClass, 'resize-y')}
+              />
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-xs text-[#757B81] w-full">Try one of these:</span>
+                {PROMPT_EXAMPLES.map((example) => (
+                  <button
+                    type="button"
+                    key={example}
+                    onClick={() => setTripPrompt(example)}
+                    className="px-2.5 py-1 rounded-lg text-xs text-left border border-gray-200 dark:border-white/10 hover:border-[#FFD300] hover:bg-[#FFD300]/10 transition-colors"
+                  >
+                    {example}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="text-xs text-[#757B81]">
+                  {tripPrompt.length} of {MAX_PROMPT_LENGTH} characters
+                </span>
+                <Button type="button" variant="primary" onClick={handleDescribe} className="font-bold">
+                  <Sparkles size={16} />
+                  <span>Plan this trip</span>
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs font-semibold uppercase text-[#757B81]">
+              <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+              <span>or build it step by step</span>
+              <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+            </div>
+
             {/* Step 1: Festival */}
             <div className={cardClass}>
               <h2 className="text-lg font-bold flex items-center gap-2">
@@ -931,9 +1034,9 @@ export const AIPlannerPage: React.FC = () => {
             ) : isGenerating ? (
               <div className="p-16 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center space-y-4 shadow-xl">
                 <Spinner size="lg" color="primary" />
-                <h3 className="text-xl font-bold">Synthesizing Your Ghana Journey...</h3>
+                <h3 className="text-xl font-bold">Planning your trip...</h3>
                 <p className="text-sm text-[#757B81] max-w-md mx-auto">
-                  Calculating road distances, optimizing daily activities, estimating entrance fees in Cedis, and assembling local restaurant suggestions.
+                  Looking up matching destinations, festivals, entry fees and transport fares in the YɛnkɔGH catalogue, then arranging them day by day.
                 </p>
               </div>
             ) : generatedItinerary && costs ? (
@@ -1054,6 +1157,54 @@ export const AIPlannerPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Where the plan's facts came from */}
+                {planInfo && (
+                  <div className={cardClass}>
+                    <h3 className="font-bold flex items-center gap-2">
+                      <Database size={18} className="text-[#FFD300]" />
+                      <span>How this plan was built</span>
+                    </h3>
+                    <p className="text-sm text-[#757B81] dark:text-white/80">
+                      {planInfo.source === 'ai'
+                        ? 'Written by the AI planner, using only records from the YɛnkɔGH catalogue.'
+                        : 'Put together directly from the YɛnkɔGH catalogue, without the AI planner.'}
+                    </p>
+                    {planInfo.notes.map((note) => (
+                      <p key={note} className="text-sm">
+                        {note}
+                      </p>
+                    ))}
+                    <div className="flex flex-wrap gap-1.5">
+                      {planInfo.grounding.destinations.map((d) => (
+                        <Link
+                          key={d.id}
+                          to={`/explore/${d.id}`}
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium border border-gray-200 dark:border-white/10 hover:border-[#FFD300] hover:bg-[#FFD300]/10 transition-colors"
+                        >
+                          {d.name}
+                        </Link>
+                      ))}
+                      {planInfo.grounding.festivals.map((f) => (
+                        <Link
+                          key={f.id}
+                          to={`/festivals/${f.id}`}
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium border border-gray-200 dark:border-white/10 hover:border-[#FFD300] hover:bg-[#FFD300]/10 transition-colors"
+                        >
+                          {f.name}
+                        </Link>
+                      ))}
+                      {planInfo.grounding.transport.map((t) => (
+                        <span key={t.id} className="px-2.5 py-1 rounded-lg text-xs font-medium border border-gray-200 dark:border-white/10 text-[#757B81] dark:text-white/70">
+                          {t.name}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-xs text-[#757B81]">
+                      {planInfo.grounding.groundedItems} of {planInfo.grounding.activityItems} activities are tied to a catalogue record. Entry fees and fares come from the catalogue; meal and overnight prices are typical figures.
+                    </p>
+                  </div>
+                )}
 
                 {/* Day-by-Day Timeline */}
                 <div className="space-y-6">
@@ -1241,7 +1392,7 @@ export const AIPlannerPage: React.FC = () => {
         <div className="space-y-5">
           <p className="text-sm text-[#757B81] dark:text-white/80">{dateConflict}</p>
           <div className="flex flex-col sm:flex-row sm:justify-end gap-2.5">
-            <Button variant="outline" onClick={generate}>
+            <Button variant="outline" onClick={() => generate()}>
               Keep my dates anyway
             </Button>
             <Button variant="outline" onClick={() => setShowMissPrompt(false)}>

@@ -316,6 +316,60 @@ export const authService = {
     return newUser;
   },
 
+  /**
+   * Emails a link for choosing a new password. Resolves the same way whether
+   * or not the address has an account, so it cannot be used to find out who
+   * is registered.
+   */
+  async requestPasswordReset(email: string): Promise<void> {
+    if (!supabase) {
+      throw new Error('Password reset by email needs the live site. On this copy, use the demo accounts.');
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      throw new Error(
+        /rate limit|too many|security purposes/i.test(error.message)
+          ? 'Too many reset emails have been requested. Please wait a few minutes and try again.'
+          : error.message,
+      );
+    }
+  },
+
+  /** Sets a new password for the person signed in by a reset link. */
+  async setNewPassword(password: string): Promise<void> {
+    if (!supabase) throw new Error('Password reset by email needs the live site.');
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw new Error(error.message);
+  },
+
+  /** Changes the signed-in person's password, after checking they know the current one. */
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    if (supabase) {
+      const { data } = await supabase.auth.getUser();
+      const email = data.user?.email;
+      if (!email) throw new Error('Please sign in again to change your password.');
+      const check = await supabase.auth.signInWithPassword({ email, password: currentPassword });
+      if (check.error) throw new Error('Your current password is not correct.');
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw new Error(error.message);
+      return;
+    }
+
+    await delay(400);
+    const user = authService.getCurrentUser();
+    if (!user) throw new Error('Please sign in again to change your password.');
+    const demoEmails = [DEMO_USER_EMAIL, DEMO_ADMIN_EMAIL].map((e) => e.toLowerCase());
+    if (demoEmails.includes(user.email.toLowerCase())) {
+      throw new Error('The demo accounts have fixed passwords that cannot be changed.');
+    }
+    const pwMap = authService._getPasswordMap();
+    if (pwMap[user.id] !== currentPassword) throw new Error('Your current password is not correct.');
+    pwMap[user.id] = newPassword;
+    localStorage.setItem('yenkogh_pw_map', JSON.stringify(pwMap));
+  },
+
   /** End the session. */
   logout(): void {
     if (supabase) {

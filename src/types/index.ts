@@ -44,6 +44,8 @@ export interface Destination {
   description: string;
   shortDescription: string;
   imageUrl: string;
+  /** Page carrying the photo's author and licence, when attribution is required */
+  imageCredit?: string;
   gallery: Gallery[];
   rating: number;
   reviewCount: number;

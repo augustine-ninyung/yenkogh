@@ -51,6 +51,30 @@ export const transportation: Transportation[] = [
     bookingInfo: 'Purchase tickets at VIP terminals across major cities. No advance online booking — first come, first served.',
   },
   {
+    id: 'metro-mass-transit',
+    type: 'bus',
+    name: 'Metro Mass Transit (MMT)',
+    description:
+      'Metro Mass Transit is the part state-owned bus company set up in 2003 to give Ghanaians affordable public transport. Its orange buses run city routes, links to rural towns that other operators do not serve, and long-distance services between the regional capitals. The buses are plainer than the STC and VIP coaches and make more stops, but fares are usually among the lowest on a route.',
+    imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80',
+    providers: ['Metro Mass Transit Company Limited'],
+    routes: [
+      { from: 'Kumasi', to: 'Tamale', estimatedDuration: '6–7 hours', estimatedCost: { min: 115, max: 115 }, frequency: 'Daily', notes: 'Fare published by MMT for 2026' },
+      { from: 'Accra', to: 'Koforidua', estimatedDuration: '2 hours', estimatedCost: { min: 20, max: 40 }, frequency: 'Daily', notes: 'Range reported across bus operators on this route in 2026' },
+      { from: 'Accra', to: 'Tamale', estimatedDuration: '10–12 hours', estimatedCost: { min: 180, max: 250 }, frequency: 'Daily', notes: 'Range reported across bus operators on this route in 2026' },
+      { from: 'Accra', to: 'Bolgatanga', estimatedDuration: '13–15 hours', estimatedCost: { min: 200, max: 280 }, frequency: 'Daily', notes: 'Range reported across bus operators on this route in 2026' },
+    ],
+    safetyTips: [
+      'Buy tickets only at MMT terminals or from the conductor on board',
+      'Arrive early: seats on long-distance buses are not always reserved',
+      'Keep valuables with you, not in the luggage hold',
+      'Carry water and snacks on long journeys; stops are limited',
+    ],
+    pros: ['Among the cheapest fares between cities', 'Reaches rural towns other operators skip', 'Large buses with luggage space', 'Part state-owned and nationwide'],
+    cons: ['Slower, with more stops than STC or VIP', 'Fewer comforts; not all buses are air-conditioned', 'Can be crowded', 'Timetables are less predictable'],
+    bookingInfo: 'Tickets are sold at Metro Mass Transit terminals in the regional capitals, usually on the day of travel. Ask at the terminal for the day\'s departures.',
+  },
+  {
     id: 'trotro',
     type: 'trotro',
     name: 'Trotro (Shared Minibus)',
@@ -98,14 +122,14 @@ export const transportation: Transportation[] = [
   {
     id: 'ride-hailing',
     type: 'ride-hailing',
-    name: 'Uber & Bolt',
+    name: 'Uber, Bolt & Yango',
     description:
-      'Uber and Bolt operate in Accra and other major Ghanaian cities including Kumasi, Takoradi, and Tamale. Ride-hailing apps offer the convenience of transparent pricing, cashless payment, driver tracking, and safety features — making them the preferred option for tourists visiting Ghana for the first time. Prices are generally reasonable by international standards.',
+      'Uber and Bolt operate in Accra and other major Ghanaian cities including Kumasi, Takoradi, and Tamale, and Yango operates in Accra and Kumasi. Ride-hailing apps offer the convenience of transparent pricing, cashless payment, driver tracking, and safety features — making them the preferred option for tourists visiting Ghana for the first time. Prices are generally reasonable by international standards.',
     imageUrl: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800&q=80',
-    providers: ['Uber', 'Bolt'],
+    providers: ['Uber', 'Bolt', 'Yango'],
     routes: [
       { from: 'Accra Airport', to: 'Accra City Centre', estimatedDuration: '20–45 mins', estimatedCost: { min: 50, max: 100 }, notes: 'Much cheaper and safer than airport taxis' },
-      { from: 'Within Accra', to: 'Any Accra destination', estimatedDuration: 'Varies', estimatedCost: { min: 25, max: 80 }, notes: 'Bolt is often cheaper than Uber in Accra' },
+      { from: 'Within Accra', to: 'Any Accra destination', estimatedDuration: 'Varies', estimatedCost: { min: 25, max: 80 }, notes: 'Compare the apps before booking; Bolt and Yango are often cheaper than Uber' },
       { from: 'Within Kumasi', to: 'Any Kumasi destination', estimatedDuration: 'Varies', estimatedCost: { min: 20, max: 60 } },
     ],
     safetyTips: [
@@ -117,7 +141,7 @@ export const transportation: Transportation[] = [
     ],
     pros: ['Transparent pricing', 'Cashless payment', 'Driver tracking', 'Rated drivers', 'Easy to book via app', 'Air-conditioned vehicles'],
     cons: ['Surge pricing during peak hours or events', 'Not available in smaller towns', 'Requires internet connection'],
-    bookingInfo: 'Download the Uber or Bolt app. Create an account and add a payment method. Available 24/7 in Accra.',
+    bookingInfo: 'Download the Uber, Bolt or Yango app. Create an account and add a payment method. Available 24/7 in Accra.',
   },
   {
     id: 'domestic-flight',

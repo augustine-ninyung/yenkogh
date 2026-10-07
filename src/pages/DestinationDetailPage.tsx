@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   MapPin,
@@ -22,6 +22,7 @@ import { RegionFestivals } from '@/components/festivals/RegionFestivals';
 import { Button } from '@/components/ui/Button';
 import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { Spinner } from '@/components/ui/Spinner';
+import { recordDestinationView } from '@/services/viewService';
 
 export const DestinationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +33,12 @@ export const DestinationDetailPage: React.FC = () => {
   const { addToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'activities' | 'transport' | 'safety'>('overview');
+
+  // Counted once per browser session, for the admin's most-viewed figures
+  const viewedId = destination?.id;
+  useEffect(() => {
+    if (viewedId) recordDestinationView(viewedId);
+  }, [viewedId]);
 
   if (isLoading) {
     return (
@@ -151,10 +158,14 @@ export const DestinationDetailPage: React.FC = () => {
           <div className="flex items-center gap-4 text-xs sm:text-sm text-[#757B81] dark:text-white/70">
             <div className="flex items-center gap-1">
               <Star size={16} className="text-[#FFD300] fill-[#FFD300]" />
-              <span className="font-bold text-[#090C11] dark:text-white">
-                {destination.rating?.toFixed(1) || '4.5'}
-              </span>
-              <span>({destination.reviewCount || 0} reviews)</span>
+              {destination.reviewCount > 0 ? (
+                <>
+                  <span className="font-bold text-[#090C11] dark:text-white">{destination.rating.toFixed(1)}</span>
+                  <span>({destination.reviewCount} reviews)</span>
+                </>
+              ) : (
+                <span>Not yet rated</span>
+              )}
             </div>
             {destination.openingHours && (
               <div className="flex items-center gap-1">
@@ -168,6 +179,14 @@ export const DestinationDetailPage: React.FC = () => {
         {/* Gallery */}
         <div className="mb-10">
           <ImageGallery images={galleryImages} />
+          {destination.imageCredit && (
+            <p className="mt-2 text-xs text-[#757B81]">
+              Main photo:{' '}
+              <a href={destination.imageCredit} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#090C11] dark:hover:text-white">
+                author and licence on Wikimedia Commons
+              </a>
+            </p>
+          )}
         </div>
 
         {/* 2-Column Content + Booking Card */}

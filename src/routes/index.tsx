@@ -22,6 +22,8 @@ import AIPlannerPage from '@/pages/AIPlannerPage';
 import BudgetPlannerPage from '@/pages/BudgetPlannerPage';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 
 // Authenticated Pages
@@ -53,6 +55,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="festivals/:id" element={<FestivalDetailPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="reset-password" element={<ResetPasswordPage />} />
 
         {/* Members only, shown inside the public layout */}
         <Route element={<ProtectedRoute />}>

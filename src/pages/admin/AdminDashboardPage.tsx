@@ -192,6 +192,33 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Recent things */}
       {data && (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          <Panel title="Most-viewed destinations">
+            {data.stats.mostViewed.length === 0 ? (
+              <Empty>No destination pages have been opened in the last 30 days.</Empty>
+            ) : (
+              <>
+                <ol className="divide-y divide-gray-100 dark:divide-white/5">
+                  {data.stats.mostViewed.map((item, index) => (
+                    <li key={item.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
+                      <span className="min-w-0 flex items-center gap-2.5">
+                        <span className="w-5 text-xs font-bold text-[#757B81]">{index + 1}</span>
+                        <Link to={`/explore/${item.id}`} className="font-semibold truncate hover:underline">
+                          {item.name}
+                        </Link>
+                      </span>
+                      <span className="text-xs text-[#757B81] whitespace-nowrap">
+                        {item.views} {item.views === 1 ? 'view' : 'views'}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+                <p className="pt-3 text-xs text-[#757B81]">
+                  {data.stats.viewsLast30Days} destination page {data.stats.viewsLast30Days === 1 ? 'view' : 'views'} in the last 30 days. A page reopened in the same visit is counted once.
+                </p>
+              </>
+            )}
+          </Panel>
+
           <Panel title="Upcoming events" to="/admin/events">
             {data.upcomingEvents.length === 0 ? (
               <Empty>No published events are coming up.</Empty>

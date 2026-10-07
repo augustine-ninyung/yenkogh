@@ -72,8 +72,14 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({
         {/* Rating overlay */}
         <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-xs font-medium">
           <Star size={13} className="text-[#FFD300] fill-[#FFD300]" />
-          <span>{destination.rating?.toFixed(1) || '4.5'}</span>
-          <span className="text-white/60">({destination.reviewCount || 0})</span>
+          {destination.reviewCount > 0 ? (
+            <>
+              <span>{destination.rating.toFixed(1)}</span>
+              <span className="text-white/60">({destination.reviewCount})</span>
+            </>
+          ) : (
+            <span>New</span>
+          )}
         </div>
       </div>
 

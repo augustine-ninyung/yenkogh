@@ -8,10 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "db:seed": "esbuild scripts/build-seed.ts --bundle --platform=node --format=esm --alias:@=./src --log-level=warning --outfile=node_modules/.cache/build-seed.mjs && node node_modules/.cache/build-seed.mjs"
+    "db:seed": "esbuild scripts/build-seed.ts --bundle --platform=node --format=esm --alias:@=./src --log-level=warning --outfile=node_modules/.cache/build-seed.mjs && node node_modules/.cache/build-seed.mjs",
+    "test": "esbuild tests/planner.test.ts --bundle --platform=node --format=esm --alias:@=./src --log-level=warning --outfile=node_modules/.cache/planner.test.mjs && node node_modules/.cache/planner.test.mjs"
   },
   "dependencies": {
-    "@google/genai": "^2.3.0",
     "@supabase/supabase-js": "^2.117.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
