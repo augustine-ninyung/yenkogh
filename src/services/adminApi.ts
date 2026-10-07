@@ -5,6 +5,7 @@ import { hydrateContent } from '@/services/content/contentStore';
 import { localDb, type LocalFeedbackRow } from '@/services/content/localDb';
 import type { ContentStatus, ContentTable, RowByTable } from '@/services/content/resources';
 import { localDestinationViews } from '@/services/viewService';
+import { localPlannerRuns } from '@/services/aiPlannerService';
 
 // Everything the admin area asks of the backend, and the feedback form on the
 // public site. With Supabase connected each call goes to the database, where
@@ -666,7 +667,26 @@ export interface DashboardStats {
   /** Destination pages opened most in the last 30 days, busiest first */
   mostViewed: { id: string; name: string; views: number }[];
   viewsLast30Days: number;
+  /** Trip planner use over the last 30 days */
+  planner: PlannerStats;
 }
+
+export interface PlannerStats {
+  total: number;
+  /** Plans the language model wrote */
+  ai: number;
+  /** Plans assembled from the catalogue without the model */
+  catalogue: number;
+  /** Plans started from a sentence, not the step-by-step form */
+  fromDescription: number;
+  activityItems: number;
+  /** Activities that point at a catalogue record */
+  groundedItems: number;
+  averageMs: number;
+  averageAiMs: number;
+}
+
+const NO_PLANNER_RUNS: PlannerStats = { total: 0, ai: 0, catalogue: 0, fromDescription: 0, activityItems: 0, groundedItems: 0, averageMs: 0, averageAiMs: 0 };
 
 function localStats(): DashboardStats {
   const counts = (table: 'destinations' | 'events' | 'festivals' | 'transport_options'): StatusCounts => {
@@ -694,6 +714,9 @@ function localStats(): DashboardStats {
     }))
     .filter((v) => v.views > 0)
     .sort((a, b) => b.views - a.views || a.name.localeCompare(b.name));
+
+  const runs = localPlannerRuns().filter((r) => r.created_at.slice(0, 10) >= since);
+  const average = (list: typeof runs) => (list.length ? Math.round(list.reduce((sum, r) => sum + r.duration_ms, 0) / list.length) : 0);
 
   return {
     users: {
@@ -730,6 +753,16 @@ function localStats(): DashboardStats {
     })),
     mostViewed: viewed.slice(0, 5),
     viewsLast30Days: viewed.reduce((sum, v) => sum + v.views, 0),
+    planner: {
+      total: runs.length,
+      ai: runs.filter((r) => r.source === 'ai').length,
+      catalogue: runs.filter((r) => r.source === 'catalogue').length,
+      fromDescription: runs.filter((r) => r.from_description).length,
+      activityItems: runs.reduce((sum, r) => sum + r.activity_items, 0),
+      groundedItems: runs.reduce((sum, r) => sum + r.grounded_items, 0),
+      averageMs: average(runs),
+      averageAiMs: average(runs.filter((r) => r.source === 'ai')),
+    },
   };
 }
 
@@ -739,7 +772,7 @@ export const statsApi = {
       const { data, error } = await supabase.rpc('admin_dashboard_stats');
       if (error) throw toApiError(error);
       // A database set up before view counting was added does not send these yet
-      return { mostViewed: [], viewsLast30Days: 0, ...(data as Partial<DashboardStats>) } as DashboardStats;
+      return { mostViewed: [], viewsLast30Days: 0, planner: NO_PLANNER_RUNS, ...(data as Partial<DashboardStats>) } as DashboardStats;
     }
     requireLocalAdmin();
     return localStats();

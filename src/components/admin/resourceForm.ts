@@ -1,4 +1,4 @@
-import type { TransportRoute } from '@/types';
+import type { Activity, TransportOption, TransportRoute } from '@/types';
 import type { ContentStatus, ContentTable } from '@/services/content/resources';
 import type { TableColumn, TableFilter } from './PagedTable';
 
@@ -19,7 +19,11 @@ export type FieldType =
   | 'list'
   /** Image links, one per line, stored as gallery items */
   | 'gallery'
-  | 'routes';
+  | 'routes'
+  /** What there is to do at a destination, with prices */
+  | 'activities'
+  /** Ways of reaching a destination */
+  | 'access';
 
 export interface FieldDef {
   /** A column name, or "details.something" for a value kept in the details JSON */
@@ -47,7 +51,10 @@ export interface FormSection {
   fields: FieldDef[];
 }
 
-export type FormValue = string | boolean | TransportRoute[];
+export type FormValue = string | boolean | TransportRoute[] | Activity[] | TransportOption[];
+
+/** Field types whose value is a list of records edited row by row. */
+export const isRowsField = (type: FieldType) => type === 'routes' || type === 'activities' || type === 'access';
 export type FormValues = Record<string, FormValue>;
 export type FormErrors = Record<string, string>;
 
@@ -117,7 +124,7 @@ export function rowToValues(row: AdminRow | null, sections: FormSection[], defau
   for (const field of allFields(sections)) {
     const raw = readValue(row, field);
     if (raw === undefined || raw === null) {
-      values[field.key] = defaults[field.key] ?? (field.type === 'boolean' ? false : field.type === 'routes' ? [] : '');
+      values[field.key] = defaults[field.key] ?? (field.type === 'boolean' ? false : isRowsField(field.type) ? [] : '');
       continue;
     }
     switch (field.type) {
@@ -132,6 +139,12 @@ export function rowToValues(row: AdminRow | null, sections: FormSection[], defau
         break;
       case 'routes':
         values[field.key] = Array.isArray(raw) ? (raw as TransportRoute[]).map((r) => ({ ...r, estimatedCost: { ...r.estimatedCost } })) : [];
+        break;
+      case 'activities':
+        values[field.key] = Array.isArray(raw) ? (raw as Activity[]).map((a) => ({ ...a })) : [];
+        break;
+      case 'access':
+        values[field.key] = Array.isArray(raw) ? (raw as TransportOption[]).map((o) => ({ ...o })) : [];
         break;
       default:
         values[field.key] = String(raw);
@@ -154,6 +167,29 @@ function validateField(field: FieldDef, value: FormValue): string | undefined {
       const { min, max } = route.estimatedCost;
       if (!Number.isFinite(min) || !Number.isFinite(max) || min < 0 || max < 0) return `Route ${n} has a fare that is not a valid amount.`;
       if (min > max) return `Route ${n}: the lowest fare is above the highest.`;
+    }
+    return undefined;
+  }
+
+  if (field.type === 'activities') {
+    for (const [i, activity] of (value as Activity[]).entries()) {
+      const n = i + 1;
+      if (!activity.name.trim()) return `Activity ${n} needs a name.`;
+      if (activity.name.trim().length > 80) return `Activity ${n}: keep the name to 80 characters or fewer.`;
+      if ((activity.description ?? '').length > 300) return `Activity ${n}: keep the description to 300 characters or fewer.`;
+      const cost = activity.cost ?? 0;
+      if (!Number.isFinite(cost) || cost < 0) return `Activity ${n} has a price that is not a valid amount. Use 0 if it is free.`;
+    }
+    return undefined;
+  }
+
+  if (field.type === 'access') {
+    for (const [i, option] of (value as TransportOption[]).entries()) {
+      const n = i + 1;
+      if (!option.type.trim()) return `Way ${n} needs a kind of transport, such as Bus or Trotro.`;
+      if (!option.description.trim()) return `Way ${n} needs directions.`;
+      if (option.description.length > 300) return `Way ${n}: keep the directions to 300 characters or fewer.`;
+      if (option.estimatedCost?.trim() && !/\d/.test(option.estimatedCost)) return `Way ${n}: the fare must contain an amount, such as 30-50.`;
     }
     return undefined;
   }
@@ -248,6 +284,23 @@ export function valuesToRow(values: FormValues, sections: FormSection[], existin
           estimatedCost: { min: Number(r.estimatedCost.min), max: Number(r.estimatedCost.max) },
           ...(r.frequency?.trim() ? { frequency: r.frequency.trim() } : {}),
           ...(r.notes?.trim() ? { notes: r.notes.trim() } : {}),
+        }));
+        break;
+      case 'activities':
+        stored = (value as Activity[]).map((a, i) => ({
+          id: `a${i + 1}`,
+          name: a.name.trim(),
+          description: (a.description ?? '').trim(),
+          ...(a.duration?.trim() ? { duration: a.duration.trim() } : {}),
+          cost: Number(a.cost ?? 0),
+        }));
+        break;
+      case 'access':
+        stored = (value as TransportOption[]).map((o) => ({
+          type: o.type.trim(),
+          description: o.description.trim(),
+          ...(o.estimatedCost?.trim() ? { estimatedCost: o.estimatedCost.trim() } : {}),
+          ...(o.duration?.trim() ? { duration: o.duration.trim() } : {}),
         }));
         break;
       default:

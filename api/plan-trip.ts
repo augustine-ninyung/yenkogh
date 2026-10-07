@@ -1182,6 +1182,7 @@ export default async function handler(req: IncomingRequest, res: OutgoingRespons
     const abort = new AbortController();
     const timer = setTimeout(() => abort.abort(), 40000);
     try {
+      const started = Date.now();
       const result = await planTrip(body as PlanRequest, knowledge, {
         apiKey: env.apiKey,
         model: env.model,
@@ -1190,6 +1191,20 @@ export default async function handler(req: IncomingRequest, res: OutgoingRespons
         signal: abort.signal,
         log: (message) => console.warn(message),
       });
+      // For the admin dashboard. Written as the traveller, so the database's own rules apply.
+      // A failure here (for example a database not yet updated) must not cost them their plan.
+      await fetcher(`${env.supabaseUrl}/rest/v1/planner_runs`, {
+        method: 'POST',
+        headers: { ...auth, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({
+          source: result.source,
+          from_description: Boolean((body as PlanRequest).prompt),
+          days: result.itinerary.days.length,
+          activity_items: result.grounding.activityItems,
+          grounded_items: result.grounding.groundedItems,
+          duration_ms: Date.now() - started,
+        }),
+      }).catch(() => undefined);
       return send(200, result);
     } finally {
       clearTimeout(timer);

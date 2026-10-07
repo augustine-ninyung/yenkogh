@@ -1,10 +1,11 @@
 import React, { useId, useRef, useState } from 'react';
 import { ImageOff, Plus, Trash2, Upload } from 'lucide-react';
-import type { TransportRoute } from '@/types';
+import type { Activity, TransportOption, TransportRoute } from '@/types';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { IMAGE_RULES, mediaApi, validateImageFile } from '@/services/adminApi';
 import type { ContentTable } from '@/services/content/resources';
+import { isRowsField } from './resourceForm';
 import type { FieldDef, FormValue } from './resourceForm';
 
 const inputClass =
@@ -173,6 +174,92 @@ const RoutesInput: React.FC<{ value: TransportRoute[]; onChange: (routes: Transp
   );
 };
 
+// ─── Destination activities ───────────────────────────────────────────────────
+
+const ActivitiesInput: React.FC<{ value: Activity[]; onChange: (activities: Activity[]) => void }> = ({ value, onChange }) => {
+  const update = (index: number, change: Partial<Activity>) =>
+    onChange(value.map((a, i) => (i === index ? { ...a, ...change } : a)));
+  const small = cn(inputClass, borderFor(), 'py-2');
+
+  return (
+    <div className="space-y-3">
+      {value.length === 0 && <p className="text-sm text-[#757B81]">No activities yet.</p>}
+      {value.map((activity, i) => (
+        <fieldset key={i} className="rounded-xl border border-gray-200 dark:border-white/10 p-3 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <legend className="text-xs font-bold uppercase tracking-wide text-[#757B81]">Activity {i + 1}</legend>
+            <button
+              type="button"
+              onClick={() => onChange(value.filter((_, j) => j !== i))}
+              aria-label={`Remove activity ${i + 1}`}
+              className="p-1 text-[#757B81] hover:text-red-500"
+            >
+              <Trash2 size={15} />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+            <input className={cn(small, 'sm:col-span-2')} value={activity.name} onChange={(e) => update(i, { name: e.target.value })} placeholder="Name (e.g. Canopy Walkway)" aria-label={`Activity ${i + 1} name`} />
+            <input className={small} value={activity.duration ?? ''} onChange={(e) => update(i, { duration: e.target.value })} placeholder="Time (e.g. 2 hours)" aria-label={`Activity ${i + 1} duration`} />
+            <input
+              className={small}
+              type="number"
+              min={0}
+              value={Number.isFinite(activity.cost) ? activity.cost : ''}
+              onChange={(e) => update(i, { cost: e.target.valueAsNumber })}
+              placeholder="Price (GH₵)"
+              aria-label={`Activity ${i + 1} price per person in cedis`}
+            />
+            <input className={cn(small, 'sm:col-span-4')} value={activity.description} onChange={(e) => update(i, { description: e.target.value })} placeholder="What it involves, in a sentence" aria-label={`Activity ${i + 1} description`} />
+          </div>
+        </fieldset>
+      ))}
+      <Button type="button" variant="ghost" size="sm" onClick={() => onChange([...value, { id: '', name: '', description: '', duration: '', cost: 0 }])}>
+        <Plus size={14} />
+        Add an activity
+      </Button>
+    </div>
+  );
+};
+
+// ─── Ways of reaching a destination ───────────────────────────────────────────
+
+const AccessInput: React.FC<{ value: TransportOption[]; onChange: (options: TransportOption[]) => void }> = ({ value, onChange }) => {
+  const update = (index: number, change: Partial<TransportOption>) =>
+    onChange(value.map((o, i) => (i === index ? { ...o, ...change } : o)));
+  const small = cn(inputClass, borderFor(), 'py-2');
+
+  return (
+    <div className="space-y-3">
+      {value.length === 0 && <p className="text-sm text-[#757B81]">No ways of getting there yet.</p>}
+      {value.map((option, i) => (
+        <fieldset key={i} className="rounded-xl border border-gray-200 dark:border-white/10 p-3 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <legend className="text-xs font-bold uppercase tracking-wide text-[#757B81]">Way {i + 1}</legend>
+            <button
+              type="button"
+              onClick={() => onChange(value.filter((_, j) => j !== i))}
+              aria-label={`Remove way ${i + 1}`}
+              className="p-1 text-[#757B81] hover:text-red-500"
+            >
+              <Trash2 size={15} />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <input className={small} value={option.type} onChange={(e) => update(i, { type: e.target.value })} placeholder="Kind (Bus, Trotro, Taxi...)" aria-label={`Way ${i + 1} kind of transport`} />
+            <input className={small} value={option.estimatedCost ?? ''} onChange={(e) => update(i, { estimatedCost: e.target.value })} placeholder="Fare (e.g. ₵30–50)" aria-label={`Way ${i + 1} fare in cedis`} />
+            <input className={small} value={option.duration ?? ''} onChange={(e) => update(i, { duration: e.target.value })} placeholder="Time (e.g. 3 hours)" aria-label={`Way ${i + 1} travel time`} />
+            <input className={cn(small, 'sm:col-span-3')} value={option.description} onChange={(e) => update(i, { description: e.target.value })} placeholder="Directions (e.g. STC or VIP bus from Accra (Tudu) to Cape Coast)" aria-label={`Way ${i + 1} directions`} />
+          </div>
+        </fieldset>
+      ))}
+      <Button type="button" variant="ghost" size="sm" onClick={() => onChange([...value, { type: '', description: '', estimatedCost: '', duration: '' }])}>
+        <Plus size={14} />
+        Add a way of getting there
+      </Button>
+    </div>
+  );
+};
+
 // ─── One labelled field ───────────────────────────────────────────────────────
 
 export const ResourceField: React.FC<FieldProps> = (props) => {
@@ -232,6 +319,12 @@ export const ResourceField: React.FC<FieldProps> = (props) => {
     case 'routes':
       control = <RoutesInput value={value as TransportRoute[]} onChange={onChange} />;
       break;
+    case 'activities':
+      control = <ActivitiesInput value={value as Activity[]} onChange={onChange} />;
+      break;
+    case 'access':
+      control = <AccessInput value={value as TransportOption[]} onChange={onChange} />;
+      break;
     default:
       control = (
         <input
@@ -253,7 +346,7 @@ export const ResourceField: React.FC<FieldProps> = (props) => {
   return (
     <div className={cn(field.wide && 'sm:col-span-2')}>
       <div className="flex items-baseline justify-between gap-3 mb-1.5">
-        <label htmlFor={field.type === 'routes' ? undefined : id} className="text-sm font-semibold text-[#262B32] dark:text-white">
+        <label htmlFor={isRowsField(field.type) ? undefined : id} className="text-sm font-semibold text-[#262B32] dark:text-white">
           {field.label}
           {field.required && <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>}
         </label>

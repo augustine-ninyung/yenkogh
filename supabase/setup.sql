@@ -760,6 +760,42 @@ $$;
 revoke all on function public.record_destination_view(text) from public;
 grant execute on function public.record_destination_view(text) to anon, authenticated;
 
+-- ─── Trip planner runs ───────────────────────────────────────────────────────
+-- One row each time the planner produces a plan: whether the language model
+-- wrote it or it was assembled from the catalogue, how long it took and how
+-- many of its activities point at a catalogue record. The request text is not
+-- stored. Travellers add their own rows (the planner does it on their behalf);
+-- only administrators can read them, and nobody can change or remove them.
+
+create table if not exists public.planner_runs (
+  id               bigint generated always as identity primary key,
+  user_id          uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  source           text not null check (source in ('ai', 'catalogue')),
+  from_description boolean not null default false,
+  days             integer not null check (days between 1 and 14),
+  activity_items   integer not null default 0 check (activity_items >= 0),
+  grounded_items   integer not null default 0 check (grounded_items >= 0 and grounded_items <= activity_items),
+  duration_ms      integer not null default 0 check (duration_ms >= 0),
+  created_at       timestamptz not null default now()
+);
+
+create index if not exists planner_runs_created_idx on public.planner_runs (created_at desc);
+
+alter table public.planner_runs enable row level security;
+revoke all on public.planner_runs from anon, authenticated;
+grant select on public.planner_runs to authenticated;
+grant insert (source, from_description, days, activity_items, grounded_items, duration_ms) on public.planner_runs to authenticated;
+
+drop policy if exists "planner runs: own rows added" on public.planner_runs;
+create policy "planner runs: own rows added" on public.planner_runs
+  for insert to authenticated
+  with check (user_id = auth.uid() and public.is_active());
+
+drop policy if exists "planner runs: admins read" on public.planner_runs;
+create policy "planner runs: admins read" on public.planner_runs
+  for select to authenticated
+  using (public.is_admin());
+
 -- ─── Dashboard figures ───────────────────────────────────────────────────────
 -- One round trip for every number on the admin dashboard.
 
@@ -844,6 +880,20 @@ begin
     ), '[]'::jsonb),
     'viewsLast30Days', (
       select coalesce(sum(views), 0)::int from public.destination_views where viewed_on > current_date - 30
+    ),
+    'planner', (
+      select jsonb_build_object(
+        'total', count(*),
+        'ai', count(*) filter (where source = 'ai'),
+        'catalogue', count(*) filter (where source = 'catalogue'),
+        'fromDescription', count(*) filter (where from_description),
+        'activityItems', coalesce(sum(activity_items), 0),
+        'groundedItems', coalesce(sum(grounded_items), 0),
+        'averageMs', coalesce(round(avg(duration_ms)), 0),
+        'averageAiMs', coalesce(round(avg(duration_ms) filter (where source = 'ai')), 0)
+      )
+      from public.planner_runs
+      where created_at > now() - interval '30 days'
     )
   );
 end;

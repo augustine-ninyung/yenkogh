@@ -14,6 +14,27 @@ export type { PlanRequest, PlanResult };
 
 const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
+const LOCAL_RUNS_KEY = 'yenkogh_db_planner_runs';
+
+/** A planner run kept in this browser when there is no backend, in the database's shape. */
+export interface LocalPlannerRun {
+  source: 'ai' | 'catalogue';
+  from_description: boolean;
+  days: number;
+  activity_items: number;
+  grounded_items: number;
+  duration_ms: number;
+  created_at: string;
+}
+
+export const localPlannerRuns = (): LocalPlannerRun[] => {
+  try {
+    return JSON.parse(localStorage.getItem(LOCAL_RUNS_KEY) ?? '[]') as LocalPlannerRun[];
+  } catch {
+    return [];
+  }
+};
+
 /** The content this copy of the app is showing, in the shape the planner reads. */
 const localKnowledge = (): PlannerKnowledge => {
   const capitalOf = (region: string) => regions.find((r) => r.name === region)?.capital ?? '';
@@ -75,11 +96,27 @@ export const aiPlannerService = {
     if (!supabase) {
       await delay(900);
       try {
-        return await planTrip(request, localKnowledge(), {
+        const started = Date.now();
+        const result = await planTrip(request, localKnowledge(), {
           apiKey: '',
           fetch: () => Promise.reject(new Error('offline')),
           today: toIsoDate(new Date()),
         });
+        const run: LocalPlannerRun = {
+          source: result.source,
+          from_description: Boolean(request.prompt),
+          days: result.itinerary.days.length,
+          activity_items: result.grounding.activityItems,
+          grounded_items: result.grounding.groundedItems,
+          duration_ms: Date.now() - started,
+          created_at: new Date().toISOString(),
+        };
+        try {
+          localStorage.setItem(LOCAL_RUNS_KEY, JSON.stringify([...localPlannerRuns(), run].slice(-500)));
+        } catch {
+          // Storage can be unavailable; the plan still stands
+        }
+        return result;
       } catch (err) {
         throw new Error(err instanceof PlanError ? err.message : 'Could not plan the trip. Please try again.');
       }

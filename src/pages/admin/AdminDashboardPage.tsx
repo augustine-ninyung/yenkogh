@@ -192,6 +192,43 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Recent things */}
       {data && (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          <Panel title="Trip planner, last 30 days">
+            {data.stats.planner.total === 0 ? (
+              <Empty>No trips have been planned in the last 30 days.</Empty>
+            ) : (
+              <>
+                <dl className="divide-y divide-gray-100 dark:divide-white/5 text-sm">
+                  {(
+                    [
+                      ['Plans produced', String(data.stats.planner.total)],
+                      ['Written by the AI planner', String(data.stats.planner.ai)],
+                      ['Assembled from the catalogue', String(data.stats.planner.catalogue)],
+                      ['Started from a description', String(data.stats.planner.fromDescription)],
+                      [
+                        'Activities tied to a catalogue record',
+                        data.stats.planner.activityItems > 0
+                          ? `${data.stats.planner.groundedItems} of ${data.stats.planner.activityItems} (${Math.round((data.stats.planner.groundedItems / data.stats.planner.activityItems) * 100)}%)`
+                          : 'None yet',
+                      ],
+                      ['Average time to plan', `${(data.stats.planner.averageMs / 1000).toFixed(1)} s`],
+                      ...(data.stats.planner.ai > 0 ? [['Average time, AI plans', `${(data.stats.planner.averageAiMs / 1000).toFixed(1)} s`]] : []),
+                    ] as [string, string][]
+                  ).map(([label, value]) => (
+                    <div key={label} className="py-2.5 flex items-center justify-between gap-3">
+                      <dt className="text-[#757B81] dark:text-white/70">{label}</dt>
+                      <dd className="font-semibold whitespace-nowrap">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                {data.stats.planner.ai === 0 && (
+                  <p className="pt-3 text-xs text-[#757B81]">
+                    No plan has come from the AI planner in this period. If that is unexpected, check that GEMINI_API_KEY is set for the site and look at the function's log.
+                  </p>
+                )}
+              </>
+            )}
+          </Panel>
+
           <Panel title="Most-viewed destinations">
             {data.stats.mostViewed.length === 0 ? (
               <Empty>No destination pages have been opened in the last 30 days.</Empty>

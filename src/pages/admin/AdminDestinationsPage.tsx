@@ -79,6 +79,18 @@ const config: ResourceConfig = {
         { key: 'details.tags', label: 'Tags', type: 'list', wide: true, rows: 2, hint: 'One per line. Used by search.' },
       ],
     },
+    {
+      title: 'Activities and prices',
+      fields: [
+        { key: 'details.activities', label: 'What visitors can do here', type: 'activities', wide: true, hint: 'The trip planner builds each day from these and uses these prices. Price is per person; use 0 if it is free.' },
+      ],
+    },
+    {
+      title: 'Getting there',
+      fields: [
+        { key: 'details.transportOptions', label: 'Ways of reaching this place', type: 'access', wide: true, hint: 'Say where each one starts, e.g. "from Accra". The trip planner uses these for travel legs; leave the fare empty if it is not known.' },
+      ],
+    },
   ],
 };
 

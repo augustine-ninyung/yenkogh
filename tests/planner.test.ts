@@ -319,8 +319,8 @@ const call = async (options: { method?: string; token?: string; body?: unknown; 
 
 /** Stands in for Supabase: one signed-in user and the seeded catalogue. */
 const supabaseStub = (profileStatus = 'active', calls: string[] = []) =>
-  (async (url: string) => {
-    calls.push(url);
+  (async (url: string, init?: { body?: string }) => {
+    calls.push(url.includes('/planner_runs') ? `${url} ${init?.body}` : url);
     const reply = (data: unknown, ok = true) => ({ ok, status: ok ? 200 : 401, json: async () => data, text: async () => '' });
     if (url.includes('/auth/v1/user')) return reply({ id: `user-${profileStatus}-${calls.length}` });
     if (url.includes('/rest/v1/profiles')) return reply([{ status: profileStatus }]);
@@ -328,6 +328,7 @@ const supabaseStub = (profileStatus = 'active', calls: string[] = []) =>
     if (url.includes('/rest/v1/destinations')) return reply(rows.destinations);
     if (url.includes('/rest/v1/festivals')) return reply(rows.festivals);
     if (url.includes('/rest/v1/transport_options')) return reply(rows.transport);
+    if (url.includes('/rest/v1/planner_runs')) return reply(null);
     throw new Error(`unexpected call to ${url}`);
   }) as unknown as typeof fetch;
 
@@ -352,6 +353,14 @@ test('the endpoint plans a trip from the database for a signed-in traveller', as
   assert.equal(response.json.source, 'catalogue');
   assert.equal(response.json.itinerary.days.length, 2);
   assert.equal(response.json.itinerary.days[0].location, 'Kakum National Park');
+  // The run is recorded for the dashboard, without the traveller's words
+  const logged = calls.find((u) => u.includes('/rest/v1/planner_runs'));
+  assert.ok(logged, 'the run is recorded');
+  const record = JSON.parse(logged.slice(logged.indexOf(' ') + 1));
+  assert.deepEqual(Object.keys(record).sort(), ['activity_items', 'days', 'duration_ms', 'from_description', 'grounded_items', 'source']);
+  assert.equal(record.source, 'catalogue');
+  assert.equal(record.from_description, true);
+  assert.equal(record.days, 2);
   // Only published content is read
   for (const table of ['destinations', 'festivals', 'transport_options']) {
     assert.ok(calls.some((u) => u.includes(`/rest/v1/${table}`) && u.includes('status=eq.published')), `${table} is filtered to published rows`);
