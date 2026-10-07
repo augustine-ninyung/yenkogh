@@ -430,14 +430,14 @@ export default function LandingPage() {
             Ready to Experience Ghana?
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto mb-10">
-            Join thousands of travelers who have used YɛnkɔGH to plan unforgettable trips across Ghana. Start your journey today — it's free.
+            Join the thousands of travelers who have used YɛnkɔGH to plan unforgettable trips across Ghana. Start your journey today — it's free.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               to="/register"
               className="inline-flex items-center gap-2 bg-[#FFD300] hover:bg-yellow-400 text-[#090C11] font-bold px-10 py-5 rounded-xl text-lg transition-all duration-200 shadow-xl shadow-[#FFD300]/30"
             >
-              Start Planning — It's Free
+              Start Planning, It's Free
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link

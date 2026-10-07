@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { scrollToStart } from '@/utils/scroll';
 import { ArrowDown, ArrowUp, ArrowUpDown, Search, X } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -61,8 +62,10 @@ export function PagedTable<T>({ list, columns, rowKey, filters = [], searchPlace
   const firstRow = (list.page - 1) * list.pageSize + 1;
   const lastRow = Math.min(list.page * list.pageSize, list.total);
 
+  const topRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="space-y-4">
+    <div ref={topRef} className="space-y-4">
       {/* Search and filters */}
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="relative flex-1 min-w-0">
@@ -187,7 +190,11 @@ export function PagedTable<T>({ list, columns, rowKey, filters = [], searchPlace
             Showing {firstRow}–{lastRow} of {list.total} {noun}
           </span>
           {list.totalPages > 1 && (
-            <Pagination currentPage={list.page} totalPages={list.totalPages} onPageChange={list.setPage} />
+            <Pagination currentPage={list.page} totalPages={list.totalPages} onPageChange={(page) => {
+                list.setPage(page);
+                scrollToStart(topRef.current);
+              }}
+            />
           )}
         </div>
       )}

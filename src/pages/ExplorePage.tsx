@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, X } from 'lucide-react';
 import { DestinationCard } from '@/components/cards/DestinationCard';
@@ -8,6 +8,7 @@ import { Pagination } from '@/components/ui/Pagination';
 import { Badge } from '@/components/ui/Badge';
 import { useDestinations } from '@/hooks/useDestinations';
 import { regions } from '@/data/regions';
+import { scrollToStart } from '@/utils/scroll';
 import { RegionFestivals } from '@/components/festivals/RegionFestivals';
 import type { DestinationType, SortOption } from '@/types';
 
@@ -44,6 +45,8 @@ export const ExplorePage: React.FC = () => {
   const [sortBy, setSortBy] = useState<SortOption>('rating-desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  const resultsRef = useRef<HTMLElement>(null);
 
   const { destinations, isLoading } = useDestinations();
 
@@ -323,7 +326,7 @@ export const ExplorePage: React.FC = () => {
           )}
 
           {/* Destination Results Grid */}
-          <main className="lg:col-span-3">
+          <main ref={resultsRef} className="lg:col-span-3">
             {/* Active Pills */}
             {hasActiveFilters && (
               <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -376,7 +379,11 @@ export const ExplorePage: React.FC = () => {
                     <Pagination
                       currentPage={currentPage}
                       totalPages={totalPages}
-                      onPageChange={setCurrentPage}
+                      onPageChange={(page) => {
+                        setCurrentPage(page);
+                        // Start the new page of results at its top, not at the pagination bar
+                        scrollToStart(resultsRef.current);
+                      }}
                     />
                   </div>
                 )}
