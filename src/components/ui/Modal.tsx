@@ -31,12 +31,20 @@ export const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<Element | null>(null);
 
+  // Callers usually pass a new onClose function on every render. Reading it through a ref
+  // keeps the effect below tied to opening and closing only; otherwise it would re-run on
+  // each keystroke in a form and move focus back to the first control.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
   // Focus trap
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!isOpen) return;
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (e.key === 'Tab') {
@@ -60,7 +68,7 @@ export const Modal: React.FC<ModalProps> = ({
         }
       }
     },
-    [isOpen, onClose]
+    [isOpen]
   );
 
   useEffect(() => {
