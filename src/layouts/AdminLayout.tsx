@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { Outlet, NavLink, Navigate, useNavigate, Link } from 'react-router-dom';
+import { PageFallback } from '@/components/ui/PageFallback';
 import {
   BarChart3,
   MapPin,
@@ -237,7 +238,9 @@ export const AdminLayout: React.FC = () => {
 
         {/* Page content */}
         <main className="flex-1 p-4 sm:p-6">
-          <Outlet />
+          <Suspense fallback={<PageFallback />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 

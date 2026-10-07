@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { PageFallback } from '@/components/ui/PageFallback';
 import { Navbar } from '@/components/navigation/Navbar';
 import { Footer } from '@/components/navigation/Footer';
 import { ToastContainer } from '@/components/ui/Toast';
@@ -12,7 +13,9 @@ export const MainLayout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-white dark:bg-[#090C11] text-[#262B32] dark:text-white">
       <Navbar />
       <main className="flex-1">
-        <Outlet />
+        <Suspense fallback={<PageFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
       <ToastContainer />

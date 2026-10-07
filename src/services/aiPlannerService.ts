@@ -118,7 +118,10 @@ export const aiPlannerService = {
         }
         return result;
       } catch (err) {
-        throw new Error(err instanceof PlanError ? err.message : 'Could not plan the trip. Please try again.');
+        // Only the planner's own refusals are worded for the traveller
+        if (err instanceof PlanError) throw err;
+        console.error(err);
+        throw new Error('Could not plan the trip. Please try again.', { cause: err });
       }
     }
 

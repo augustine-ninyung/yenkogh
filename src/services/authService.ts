@@ -232,7 +232,7 @@ export const authService = {
 
     // For mock users we check the known passwords; for registered users we
     // compare the stored (plain-text) password that was set at registration.
-    let passwordOk = false;
+    let passwordOk: boolean;
     if (normalised === DEMO_USER_EMAIL.toLowerCase()) {
       passwordOk = password === DEMO_USER_PASSWORD;
     } else if (normalised === DEMO_ADMIN_EMAIL.toLowerCase()) {

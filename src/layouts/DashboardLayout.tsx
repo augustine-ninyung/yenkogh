@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
+import { PageFallback } from '@/components/ui/PageFallback';
 import {
   LayoutDashboard,
   Map,
@@ -208,7 +209,9 @@ export const DashboardLayout: React.FC = () => {
               </div>
             )}
           </div>
-          <Outlet />
+          <Suspense fallback={<PageFallback />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 
