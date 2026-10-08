@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { Outlet, NavLink, Navigate, useNavigate, Link } from 'react-router-dom';
+import { Logo } from '@/components/ui/Logo';
 import { PageFallback } from '@/components/ui/PageFallback';
 import {
   BarChart3,
@@ -100,11 +101,10 @@ export const AdminLayout: React.FC = () => {
       <div className="px-4 py-5 border-b border-white/10">
         <Link
           to="/admin"
-          className="flex items-center gap-2 text-xl font-bold text-white font-['Playfair_Display',serif]"
+          className="flex items-center"
           onClick={() => setMobileOpen(false)}
         >
-          <span className="text-[#FFD300]">Yɛnkɔ</span>
-          <span>GH</span>
+          <Logo className="h-8 w-auto text-white" />
         </Link>
         <div className="flex items-center gap-1.5 mt-1">
           <ShieldCheck size={12} className="text-[#FFD300]" />
@@ -200,9 +200,9 @@ export const AdminLayout: React.FC = () => {
           {/* Mobile logo */}
           <Link
             to="/admin"
-            className="lg:hidden text-lg font-bold font-['Playfair_Display',serif] text-[#262B32] dark:text-white"
+            className="lg:hidden"
           >
-            <span className="text-[#FFD300]">Yɛnkɔ</span>GH
+            <Logo className="h-7 w-auto text-[#191E25] dark:text-white" />
           </Link>
 
           {/* Title */}

@@ -1,5 +1,6 @@
 import React, { useState, Suspense } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
+import { Logo } from '@/components/ui/Logo';
 import { PageFallback } from '@/components/ui/PageFallback';
 import {
   LayoutDashboard,
@@ -74,11 +75,10 @@ export const DashboardLayout: React.FC = () => {
       <div className="px-4 py-5 border-b border-gray-100 dark:border-white/10">
         <Link
           to="/"
-          className="flex items-center gap-2 text-xl font-bold text-[#262B32] dark:text-white font-['Playfair_Display',serif]"
+          className="flex items-center"
           onClick={() => setMobileOpen(false)}
         >
-          <span className="text-[#FFD300]">Yɛnkɔ</span>
-          <span>GH</span>
+          <Logo className="h-8 w-auto text-[#191E25] dark:text-white" />
         </Link>
         <p className="text-xs text-[#757B81] mt-1">My Dashboard</p>
       </div>
@@ -175,9 +175,8 @@ export const DashboardLayout: React.FC = () => {
           </button>
           <Link
             to="/"
-            className="text-lg font-bold font-['Playfair_Display',serif] text-[#262B32] dark:text-white"
           >
-            <span className="text-[#FFD300]">Yɛnkɔ</span>GH
+            <Logo className="h-7 w-auto text-[#191E25] dark:text-white" />
           </Link>
           {user && (
             <div className="ml-auto">

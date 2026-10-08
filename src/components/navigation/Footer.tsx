@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Logo } from '@/components/ui/Logo';
 
 export const Footer: React.FC = () => {
   return (
@@ -12,10 +13,7 @@ export const Footer: React.FC = () => {
           {/* Brand Info */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <span className="font-['Playfair_Display',serif] text-2xl font-bold">
-                <span className="text-[#FFD300] drop-shadow-sm">Yɛnkɔ</span>
-                <span>GH</span>
-              </span>
+              <Logo className="h-10 w-auto text-[#191E25] dark:text-white" />
             </Link>
             <p className="text-[#757B81] dark:text-white/70 text-sm leading-relaxed max-w-sm">
               Ghana's premier smart tourism and transportation discovery platform. Explore historical landmarks, pristine natural wonders, vibrant festivals, and plan your entire journey with confidence.

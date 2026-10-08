@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { Logo } from '@/components/ui/Logo';
 import {
   X,
   Compass,
@@ -56,9 +57,8 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
       <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-white dark:bg-[#090C11] shadow-2xl flex flex-col z-50 border-l border-gray-100 dark:border-white/10 animate-in slide-in-from-right duration-250">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-white/10">
-          <Link to="/" onClick={onClose} className="font-['Playfair_Display',serif] text-xl font-bold">
-            <span className="text-[#FFD300]">Yɛnkɔ</span>
-            <span className="text-[#090C11] dark:text-white">GH</span>
+          <Link to="/" onClick={onClose}>
+            <Logo className="h-8 w-auto text-[#191E25] dark:text-white" />
           </Link>
           <button
             onClick={onClose}

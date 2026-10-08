@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Logo } from '@/components/ui/Logo';
 import {
   Menu,
   User,
@@ -82,12 +83,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group">
-              <span className="font-['Playfair_Display',serif] text-2xl font-bold tracking-tight">
-                <span className="text-[#FFD300] drop-shadow-sm">Yɛnkɔ</span>
-                <span className={cn('transition-colors', !isHome || isScrolled ? 'text-[#090C11] dark:text-white' : 'text-white')}>
-                  GH
-                </span>
-              </span>
+              <Logo variant="mark" className={cn('h-10 w-auto transition-colors', !isHome || isScrolled ? 'text-[#191E25] dark:text-white' : 'text-white')} />
             </Link>
 
             {/* Desktop Navigation */}

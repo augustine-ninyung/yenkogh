@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Layouts
@@ -9,38 +9,39 @@ import { AdminLayout } from '@/layouts/AdminLayout';
 // Route Guards
 import { ProtectedRoute } from './ProtectedRoute';
 import { AdminRoute } from './AdminRoute';
+import { lazyPage } from './lazyPage';
 
 // Pages. Each is fetched the first time it is opened, apart from the landing
 // page, which is part of the first download.
 import LandingPage from '@/pages/LandingPage';
-const ExplorePage = lazy(() => import('@/pages/ExplorePage'));
-const DestinationDetailPage = lazy(() => import('@/pages/DestinationDetailPage'));
-const EventsPage = lazy(() => import('@/pages/EventsPage'));
-const EventDetailPage = lazy(() => import('@/pages/EventDetailPage'));
-const FestivalDetailPage = lazy(() => import('@/pages/FestivalDetailPage'));
-const TransportationPage = lazy(() => import('@/pages/TransportationPage'));
-const AIPlannerPage = lazy(() => import('@/pages/AIPlannerPage'));
-const BudgetPlannerPage = lazy(() => import('@/pages/BudgetPlannerPage'));
-const LoginPage = lazy(() => import('@/pages/LoginPage'));
-const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
-const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
-const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
-const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
+const ExplorePage = lazyPage(() => import('@/pages/ExplorePage'));
+const DestinationDetailPage = lazyPage(() => import('@/pages/DestinationDetailPage'));
+const EventsPage = lazyPage(() => import('@/pages/EventsPage'));
+const EventDetailPage = lazyPage(() => import('@/pages/EventDetailPage'));
+const FestivalDetailPage = lazyPage(() => import('@/pages/FestivalDetailPage'));
+const TransportationPage = lazyPage(() => import('@/pages/TransportationPage'));
+const AIPlannerPage = lazyPage(() => import('@/pages/AIPlannerPage'));
+const BudgetPlannerPage = lazyPage(() => import('@/pages/BudgetPlannerPage'));
+const LoginPage = lazyPage(() => import('@/pages/LoginPage'));
+const RegisterPage = lazyPage(() => import('@/pages/RegisterPage'));
+const ForgotPasswordPage = lazyPage(() => import('@/pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazyPage(() => import('@/pages/ResetPasswordPage'));
+const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage'));
 
 // Authenticated Pages
-const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
-const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const DashboardPage = lazyPage(() => import('@/pages/DashboardPage'));
+const ProfilePage = lazyPage(() => import('@/pages/ProfilePage'));
 
 // Admin Pages
-const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
-const AdminDestinationsPage = lazy(() => import('@/pages/admin/AdminDestinationsPage'));
-const AdminEventsPage = lazy(() => import('@/pages/admin/AdminEventsPage'));
-const AdminTransportPage = lazy(() => import('@/pages/admin/AdminTransportPage'));
-const AdminUsersPage = lazy(() => import('@/pages/admin/AdminUsersPage'));
-const AdminRegionsPage = lazy(() => import('@/pages/admin/AdminRegionsPage'));
-const AdminFestivalsPage = lazy(() => import('@/pages/admin/AdminFestivalsPage'));
-const AdminFeedbackPage = lazy(() => import('@/pages/admin/AdminFeedbackPage'));
-const AdminAuditPage = lazy(() => import('@/pages/admin/AdminAuditPage'));
+const AdminDashboardPage = lazyPage(() => import('@/pages/admin/AdminDashboardPage'));
+const AdminDestinationsPage = lazyPage(() => import('@/pages/admin/AdminDestinationsPage'));
+const AdminEventsPage = lazyPage(() => import('@/pages/admin/AdminEventsPage'));
+const AdminTransportPage = lazyPage(() => import('@/pages/admin/AdminTransportPage'));
+const AdminUsersPage = lazyPage(() => import('@/pages/admin/AdminUsersPage'));
+const AdminRegionsPage = lazyPage(() => import('@/pages/admin/AdminRegionsPage'));
+const AdminFestivalsPage = lazyPage(() => import('@/pages/admin/AdminFestivalsPage'));
+const AdminFeedbackPage = lazyPage(() => import('@/pages/admin/AdminFeedbackPage'));
+const AdminAuditPage = lazyPage(() => import('@/pages/admin/AdminAuditPage'));
 
 export const AppRoutes: React.FC = () => {
   return (
