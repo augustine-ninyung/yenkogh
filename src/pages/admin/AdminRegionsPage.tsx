@@ -32,7 +32,7 @@ export const AdminRegionsPage: React.FC = () => {
     const count = (name: string, kind: 'destinations' | 'festivals' | 'events', id: string) => {
       const n = counts[name]?.[kind];
       if (n === undefined) return '—';
-      if (n === 0) return <span className="text-[#757B81]">0</span>;
+      if (n === 0) return <span className="text-muted">0</span>;
       return (
         <Link to={`/admin/${kind}?region=${id}`} className={countLink} aria-label={`${n} ${kind} in ${name}`}>
           {n}
@@ -66,7 +66,7 @@ export const AdminRegionsPage: React.FC = () => {
               )}
               <div>
                 <p className="font-semibold text-[#090C11] dark:text-white">{row.name}</p>
-                <p className="text-xs text-[#757B81]">{String(row.code)}</p>
+                <p className="text-xs text-muted">{String(row.code)}</p>
               </div>
             </div>
           ),

@@ -11,7 +11,7 @@ interface BadgeProps {
 
 const variantClasses: Record<BadgeVariant, string> = {
   default:
-    'bg-gray-100 text-gray-700 dark:bg-[#262B32] dark:text-[#757B81]',
+    'bg-gray-100 text-gray-700 dark:bg-[#262B32] dark:text-muted',
   primary:
     'bg-[#FFD300] text-[#090C11] font-semibold',
   success:
@@ -23,7 +23,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   info:
     'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
   outline:
-    'bg-transparent border border-gray-300 text-gray-700 dark:border-[#757B81]/50 dark:text-[#757B81]',
+    'bg-transparent border border-gray-300 text-gray-700 dark:border-[#757B81]/50 dark:text-muted',
 };
 
 export const Badge: React.FC<BadgeProps> = ({

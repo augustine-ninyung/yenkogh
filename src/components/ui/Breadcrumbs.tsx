@@ -26,7 +26,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className }) =>
               {isFirst && (
                 <Home
                   size={14}
-                  className="text-[#757B81] shrink-0 mr-0.5"
+                  className="text-muted shrink-0 mr-0.5"
                   aria-hidden="true"
                 />
               )}
@@ -40,19 +40,19 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className }) =>
               ) : item.href ? (
                 <Link
                   to={item.href}
-                  className="text-sm text-[#757B81] hover:text-[#FFD300] transition-colors duration-200 truncate max-w-[200px]"
+                  className="text-sm text-muted hover:text-[#FFD300] transition-colors duration-200 truncate max-w-[200px]"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-sm text-[#757B81] truncate max-w-[200px]">
+                <span className="text-sm text-muted truncate max-w-[200px]">
                   {item.label}
                 </span>
               )}
               {!isLast && (
                 <ChevronRight
                   size={14}
-                  className="text-[#757B81]/50 shrink-0"
+                  className="text-muted/50 shrink-0"
                   aria-hidden="true"
                 />
               )}

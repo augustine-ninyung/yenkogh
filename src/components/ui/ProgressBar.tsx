@@ -36,7 +36,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             </span>
           )}
           {showPercentage && (
-            <span className="text-sm font-semibold text-[#757B81] tabular-nums">
+            <span className="text-sm font-semibold text-muted tabular-nums">
               {clamped}%
             </span>
           )}

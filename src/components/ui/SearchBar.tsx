@@ -44,7 +44,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         {/* Search icon */}
         <span
           className={cn(
-            'absolute top-1/2 -translate-y-1/2 pointer-events-none text-[#757B81]',
+            'absolute top-1/2 -translate-y-1/2 pointer-events-none text-muted',
             sz.iconLeft
           )}
           aria-hidden="true"
@@ -62,7 +62,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           placeholder={placeholder}
           className={cn(
             'w-full rounded-xl border border-gray-200 dark:border-[#757B81]/40 bg-white dark:bg-[#262B32]',
-            'text-[#090C11] dark:text-white placeholder:text-[#757B81]',
+            'text-[#090C11] dark:text-white placeholder:text-muted',
             'transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FFD300] focus:border-transparent',
             'hover:border-[#757B81]',
             sz.input,
@@ -76,7 +76,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             type="button"
             aria-label="Clear search"
             onClick={() => onChange('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#757B81] hover:text-[#262B32] dark:hover:text-white transition-colors duration-200"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-[#262B32] dark:hover:text-white transition-colors duration-200"
           >
             <X size={16} />
           </button>

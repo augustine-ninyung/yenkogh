@@ -1,3 +1,4 @@
+import { SkipLink } from '@/components/navigation/SkipLink';
 import React, { useEffect, useState, Suspense } from 'react';
 import { Outlet, NavLink, Navigate, useNavigate, Link } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
@@ -151,6 +152,7 @@ export const AdminLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-[#0a0d12] text-[#262B32] dark:text-white">
+      <SkipLink />
       {/* ── Desktop Sidebar ── */}
       <aside className="hidden lg:flex flex-col w-60 shrink-0 bg-[#090C11] fixed inset-y-0 left-0 z-30">
         {sidebarContent}
@@ -192,7 +194,7 @@ export const AdminLayout: React.FC = () => {
           <button
             onClick={() => setMobileOpen(true)}
             aria-label="Open navigation menu"
-            className="lg:hidden p-2 rounded-lg text-[#757B81] hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+            className="lg:hidden p-2 rounded-lg text-muted hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
           >
             <Menu size={20} />
           </button>
@@ -217,7 +219,7 @@ export const AdminLayout: React.FC = () => {
           <div className="ml-auto flex items-center gap-3">
             <Link
               to="/"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-[#757B81] hover:text-[#090C11] dark:hover:text-white"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-[#090C11] dark:hover:text-white"
             >
               View site <ExternalLink size={14} />
             </Link>
@@ -228,7 +230,7 @@ export const AdminLayout: React.FC = () => {
                   <p className="text-sm font-semibold text-[#262B32] dark:text-white leading-none">
                     {user.name}
                   </p>
-                  <p className="text-xs text-[#757B81] capitalize">{user.role}</p>
+                  <p className="text-xs text-muted capitalize">{user.role}</p>
                 </div>
                 <Avatar src={user.avatar} name={user.name} size="sm" />
               </>
@@ -237,7 +239,7 @@ export const AdminLayout: React.FC = () => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6">
+        <main id="main" tabIndex={-1} className="focus:outline-none flex-1 p-4 sm:p-6">
           <Suspense fallback={<PageFallback />}>
             <Outlet />
           </Suspense>

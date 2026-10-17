@@ -7,7 +7,7 @@ import { regions } from '@/data/regions';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { FESTIVAL_CATEGORY_META } from '@/components/festivals/festivalMeta';
 import { FestivalCard } from '@/components/cards/FestivalCard';
-import { Button } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -50,10 +50,8 @@ export const FestivalDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen pt-32 pb-20 max-w-xl mx-auto px-4 text-center">
         <h2 className="text-2xl font-bold mb-3">Festival Not Found</h2>
-        <p className="text-[#757B81] mb-6">The festival you are looking for could not be found.</p>
-        <Link to={FESTIVALS_URL}>
-          <Button variant="primary">Browse all festivals</Button>
-        </Link>
+        <p className="text-muted mb-6">The festival you are looking for could not be found.</p>
+        <ButtonLink to={FESTIVALS_URL} variant="primary">Browse all festivals</ButtonLink>
       </div>
     );
   }
@@ -194,13 +192,13 @@ export const FestivalDetailPage: React.FC = () => {
 
           {festival.historicalSignificance && (
             <Section title="History">
-              <p className="leading-relaxed text-[#757B81] dark:text-white/70">{festival.historicalSignificance}</p>
+              <p className="leading-relaxed text-muted dark:text-white/70">{festival.historicalSignificance}</p>
             </Section>
           )}
 
           {festival.culturalSignificance && (
             <Section title="Cultural significance">
-              <p className="leading-relaxed text-[#757B81] dark:text-white/70">{festival.culturalSignificance}</p>
+              <p className="leading-relaxed text-muted dark:text-white/70">{festival.culturalSignificance}</p>
             </Section>
           )}
 
@@ -239,23 +237,19 @@ export const FestivalDetailPage: React.FC = () => {
         <aside className="space-y-6">
           <div className="rounded-2xl border border-[#FFD300]/50 bg-[#FFD300]/10 p-6">
             <h2 className="font-bold mb-1">Want to attend?</h2>
-            <p className="text-sm text-[#757B81] dark:text-white/70 mb-4">
+            <p className="text-sm text-muted dark:text-white/70 mb-4">
               Build a day-by-day trip around this festival, with places to stay nearby.
             </p>
             <div className="space-y-2.5">
-              <Link to={`/planner?festival=${festival.id}`} className="block">
-                <Button variant="primary" className="w-full gap-2 font-bold">
+              <ButtonLink to={`/planner?festival=${festival.id}`} variant="primary" fullWidth className="gap-2 font-bold">
                   <Sparkles size={16} />
                   Plan a trip to this festival
-                </Button>
-              </Link>
+                </ButtonLink>
               {tripState === 'saved' ? (
-                <Link to="/dashboard/trips" className="block">
-                  <Button variant="outline" className="w-full gap-2">
+                <ButtonLink to="/dashboard/trips" variant="outline" fullWidth className="gap-2">
                     <CheckCircle2 size={16} />
                     Added. View My Trips
-                  </Button>
-                </Link>
+                  </ButtonLink>
               ) : (
                 <Button
                   variant="outline"
@@ -277,24 +271,22 @@ export const FestivalDetailPage: React.FC = () => {
                   <div key={fact.label} className="flex gap-3">
                     <fact.icon className="w-4 h-4 shrink-0 text-[#FFD300] mt-0.5" />
                     <div>
-                      <dt className="text-xs text-[#757B81] dark:text-white/50">{fact.label}</dt>
+                      <dt className="text-xs text-muted dark:text-white/50">{fact.label}</dt>
                       <dd className="text-sm font-medium">{fact.value}</dd>
                     </div>
                   </div>
                 ))}
               </dl>
             ) : (
-              <p className="text-sm text-[#757B81]">No dates or places are on record yet.</p>
+              <p className="text-sm text-muted">No dates or places are on record yet.</p>
             )}
             {!festival.month && facts.length > 0 && (
-              <p className="mt-4 text-xs text-[#757B81] dark:text-white/50">The time of year is not on record.</p>
+              <p className="mt-4 text-xs text-muted dark:text-white/50">The time of year is not on record.</p>
             )}
             {eventId && (
-              <Link to={`/events/${eventId}`} className="block mt-6">
-                <Button variant="primary" className="w-full">
+              <ButtonLink to={`/events/${eventId}`} variant="primary" fullWidth className="mt-6">
                   See this year's event
-                </Button>
-              </Link>
+                </ButtonLink>
             )}
           </div>
 
@@ -307,7 +299,7 @@ export const FestivalDetailPage: React.FC = () => {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-[#757B81] dark:text-white/70 hover:text-[#FFD300] transition-colors break-all"
+                    className="inline-flex items-center gap-1.5 text-sm text-muted dark:text-white/70 hover:text-[#FFD300] transition-colors break-all"
                   >
                     <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                     {sourceLabel(url)}
@@ -356,7 +348,7 @@ export const FestivalDetailPage: React.FC = () => {
       {/* Dates for "Add to My Trips" */}
       <Modal isOpen={isDateModalOpen} onClose={() => setIsDateModalOpen(false)} title={`When are you going to the ${festival.name}?`} size="md">
         <div className="space-y-4">
-          <p className="text-sm text-[#757B81] dark:text-white/80">
+          <p className="text-sm text-muted dark:text-white/80">
             {festivalWindow
               ? <>This festival is held: <strong>{festivalWindow.label}</strong>. Pick dates that include it.</>
               : 'This festival follows a traditional calendar with no fixed month, so we cannot check your dates against it. Find out when it is next held before choosing.'}
@@ -364,15 +356,15 @@ export const FestivalDetailPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">Start date</label>
+              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">Start date</label>
               <input type="date" value={tripStart} min={todayIso} onChange={(e) => setTripStart(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">End date</label>
+              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">End date</label>
               <input type="date" value={tripEnd} min={tripStart || todayIso} onChange={(e) => setTripEnd(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">Travelers</label>
+              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">Travelers</label>
               <input
                 type="number"
                 min={1}

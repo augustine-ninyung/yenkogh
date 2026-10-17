@@ -81,7 +81,7 @@ export const Rating: React.FC<RatingProps> = ({
       {reviewCount !== undefined && (
         <span
           className={cn(
-            'text-[#757B81]',
+            'text-muted',
             size === 'sm' && 'text-xs',
             size === 'md' && 'text-xs',
             size === 'lg' && 'text-sm'

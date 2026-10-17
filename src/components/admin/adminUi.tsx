@@ -15,7 +15,7 @@ export const AdminPageHeader: React.FC<{ title: string; description: string; act
   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
     <div className="min-w-0">
       <h1 className="text-2xl font-bold text-[#090C11] dark:text-white">{title}</h1>
-      <p className="text-sm text-[#757B81] mt-1">{description}</p>
+      <p className="text-sm text-muted mt-1">{description}</p>
     </div>
     {action && <div className="shrink-0">{action}</div>}
   </div>
@@ -92,7 +92,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 }) => (
   <Modal isOpen={isOpen} onClose={onCancel} title={title} size="sm">
     <div className="space-y-5">
-      <div className="text-sm text-[#757B81] dark:text-white/80">{message}</div>
+      <div className="text-sm text-muted dark:text-white/80">{message}</div>
       <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5">
         <Button variant="ghost" onClick={onCancel} disabled={isWorking}>
           Cancel

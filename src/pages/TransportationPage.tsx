@@ -90,7 +90,7 @@ export const TransportationPage: React.FC = () => {
 
           <form onSubmit={handleRouteSearch} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-1.5 uppercase">
+              <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-1.5 uppercase">
                 Departure (From)
               </label>
               <select
@@ -108,7 +108,7 @@ export const TransportationPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-1.5 uppercase">
+              <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-1.5 uppercase">
                 Destination (To)
               </label>
               <select
@@ -149,11 +149,11 @@ export const TransportationPage: React.FC = () => {
           </form>
 
           {hasSearched && (
-            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-white/10 flex items-center justify-between text-xs text-[#757B81]">
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-white/10 flex items-center justify-between text-xs text-muted">
               <span>
                 Found transport connecting <strong>{fromCity}</strong> and <strong>{toCity}</strong>
               </span>
-              <button onClick={clearRouteSearch} className="text-[#FFD300] hover:underline font-semibold">
+              <button onClick={clearRouteSearch} className="text-accent-ink hover:underline font-semibold">
                 Show All Transport Options
               </button>
             </div>
@@ -169,7 +169,7 @@ export const TransportationPage: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium shrink-0 transition-all ${
                 selectedType === tab.type
                   ? 'bg-[#FFD300] text-[#090C11] font-bold shadow-sm'
-                  : 'bg-white dark:bg-[#262B32] text-[#757B81] dark:text-white/80 border border-gray-200 dark:border-white/10 hover:border-gray-300'
+                  : 'bg-white dark:bg-[#262B32] text-muted dark:text-white/80 border border-gray-200 dark:border-white/10 hover:border-gray-300'
               }`}
             >
               {tab.label}
@@ -181,7 +181,7 @@ export const TransportationPage: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">Available Transport Options</h2>
-            <span className="text-xs text-[#757B81]">
+            <span className="text-xs text-muted">
               {displayedTransport.length} transport modes available
             </span>
           </div>
@@ -201,7 +201,7 @@ export const TransportationPage: React.FC = () => {
             </div>
             <div>
               <h2 className="text-xl font-bold">Ghana Transportation Tips for Travelers</h2>
-              <p className="text-xs text-[#757B81]">Local wisdom for seamless travel across Ghana</p>
+              <p className="text-xs text-muted">Local wisdom for seamless travel across Ghana</p>
             </div>
           </div>
 
@@ -211,7 +211,7 @@ export const TransportationPage: React.FC = () => {
                 <CheckCircle2 size={16} className="text-emerald-500" />
                 <span>Trotro Etiquette</span>
               </h3>
-              <p className="text-[#757B81] dark:text-white/70 leading-relaxed">
+              <p className="text-muted dark:text-white/70 leading-relaxed">
                 Always carry small cedi notes (₵5, ₵10, ₵20). Confirm your stop with the conductor ("mate") when getting in. Say "Bus stop!" clearly when you want to alight.
               </p>
             </div>
@@ -221,7 +221,7 @@ export const TransportationPage: React.FC = () => {
                 <CheckCircle2 size={16} className="text-emerald-500" />
                 <span>Intercity Bus Booking</span>
               </h3>
-              <p className="text-[#757B81] dark:text-white/70 leading-relaxed">
+              <p className="text-muted dark:text-white/70 leading-relaxed">
                 For STC and VIP coaches, arrive at the terminal at least 45 minutes before departure. Friday afternoons and Sunday evenings see heavy traffic on the Accra–Kumasi corridor.
               </p>
             </div>
@@ -231,7 +231,7 @@ export const TransportationPage: React.FC = () => {
                 <CheckCircle2 size={16} className="text-emerald-500" />
                 <span>Taxis & Ride-Hailing</span>
               </h3>
-              <p className="text-[#757B81] dark:text-white/70 leading-relaxed">
+              <p className="text-muted dark:text-white/70 leading-relaxed">
                 In Accra, Kumasi, and Takoradi, Bolt and Uber provide fixed upfront pricing. For regular street taxis, agree on the total price before stepping inside the vehicle.
               </p>
             </div>

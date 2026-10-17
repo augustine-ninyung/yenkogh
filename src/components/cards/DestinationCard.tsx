@@ -60,7 +60,7 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({
           onClick={handleFavoriteClick}
           aria-label={isSaved ? `Remove ${destination.name} from saved` : `Save ${destination.name}`}
           className={cn(
-            'absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all duration-200 focus:outline-none',
+            'absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2',
             isSaved
               ? 'bg-rose-500 text-white shadow-md'
               : 'bg-black/30 text-white hover:bg-black/50 hover:scale-110'
@@ -87,7 +87,7 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Region */}
-          <div className="flex items-center gap-1 text-xs text-[#757B81] dark:text-white/60 mb-1.5">
+          <div className="flex items-center gap-1 text-xs text-muted dark:text-white/60 mb-1.5">
             <MapPin size={13} className="text-[#FFD300]" />
             <span className="font-medium">{destination.region} Region</span>
           </div>
@@ -100,7 +100,7 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({
           </h3>
 
           {/* Description */}
-          <p className="text-xs sm:text-sm text-[#757B81] dark:text-white/70 line-clamp-2 leading-relaxed mb-4">
+          <p className="text-xs sm:text-sm text-muted dark:text-white/70 line-clamp-2 leading-relaxed mb-4">
             {destination.shortDescription || destination.description}
           </p>
         </div>
@@ -108,12 +108,12 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({
         {/* Price & Action */}
         <div className="pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-between mt-auto">
           <div>
-            <span className="text-[11px] uppercase tracking-wider text-[#757B81] dark:text-white/50 block">
+            <span className="text-[11px] uppercase tracking-wider text-muted dark:text-white/50 block">
               Est. Cost
             </span>
             <span className="text-sm font-bold text-[#090C11] dark:text-white">
               {formatCurrency(destination.estimatedCostPerPerson || 0)}
-              <span className="text-xs font-normal text-[#757B81] dark:text-white/60"> / person</span>
+              <span className="text-xs font-normal text-muted dark:text-white/60"> / person</span>
             </span>
           </div>
 

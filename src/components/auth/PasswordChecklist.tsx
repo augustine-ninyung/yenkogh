@@ -19,7 +19,7 @@ export const PasswordChecklist: React.FC<{ password: string }> = ({ password }) 
           key={rule.label}
           className={cn(
             'flex items-center gap-1.5 text-xs transition-colors',
-            met ? 'text-green-700 dark:text-green-400 font-medium' : 'text-[#757B81] dark:text-white/50'
+            met ? 'text-green-700 dark:text-green-400 font-medium' : 'text-muted dark:text-white/50'
           )}
         >
           <span

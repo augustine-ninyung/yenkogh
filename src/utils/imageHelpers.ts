@@ -159,25 +159,3 @@ export function getFallbackImageUrl(category: string): string {
   return GHANA_IMAGES[key] ?? DEFAULT_IMAGE;
 }
 
-/**
- * Generate a UI Avatars URL for a user by their display name.
- * Produces a 128 × 128 circular avatar with the brand dark background
- * and yellow (#FFD300) initials.
- *
- * @example
- * getAvatarUrl("Kwame Mensah")
- * // → "https://ui-avatars.com/api/?name=Kwame+Mensah&size=128&..."
- */
-export function getAvatarUrl(name: string): string {
-  const encoded = encodeURIComponent(name.trim());
-  return (
-    `https://ui-avatars.com/api/` +
-    `?name=${encoded}` +
-    `&size=128` +
-    `&background=262B32` +
-    `&color=FFD300` +
-    `&bold=true` +
-    `&rounded=true` +
-    `&format=svg`
-  );
-}

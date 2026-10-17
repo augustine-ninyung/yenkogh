@@ -60,7 +60,7 @@ export const destinationService = {
       case 'name-desc':
         return copy.sort((a, b) => b.name.localeCompare(a.name));
       case 'rating-desc':
-        return copy.sort((a, b) => b.rating - a.rating);
+        return copy.sort((a, b) => Number(b.featured) - Number(a.featured));
       case 'cost-asc':
         return copy.sort((a, b) => a.estimatedCostPerPerson - b.estimatedCostPerPerson);
       case 'cost-desc':

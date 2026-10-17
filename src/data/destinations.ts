@@ -18,8 +18,8 @@ export const destinations: Destination[] = [
       { id: 'g2', url: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=1200&q=85', alt: 'Castle courtyard' },
       { id: 'g3', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85', alt: 'Coastal view' },
     ],
-    rating: 4.8,
-    reviewCount: 2847,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Guided Museum Tour', description: 'A comprehensive guided tour through the castle\'s dungeons, museum and the Door of No Return.', duration: '2 hours', cost: 30 },
       { id: 'a2', name: 'Canopy Walk', description: 'Walk along the castle\'s battlements with sweeping views of the Atlantic Ocean.', duration: '30 mins', cost: 0 },
@@ -67,8 +67,8 @@ export const destinations: Destination[] = [
       { id: 'g2', url: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1200&q=85', alt: 'Rainforest canopy' },
       { id: 'g3', url: 'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=1200&q=85', alt: 'Forest trail' },
     ],
-    rating: 4.7,
-    reviewCount: 3214,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Canopy Walkway', description: 'Walk 330 metres of swaying rope bridges high above the rainforest floor.', duration: '1.5 hours', cost: 60 },
       { id: 'a2', name: 'Bird Watching', description: 'Spot rare forest birds with a knowledgeable guide.', duration: '2 hours', cost: 50 },
@@ -114,8 +114,8 @@ export const destinations: Destination[] = [
       { id: 'g2', url: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=85', alt: 'Savannah landscape' },
       { id: 'g3', url: 'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=1200&q=85', alt: 'Warthog family' },
     ],
-    rating: 4.9,
-    reviewCount: 1876,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Walking Safari', description: 'Early morning guided walk to encounter elephants and other wildlife.', duration: '2 hours', cost: 80 },
       { id: 'a2', name: 'Jeep Safari', description: 'Vehicle-based game drive covering more of the park.', duration: '3 hours', cost: 200 },
@@ -161,8 +161,8 @@ export const destinations: Destination[] = [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=1200&q=85', alt: 'Elmina Castle exterior' },
       { id: 'g2', url: 'https://images.unsplash.com/photo-1575986767340-5d17ae767ab0?w=1200&q=85', alt: 'Castle and fishing harbour' },
     ],
-    rating: 4.7,
-    reviewCount: 2193,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Guided Historical Tour', description: 'Comprehensive tour through the castle\'s dungeons and museum.', duration: '2 hours', cost: 80 },
       { id: 'a2', name: 'Fishing Harbour Walk', description: 'Explore the colourful Elmina fishing harbour and local market.', duration: '1 hour', cost: 0 },
@@ -206,8 +206,8 @@ export const destinations: Destination[] = [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85', alt: 'Labadi Beach' },
       { id: 'g2', url: 'https://images.unsplash.com/photo-1589825743636-23a879d4b8e2?w=1200&q=85', alt: 'Beach activities' },
     ],
-    rating: 4.2,
-    reviewCount: 4521,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Horse Riding', description: 'Ride horses along the beach shoreline.', duration: '30 mins', cost: 80 },
       { id: 'a2', name: 'Beach Volleyball', description: 'Join a game of beach volleyball on the sand.', duration: '1 hour', cost: 20 },
@@ -252,8 +252,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1589825743636-23a879d4b8e2?w=1200&q=85', alt: 'Nkrumah Memorial Park' },
     ],
-    rating: 4.5,
-    reviewCount: 1892,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Museum Tour', description: 'Explore artefacts and photographs documenting Nkrumah\'s life and Ghana\'s independence movement.', duration: '1.5 hours', cost: 30 },
       { id: 'a2', name: 'Garden Walk', description: 'Stroll the peaceful manicured gardens and take photos of the striking mausoleum.', duration: '30 mins', cost: 0 },
@@ -296,8 +296,8 @@ export const destinations: Destination[] = [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=1200&q=85', alt: 'Wli Waterfalls' },
       { id: 'g2', url: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=85', alt: 'Forest trail to Wli' },
     ],
-    rating: 4.8,
-    reviewCount: 1654,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Lower Falls Hike', description: 'Easy 45-minute hike through forest to the stunning lower waterfall pool.', duration: '2 hours', cost: 40 },
       { id: 'a2', name: 'Upper Falls Trek', description: 'Challenging 3-hour trek to the upper falls — incredible views.', duration: '6 hours', cost: 80 },
@@ -342,8 +342,8 @@ export const destinations: Destination[] = [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=1200&q=85', alt: 'Aburi gardens' },
       { id: 'g2', url: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=85', alt: 'Tropical trees' },
     ],
-    rating: 4.4,
-    reviewCount: 1287,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Garden Walk', description: 'Stroll through 64 hectares of magnificent tropical plants and trees.', duration: '2 hours', cost: 20 },
       { id: 'a2', name: 'Picnic', description: 'Bring food and enjoy a peaceful picnic under towering mahogany trees.', duration: 'Flexible', cost: 0 },
@@ -387,8 +387,8 @@ export const destinations: Destination[] = [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85', alt: 'Lake Volta' },
       { id: 'g2', url: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=1200&q=85', alt: 'Lake sunset' },
     ],
-    rating: 4.5,
-    reviewCount: 892,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Lake Ferry Journey', description: 'Multi-day ferry journey from Akosombo to Yeji through the heart of the lake.', duration: '20 hours', cost: 120 },
       { id: 'a2', name: 'Boat Safari', description: 'Smaller boat tours to spot hippos, crocodiles and birds.', duration: '3 hours', cost: 150 },
@@ -430,8 +430,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85', alt: 'Nzulezu stilt village' },
     ],
-    rating: 4.6,
-    reviewCount: 743,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Canoe Trip', description: '45-minute canoe ride through forest waterways to reach the village.', duration: '1.5 hours', cost: 50 },
       { id: 'a2', name: 'Village Tour', description: 'Walk the floating boardwalks, visit the school, church, and shrine.', duration: '1 hour', cost: 30 },
@@ -473,8 +473,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=1200&q=85', alt: 'Manhyia Palace' },
     ],
-    rating: 4.6,
-    reviewCount: 1543,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Museum Tour', description: 'Guided tour through the Manhyia Palace Museum and royal collections.', duration: '1.5 hours', cost: 40 },
       { id: 'a2', name: 'Cultural Talk', description: 'Learn about Ashanti royal customs and the significance of the Golden Stool.', duration: '30 mins', cost: 0 },
@@ -516,8 +516,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=1200&q=85', alt: 'Cultural Centre crafts' },
     ],
-    rating: 4.4,
-    reviewCount: 987,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Craft Market Shopping', description: 'Browse and buy Kente cloth, carvings, brass, and leather goods from master artisans.', duration: '2 hours', cost: 0 },
       { id: 'a2', name: 'Kente Weaving Demo', description: 'Watch traditional Kente cloth being woven on a hand loom.', duration: '30 mins', cost: 20 },
@@ -559,8 +559,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85', alt: 'Ada Foah beach' },
     ],
-    rating: 4.6,
-    reviewCount: 1345,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'River Cruise', description: 'Boat cruise on the Volta River to spot birds and hippos.', duration: '2 hours', cost: 100 },
       { id: 'a2', name: 'Water Sports', description: 'Jet skiing, kayaking, and paddleboarding.', duration: 'Flexible', cost: 80 },
@@ -602,8 +602,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=1200&q=85', alt: 'Paga crocodile' },
     ],
-    rating: 4.7,
-    reviewCount: 876,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Crocodile Interaction', description: 'Guided interaction with the sacred crocodiles — sit on or touch them safely.', duration: '1 hour', cost: 50 },
       { id: 'a2', name: 'Cultural Tour', description: 'Learn about Kasena traditions and the spiritual significance of the crocodiles.', duration: '30 mins', cost: 20 },
@@ -645,8 +645,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=1200&q=85', alt: 'Kintampo Waterfalls' },
     ],
-    rating: 4.5,
-    reviewCount: 643,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Waterfall Hike', description: 'Guided hike down to the base of the falls through lush vegetation.', duration: '1.5 hours', cost: 30 },
       { id: 'a2', name: 'Swimming', description: 'Swim in the natural pool at the base of the falls.', duration: 'Flexible', cost: 0 },
@@ -687,8 +687,8 @@ export const destinations: Destination[] = [
     gallery: [
       { id: 'g1', url: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=1200&q=85', alt: 'Boti Falls' },
     ],
-    rating: 4.4,
-    reviewCount: 892,
+    rating: 0,
+    reviewCount: 0,
     activities: [
       { id: 'a1', name: 'Falls Hike', description: 'Short guided hike to the twin waterfalls through forest.', duration: '1 hour', cost: 25 },
       { id: 'a2', name: 'Love Tree Walk', description: 'Walk around the famous joined Love Tree for good luck.', duration: '15 mins', cost: 0 },

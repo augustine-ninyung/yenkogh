@@ -16,7 +16,7 @@ import { getFestivalForEvent } from '@/data/festivals';
 import { useFavorites } from '@/context/FavoritesContext';
 import { useToast } from '@/context/ToastContext';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
-import { Button } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 
 export const EventDetailPage: React.FC = () => {
@@ -38,12 +38,10 @@ export const EventDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen pt-32 pb-20 max-w-xl mx-auto px-4 text-center">
         <h2 className="text-2xl font-bold mb-3">Event Not Found</h2>
-        <p className="text-[#757B81] mb-6">
+        <p className="text-muted mb-6">
           The event or festival you are looking for could not be found.
         </p>
-        <Link to="/events">
-          <Button variant="primary">Return to Events</Button>
-        </Link>
+        <ButtonLink to="/events" variant="primary">Return to Events</ButtonLink>
       </div>
     );
   }
@@ -84,7 +82,7 @@ export const EventDetailPage: React.FC = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm">
           <Link
             to="/events"
-            className="flex items-center gap-1.5 text-[#757B81] hover:text-[#090C11] dark:hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-muted hover:text-[#090C11] dark:hover:text-white transition-colors"
           >
             <ChevronLeft size={16} />
             <span>Back to Events</span>
@@ -92,7 +90,7 @@ export const EventDetailPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleShare}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-[#757B81] transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-muted transition-colors"
               aria-label="Share event"
             >
               <Share2 size={16} />
@@ -137,7 +135,7 @@ export const EventDetailPage: React.FC = () => {
           <div className="lg:col-span-2 space-y-6">
             <div>
               <h2 className="text-xl font-bold mb-3">About the Celebration</h2>
-              <p className="text-sm sm:text-base text-[#757B81] dark:text-white/80 leading-relaxed whitespace-pre-line">
+              <p className="text-sm sm:text-base text-muted dark:text-white/80 leading-relaxed whitespace-pre-line">
                 {event.description}
               </p>
               {festival && (
@@ -156,7 +154,7 @@ export const EventDetailPage: React.FC = () => {
                 <h3 className="text-lg font-bold mb-3">Event Highlights & Program</h3>
                 <ul className="space-y-2">
                   {event.activities.map((act, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-sm text-[#757B81] dark:text-white/80">
+                    <li key={i} className="flex items-start gap-2.5 text-sm text-muted dark:text-white/80">
                       <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
                       <span>{act}</span>
                     </li>
@@ -171,7 +169,7 @@ export const EventDetailPage: React.FC = () => {
                   <Bus size={16} className="text-[#FFD300]" />
                   <span>Getting There</span>
                 </div>
-                <p className="text-xs sm:text-sm text-[#757B81] dark:text-white/70">
+                <p className="text-xs sm:text-sm text-muted dark:text-white/70">
                   {event.transportInfo}
                 </p>
               </div>
@@ -181,13 +179,13 @@ export const EventDetailPage: React.FC = () => {
           {/* Quick Info Box */}
           <div className="space-y-6">
             <div className="p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-lg space-y-4">
-              <h3 className="font-bold text-sm uppercase tracking-wider text-[#757B81] dark:text-white/60">
+              <h3 className="font-bold text-sm uppercase tracking-wider text-muted dark:text-white/60">
                 Event Logistics
               </h3>
 
               <div className="space-y-3 text-xs sm:text-sm">
                 <div>
-                  <span className="text-[#757B81] block text-xs">Date:</span>
+                  <span className="text-muted block text-xs">Date:</span>
                   <div className="flex items-center gap-1.5 font-semibold text-[#090C11] dark:text-white">
                     <Calendar size={14} className="text-[#FFD300]" />
                     <span>{formatDateRange(event.startDate, event.endDate)}</span>
@@ -195,7 +193,7 @@ export const EventDetailPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <span className="text-[#757B81] block text-xs">Location & Venue:</span>
+                  <span className="text-muted block text-xs">Location & Venue:</span>
                   <div className="flex items-center gap-1.5 font-semibold text-[#090C11] dark:text-white">
                     <MapPin size={14} className="text-[#FFD300]" />
                     <span>{event.venue || event.location}, {event.region}</span>
@@ -203,7 +201,7 @@ export const EventDetailPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <span className="text-[#757B81] block text-xs">Admission:</span>
+                  <span className="text-muted block text-xs">Admission:</span>
                   <span className="font-bold text-base text-[#090C11] dark:text-white">
                     {event.isFree ? 'Free Admission' : formatCurrency(event.ticketPrice || 0)}
                   </span>

@@ -1,3 +1,4 @@
+import { SkipLink } from '@/components/navigation/SkipLink';
 import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { PageFallback } from '@/components/ui/PageFallback';
@@ -11,8 +12,9 @@ import { ToastContainer } from '@/components/ui/Toast';
 export const MainLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-[#090C11] text-[#262B32] dark:text-white">
+      <SkipLink />
       <Navbar />
-      <main className="flex-1">
+      <main id="main" tabIndex={-1} className="focus:outline-none flex-1">
         <Suspense fallback={<PageFallback />}>
           <Outlet />
         </Suspense>

@@ -26,7 +26,7 @@ const config: ResourceConfig = {
       render: (row) => (
         <div className="min-w-[11rem]">
           <p className="font-semibold text-[#090C11] dark:text-white">{row.name}</p>
-          <p className="text-xs text-[#757B81]">{String(row.town || '')}</p>
+          <p className="text-xs text-muted">{String(row.town || '')}</p>
         </div>
       ),
     },

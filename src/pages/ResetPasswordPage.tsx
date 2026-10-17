@@ -4,7 +4,7 @@ import { Lock } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
 import { validatePassword, validateConfirmPassword } from '@/utils/validators';
-import { Button } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { AuthShell } from '@/components/auth/AuthShell';
 import { AuthField } from '@/components/auth/AuthField';
@@ -98,11 +98,9 @@ export const ResetPasswordPage: React.FC = () => {
           <p role="alert" className="p-4 rounded-xl border border-red-300 bg-red-50 dark:bg-red-900/15 text-sm text-red-800 dark:text-red-200">
             We could not use this reset link. It may have expired, been used already, or been opened in a different browser from the one you requested it in.
           </p>
-          <Link to="/forgot-password" className="block">
-            <Button variant="primary" fullWidth size="lg" className="h-12 font-bold">
+          <ButtonLink to="/forgot-password" variant="primary" fullWidth size="lg" className="h-12 font-bold">
               Send me a new link
-            </Button>
-          </Link>
+            </ButtonLink>
         </div>
       )}
 

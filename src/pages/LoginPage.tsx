@@ -129,7 +129,7 @@ export const LoginPage: React.FC = () => {
           placeholder="Your password"
           autoComplete="current-password"
           labelAside={
-            <Link to="/forgot-password" className="text-sm font-medium text-[#757B81] hover:text-[#090C11] dark:hover:text-white underline underline-offset-2">
+            <Link to="/forgot-password" className="text-sm font-medium text-muted hover:text-[#090C11] dark:hover:text-white underline underline-offset-2">
               Forgot password?
             </Link>
           }
@@ -153,7 +153,7 @@ export const LoginPage: React.FC = () => {
       {/* The demo accounts exist only while the app runs without a backend */}
       {!isBackendConfigured && (
         <div>
-          <div className="flex items-center gap-3 text-xs font-medium text-[#757B81]">
+          <div className="flex items-center gap-3 text-xs font-medium text-muted">
             <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
             Or try a demo account
             <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
@@ -174,7 +174,7 @@ export const LoginPage: React.FC = () => {
               Admin
             </button>
           </div>
-          <p className="mt-2.5 text-center text-xs text-[#757B81]">Fills in the details; press Sign in to continue.</p>
+          <p className="mt-2.5 text-center text-xs text-muted">Fills in the details; press Sign in to continue.</p>
         </div>
       )}
     </AuthShell>

@@ -56,11 +56,11 @@ export const FestivalCard: React.FC<FestivalCardProps> = ({ festival, className 
         <h3 className="font-bold text-lg leading-snug mb-2 text-[#262B32] dark:text-white group-hover:text-[#FFD300] transition-colors">
           {festival.name}
         </h3>
-        <p className="text-sm text-[#757B81] dark:text-white/60 line-clamp-2 mb-4">
+        <p className="text-sm text-muted dark:text-white/60 line-clamp-2 mb-4">
           {festival.description || 'Details for this festival are still being gathered.'}
         </p>
 
-        <div className="mt-auto space-y-1.5 text-xs text-[#757B81] dark:text-white/70">
+        <div className="mt-auto space-y-1.5 text-xs text-muted dark:text-white/70">
           <div className="flex items-center gap-2">
             <Calendar className="w-3.5 h-3.5 shrink-0 text-[#FFD300]" />
             <span className="truncate">{festival.month || 'Date not on record'}</span>

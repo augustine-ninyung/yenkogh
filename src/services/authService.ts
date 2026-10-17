@@ -40,16 +40,13 @@ export interface ProfileRow {
   created_at: string;
 }
 
-const avatarFor = (name: string) =>
-  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FFD300&color=090C11`;
-
 export const profileToUser = (row: ProfileRow): User => ({
   id: row.id,
   name: row.name,
   email: row.email,
   role: row.role,
   status: row.status ?? 'active',
-  avatar: row.avatar ?? avatarFor(row.name),
+  avatar: row.avatar ?? undefined,
   bio: row.bio ?? undefined,
   preferences: row.preferences,
   savedDestinations: row.saved_destinations ?? [],
@@ -86,7 +83,6 @@ const MOCK_USERS: User[] = [
     id: 'user-001',
     name: 'Kwame Mensah',
     email: DEMO_USER_EMAIL,
-    avatar: 'https://ui-avatars.com/api/?name=Kwame+Mensah&background=FFD300&color=090C11',
     role: 'user',
     savedDestinations: [],
     savedEvents: [],
@@ -101,7 +97,6 @@ const MOCK_USERS: User[] = [
     id: 'admin-001',
     name: 'Akosua Boateng',
     email: DEMO_ADMIN_EMAIL,
-    avatar: 'https://ui-avatars.com/api/?name=Akosua+Boateng&background=FFD300&color=090C11',
     role: 'admin',
     savedDestinations: [],
     savedEvents: [],
@@ -137,6 +132,53 @@ function generateFakeToken(userId: string): string {
   );
   const signature = btoa(`yenkogh-mock-${userId}-${Date.now()}`);
   return `${header}.${payload}.${signature}`;
+}
+
+// ─── Local password hashing ──────────────────────────────────────────────────
+// Demo mode (no backend) keeps accounts in this browser. Passwords are stored
+// as salted PBKDF2 hashes, never as typed. Entries saved as plain text by
+// earlier versions still work and are re-hashed at the next sign-in.
+
+const PW_MAP_KEY = 'yenkogh_pw_map';
+const PBKDF2_ITERATIONS = 210_000;
+
+const toBase64 = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes));
+const fromBase64 = (text: string) => Uint8Array.from(atob(text), (c) => c.charCodeAt(0));
+
+async function derive(password: string, salt: Uint8Array): Promise<Uint8Array> {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: PBKDF2_ITERATIONS },
+    key,
+    256,
+  );
+  return new Uint8Array(bits);
+}
+
+/** Stored as "pbkdf2$<salt>$<hash>", both base64. */
+async function hashPassword(password: string): Promise<string> {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  return ['pbkdf2', toBase64(salt), toBase64(await derive(password, salt))].join('$');
+}
+
+const isHashed = (stored: string) => stored.startsWith('pbkdf2$');
+
+async function passwordMatches(password: string, stored: string | undefined): Promise<boolean> {
+  if (!stored) return false;
+  if (!isHashed(stored)) return stored === password; // plain text from an older version
+  const [, salt, hash] = stored.split('$');
+  const actual = await derive(password, fromBase64(salt));
+  const expected = fromBase64(hash);
+  // Compare every byte so the time taken does not reveal how much matched
+  let diff = actual.length ^ expected.length;
+  for (let i = 0; i < Math.min(actual.length, expected.length); i++) diff |= actual[i] ^ expected[i];
+  return diff === 0;
+}
+
+async function storePassword(userId: string, password: string): Promise<void> {
+  const pwMap = authService._getPasswordMap();
+  pwMap[userId] = await hashPassword(password);
+  localStorage.setItem(PW_MAP_KEY, JSON.stringify(pwMap));
 }
 
 const OVERRIDES_KEY = 'yenkogh_user_overrides';
@@ -231,7 +273,7 @@ export const authService = {
     }
 
     // For mock users we check the known passwords; for registered users we
-    // compare the stored (plain-text) password that was set at registration.
+    // check against the hash saved at registration.
     let passwordOk: boolean;
     if (normalised === DEMO_USER_EMAIL.toLowerCase()) {
       passwordOk = password === DEMO_USER_PASSWORD;
@@ -239,8 +281,9 @@ export const authService = {
       passwordOk = password === DEMO_ADMIN_PASSWORD;
     } else {
       // Registered user — password stored in a separate map
-      const pwMap = authService._getPasswordMap();
-      passwordOk = pwMap[user.id] === password;
+      const stored = authService._getPasswordMap()[user.id];
+      passwordOk = await passwordMatches(password, stored);
+      if (passwordOk && !isHashed(stored)) await storePassword(user.id, password);
     }
 
     if (!passwordOk) {
@@ -271,7 +314,7 @@ export const authService = {
         email: cleanEmail,
         password,
         // Read by the database trigger that creates the profile row
-        options: { data: { name: cleanName, avatar: avatarFor(cleanName) } },
+        options: { data: { name: cleanName } },
       });
       if (error || !data.user) throw new Error(error?.message ?? 'Could not create the account.');
       if (!data.session) throw new EmailConfirmationRequiredError();
@@ -291,7 +334,6 @@ export const authService = {
       id: `user-${Date.now()}`,
       name: name.trim(),
       email: normalised,
-      avatar: avatarFor(name.trim()),
       role: 'user',
       savedDestinations: [],
       savedEvents: [],
@@ -305,9 +347,7 @@ export const authService = {
 
     // Persist user and their password separately
     persistRegisteredUser(newUser);
-    const pwMap = authService._getPasswordMap();
-    pwMap[newUser.id] = password;
-    localStorage.setItem('yenkogh_pw_map', JSON.stringify(pwMap));
+    await storePassword(newUser.id, password);
 
     const token = generateFakeToken(newUser.id);
     localStorage.setItem(TOKEN_KEY, token);
@@ -364,13 +404,39 @@ export const authService = {
     if (demoEmails.includes(user.email.toLowerCase())) {
       throw new Error('The demo accounts have fixed passwords that cannot be changed.');
     }
-    const pwMap = authService._getPasswordMap();
-    if (pwMap[user.id] !== currentPassword) throw new Error('Your current password is not correct.');
-    pwMap[user.id] = newPassword;
-    localStorage.setItem('yenkogh_pw_map', JSON.stringify(pwMap));
+    if (!(await passwordMatches(currentPassword, authService._getPasswordMap()[user.id]))) {
+      throw new Error('Your current password is not correct.');
+    }
+    await storePassword(user.id, newPassword);
   },
 
   /** End the session. */
+  /**
+   * Permanently deletes the signed-in person's account and everything linked
+   * to it (profile, trips, budgets, feedback), then signs them out.
+   */
+  async deleteAccount(): Promise<void> {
+    if (supabase) {
+      const { error } = await supabase.rpc('delete_own_account');
+      if (error) throw new Error('Could not delete the account. Please try again.', { cause: error });
+      await supabase.auth.signOut();
+      return;
+    }
+    const current = authService.getCurrentUser();
+    if (!current) return;
+    const stored: User[] = JSON.parse(localStorage.getItem('yenkogh_registered_users') || '[]');
+    localStorage.setItem('yenkogh_registered_users', JSON.stringify(stored.filter((u) => u.id !== current.id)));
+    const pwMap = authService._getPasswordMap();
+    delete pwMap[current.id];
+    localStorage.setItem(PW_MAP_KEY, JSON.stringify(pwMap));
+    for (const key of ['yenkogh_trips', 'yenkogh_budgets']) {
+      const rows = JSON.parse(localStorage.getItem(key) || '[]') as { userId?: string }[];
+      localStorage.setItem(key, JSON.stringify(rows.filter((r) => r.userId !== current.id)));
+    }
+    localStorage.removeItem('yenkogh_favorites');
+    authService.logout();
+  },
+
   logout(): void {
     if (supabase) {
       void supabase.auth.signOut();
@@ -455,7 +521,7 @@ export const authService = {
   /** Internal: read the password map from localStorage. */
   _getPasswordMap(): Record<string, string> {
     try {
-      const raw = localStorage.getItem('yenkogh_pw_map');
+      const raw = localStorage.getItem(PW_MAP_KEY);
       return raw ? JSON.parse(raw) : {};
     } catch {
       return {};

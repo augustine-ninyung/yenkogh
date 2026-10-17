@@ -7,7 +7,7 @@ import {
   Ship,
   CheckCircle,
   ArrowRight,
-  ShieldCheck,
+  Info,
 } from 'lucide-react';
 import type { Transportation, TransportType } from '@/types';
 import { cn } from '@/utils/cn';
@@ -79,14 +79,14 @@ export const TransportCard: React.FC<TransportCardProps> = ({
       {/* Content */}
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
-          <p className="text-xs sm:text-sm text-[#757B81] dark:text-white/70 line-clamp-2 leading-relaxed mb-4">
+          <p className="text-xs sm:text-sm text-muted dark:text-white/70 line-clamp-2 leading-relaxed mb-4">
             {transport.description}
           </p>
 
           {/* Key Sample Routes */}
           {showRoutes && transport.routes && transport.routes.length > 0 && (
             <div className="space-y-2 mb-4">
-              <span className="text-[11px] uppercase tracking-wider font-semibold text-[#757B81] dark:text-white/60 block">
+              <span className="text-[11px] uppercase tracking-wider font-semibold text-muted dark:text-white/60 block">
                 Popular Routes:
               </span>
               <div className="space-y-1.5">
@@ -115,7 +115,7 @@ export const TransportCard: React.FC<TransportCardProps> = ({
           {transport.pros && transport.pros.length > 0 && (
             <div className="space-y-1 mb-4">
               {transport.pros.slice(0, 2).map((pro, idx) => (
-                <div key={idx} className="flex items-center gap-1.5 text-xs text-[#757B81] dark:text-white/60">
+                <div key={idx} className="flex items-center gap-1.5 text-xs text-muted dark:text-white/60">
                   <CheckCircle size={12} className="text-emerald-500 shrink-0" />
                   <span className="truncate">{pro}</span>
                 </div>
@@ -126,9 +126,9 @@ export const TransportCard: React.FC<TransportCardProps> = ({
 
         {/* Action Link */}
         <div className="pt-3 border-t border-gray-100 dark:border-white/10 flex items-center justify-between">
-          <div className="flex items-center gap-1 text-[11px] text-[#757B81] dark:text-white/50">
-            <ShieldCheck size={13} className="text-[#FFD300]" />
-            <span>Verified Info</span>
+          <div className="flex items-center gap-1 text-[11px] text-muted dark:text-white/50">
+            <Info size={13} className="text-muted" aria-hidden="true" />
+            <span>Prices are estimates</span>
           </div>
 
           <Link

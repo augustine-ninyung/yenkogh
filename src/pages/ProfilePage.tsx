@@ -13,6 +13,7 @@ import { DestinationCard } from '@/components/cards/DestinationCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { Button } from '@/components/ui/Button';
 import { ChangePasswordForm } from '@/components/auth/ChangePasswordForm';
+import { DeleteAccountSection } from '@/components/auth/DeleteAccountSection';
 
 export const ProfilePage: React.FC = () => {
   const { user, updateUser } = useAuth();
@@ -25,7 +26,7 @@ export const ProfilePage: React.FC = () => {
 
   // Edit State
   const [name, setName] = useState(user?.name || '');
-  const [bio, setBio] = useState(user?.bio || 'Passionate traveler exploring the culture and natural heritage of Ghana.');
+  const [bio, setBio] = useState(user?.bio || '');
   const [currency, setCurrency] = useState(user?.preferences?.currency || 'GHS');
   const [notifications, setNotifications] = useState(user?.preferences?.notifications ?? true);
   const [isSaving, setIsSaving] = useState(false);
@@ -81,8 +82,8 @@ export const ProfilePage: React.FC = () => {
               {user?.role || 'User'}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-[#757B81]">{user?.email}</p>
-          <p className="text-xs text-[#757B81] pt-1">
+          <p className="text-xs sm:text-sm text-muted">{user?.email}</p>
+          <p className="text-xs text-muted pt-1">
             Member since {user?.createdAt ? new Date(user.createdAt).getFullYear() : 2026}
           </p>
         </div>
@@ -95,7 +96,7 @@ export const ProfilePage: React.FC = () => {
           className={`pb-3 relative transition-colors ${
             activeTab === 'profile'
               ? 'text-[#090C11] dark:text-white border-b-2 border-[#FFD300]'
-              : 'text-[#757B81]'
+              : 'text-muted'
           }`}
         >
           Profile Settings
@@ -105,7 +106,7 @@ export const ProfilePage: React.FC = () => {
           className={`pb-3 relative transition-colors ${
             activeTab === 'saved-places'
               ? 'text-[#090C11] dark:text-white border-b-2 border-[#FFD300]'
-              : 'text-[#757B81]'
+              : 'text-muted'
           }`}
         >
           Saved Places ({savedDestinations.length})
@@ -115,7 +116,7 @@ export const ProfilePage: React.FC = () => {
           className={`pb-3 relative transition-colors ${
             activeTab === 'saved-events'
               ? 'text-[#090C11] dark:text-white border-b-2 border-[#FFD300]'
-              : 'text-[#757B81]'
+              : 'text-muted'
           }`}
         >
           Saved Festivals ({savedEvents.length})
@@ -128,7 +129,7 @@ export const ProfilePage: React.FC = () => {
         <form onSubmit={handleSaveProfile} className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-6 max-w-2xl">
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">
+              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                 Full Name
               </label>
               <input
@@ -141,7 +142,7 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">
+              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                 Email Address
               </label>
               <input
@@ -150,11 +151,11 @@ export const ProfilePage: React.FC = () => {
                 disabled
                 className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-sm opacity-60 cursor-not-allowed"
               />
-              <span className="text-[11px] text-[#757B81]">Email cannot be changed directly</span>
+              <span className="text-[11px] text-muted">Email cannot be changed directly</span>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">
+              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                 Bio / Travel Style
               </label>
               <textarea
@@ -167,7 +168,7 @@ export const ProfilePage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div>
-                <label className="text-xs font-semibold text-[#757B81] block mb-1.5 uppercase">
+                <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                   Preferred Currency
                 </label>
                 <select
@@ -206,6 +207,7 @@ export const ProfilePage: React.FC = () => {
         </form>
 
         <ChangePasswordForm />
+        <DeleteAccountSection />
         </div>
       )}
 
@@ -219,7 +221,7 @@ export const ProfilePage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="p-12 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center text-xs text-[#757B81]">
+            <div className="p-12 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center text-xs text-muted">
               No saved destinations yet. Explore Ghana's attractions to add some!
             </div>
           )}
@@ -236,7 +238,7 @@ export const ProfilePage: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="p-12 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center text-xs text-[#757B81]">
+            <div className="p-12 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center text-xs text-muted">
               No saved festivals yet. Explore upcoming cultural celebrations to add some!
             </div>
           )}

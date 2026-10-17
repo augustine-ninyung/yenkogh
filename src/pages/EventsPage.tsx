@@ -131,7 +131,7 @@ export const EventsPage: React.FC = () => {
         {/* Search & Filter Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="relative w-full md:w-96">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
             <input
               type="text"
               placeholder="Search festivals by name, town..."
@@ -189,7 +189,7 @@ export const EventsPage: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-medium shrink-0 transition-all ${
                 selectedCategory === cat.value
                   ? 'bg-[#FFD300] text-[#090C11] font-bold shadow-sm'
-                  : 'bg-white dark:bg-[#262B32] text-[#757B81] dark:text-white/80 border border-gray-200 dark:border-white/10 hover:border-gray-300'
+                  : 'bg-white dark:bg-[#262B32] text-muted dark:text-white/80 border border-gray-200 dark:border-white/10 hover:border-gray-300'
               }`}
             >
               {cat.label}
@@ -212,7 +212,7 @@ export const EventsPage: React.FC = () => {
               className={`-mb-px pb-3 text-sm font-semibold border-b-2 transition-colors ${
                 view === tab.value
                   ? 'border-[#FFD300] text-[#090C11] dark:text-white'
-                  : 'border-transparent text-[#757B81] dark:text-white/60 hover:text-[#262B32] dark:hover:text-white'
+                  : 'border-transparent text-muted dark:text-white/60 hover:text-[#262B32] dark:hover:text-white'
               }`}
             >
               {tab.label}
@@ -224,7 +224,7 @@ export const EventsPage: React.FC = () => {
         </div>
 
         {/* Results Info */}
-        <div className="text-xs text-[#757B81] dark:text-white/60 mb-6">
+        <div className="text-xs text-muted dark:text-white/60 mb-6">
           {view === 'festivals' ? (
             <>
               Showing <span className="font-bold text-[#090C11] dark:text-white">{filteredFestivals.length}</span> of {festivals.length} traditional festivals in Ghana

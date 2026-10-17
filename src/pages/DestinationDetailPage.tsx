@@ -19,7 +19,7 @@ import { formatCurrency } from '@/utils/formatters';
 import { ImageGallery } from '@/components/ui/ImageGallery';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { RegionFestivals } from '@/components/festivals/RegionFestivals';
-import { Button } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { Spinner } from '@/components/ui/Spinner';
 import { recordDestinationView } from '@/services/viewService';
@@ -52,12 +52,10 @@ export const DestinationDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen pt-32 pb-20 max-w-xl mx-auto px-4 text-center">
         <h2 className="text-2xl font-bold mb-3">Destination Not Found</h2>
-        <p className="text-[#757B81] mb-6">
+        <p className="text-muted mb-6">
           The destination you are looking for may have been moved or does not exist.
         </p>
-        <Link to="/explore">
-          <Button variant="primary">Return to Destinations</Button>
-        </Link>
+        <ButtonLink to="/explore" variant="primary">Return to Destinations</ButtonLink>
       </div>
     );
   }
@@ -110,7 +108,7 @@ export const DestinationDetailPage: React.FC = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm">
           <Link
             to="/explore"
-            className="flex items-center gap-1.5 text-[#757B81] hover:text-[#090C11] dark:hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-muted hover:text-[#090C11] dark:hover:text-white transition-colors"
           >
             <ChevronLeft size={16} />
             <span>Back to Explore</span>
@@ -118,7 +116,7 @@ export const DestinationDetailPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleShare}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-[#757B81] transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-muted transition-colors"
               aria-label="Share destination"
             >
               <Share2 size={16} />
@@ -145,7 +143,7 @@ export const DestinationDetailPage: React.FC = () => {
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#FFD300]/20 text-[#090C11] dark:text-[#FFD300]">
               {destination.type.replace('-', ' ')}
             </span>
-            <span className="text-xs text-[#757B81] dark:text-white/60 flex items-center gap-1">
+            <span className="text-xs text-muted dark:text-white/60 flex items-center gap-1">
               <MapPin size={12} className="text-[#FFD300]" />
               {destination.region} Region, Ghana
             </span>
@@ -155,7 +153,7 @@ export const DestinationDetailPage: React.FC = () => {
             {destination.name}
           </h1>
 
-          <div className="flex items-center gap-4 text-xs sm:text-sm text-[#757B81] dark:text-white/70">
+          <div className="flex items-center gap-4 text-xs sm:text-sm text-muted dark:text-white/70">
             <div className="flex items-center gap-1">
               <Star size={16} className="text-[#FFD300] fill-[#FFD300]" />
               {destination.reviewCount > 0 ? (
@@ -180,7 +178,7 @@ export const DestinationDetailPage: React.FC = () => {
         <div className="mb-10">
           <ImageGallery images={galleryImages} />
           {destination.imageCredit && (
-            <p className="mt-2 text-xs text-[#757B81]">
+            <p className="mt-2 text-xs text-muted">
               Main photo:{' '}
               <a href={destination.imageCredit} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#090C11] dark:hover:text-white">
                 author and licence on Wikimedia Commons
@@ -209,7 +207,7 @@ export const DestinationDetailPage: React.FC = () => {
                   className={`pb-3 relative transition-colors ${
                     activeTab === tab.id
                       ? 'text-[#090C11] dark:text-white border-b-2 border-[#FFD300]'
-                      : 'text-[#757B81] hover:text-[#090C11] dark:hover:text-white'
+                      : 'text-muted hover:text-[#090C11] dark:hover:text-white'
                   }`}
                 >
                   {tab.label}
@@ -222,7 +220,7 @@ export const DestinationDetailPage: React.FC = () => {
               <div className="space-y-6">
                 <div>
                   <h3 className="font-bold text-lg mb-3">About this Destination</h3>
-                  <p className="text-sm sm:text-base text-[#757B81] dark:text-white/80 leading-relaxed whitespace-pre-line">
+                  <p className="text-sm sm:text-base text-muted dark:text-white/80 leading-relaxed whitespace-pre-line">
                     {destination.description}
                   </p>
                 </div>
@@ -243,12 +241,12 @@ export const DestinationDetailPage: React.FC = () => {
 
                 {destination.tags && destination.tags.length > 0 && (
                   <div>
-                    <h4 className="text-xs uppercase font-semibold text-[#757B81] mb-2">Tags</h4>
+                    <h4 className="text-xs uppercase font-semibold text-muted mb-2">Tags</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {destination.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2.5 py-1 rounded-lg text-xs bg-gray-100 dark:bg-white/10 text-[#757B81] dark:text-white/80"
+                          className="px-2.5 py-1 rounded-lg text-xs bg-gray-100 dark:bg-white/10 text-muted dark:text-white/80"
                         >
                           #{tag}
                         </span>
@@ -274,16 +272,16 @@ export const DestinationDetailPage: React.FC = () => {
                         <div className="flex items-start justify-between mb-2">
                           <h4 className="font-semibold text-sm">{act.name}</h4>
                           {act.cost !== undefined && (
-                            <span className="text-xs font-bold text-[#FFD300]">
+                            <span className="text-xs font-bold text-accent-ink">
                               {act.cost === 0 ? 'Free' : formatCurrency(act.cost)}
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-[#757B81] dark:text-white/70 leading-relaxed">
+                        <p className="text-xs text-muted dark:text-white/70 leading-relaxed">
                           {act.description}
                         </p>
                         {act.duration && (
-                          <span className="text-[11px] text-[#757B81] block mt-2">
+                          <span className="text-[11px] text-muted block mt-2">
                             Duration: {act.duration}
                           </span>
                         )}
@@ -293,7 +291,7 @@ export const DestinationDetailPage: React.FC = () => {
                 ) : (
                   <ul className="space-y-2.5">
                     {destination.thingsToDo?.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-sm text-[#757B81] dark:text-white/80">
+                      <li key={idx} className="flex items-start gap-2.5 text-sm text-muted dark:text-white/80">
                         <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </li>
@@ -322,16 +320,16 @@ export const DestinationDetailPage: React.FC = () => {
                           <div className="flex items-center justify-between mb-1">
                             <h4 className="font-semibold text-sm">{opt.type}</h4>
                             {opt.estimatedCost && (
-                              <span className="text-xs font-bold text-[#FFD300]">
+                              <span className="text-xs font-bold text-accent-ink">
                                 {opt.estimatedCost}
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-[#757B81] dark:text-white/70">
+                          <p className="text-xs text-muted dark:text-white/70">
                             {opt.description}
                           </p>
                           {opt.duration && (
-                            <span className="text-[11px] text-[#757B81] block mt-1">
+                            <span className="text-[11px] text-muted block mt-1">
                               Travel Time: ~{opt.duration}
                             </span>
                           )}
@@ -340,17 +338,15 @@ export const DestinationDetailPage: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-[#757B81]">
+                  <p className="text-sm text-muted">
                     Direct bus and trotro services are available from regional capitals. Check our transportation guide for routes.
                   </p>
                 )}
 
                 <div className="pt-4">
-                  <Link to="/transportation">
-                    <Button variant="outline" size="sm">
+                  <ButtonLink to="/transportation" variant="outline" size="sm">
                       Open Full Ghana Transportation Guide
-                    </Button>
-                  </Link>
+                    </ButtonLink>
                 </div>
               </div>
             )}
@@ -377,20 +373,20 @@ export const DestinationDetailPage: React.FC = () => {
           <div className="space-y-6">
             <div className="sticky top-28 p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-xl space-y-5">
               <div>
-                <span className="text-xs uppercase tracking-wider text-[#757B81] block mb-1">
+                <span className="text-xs uppercase tracking-wider text-muted block mb-1">
                   Estimated Trip Cost
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-3xl font-bold text-[#090C11] dark:text-white">
                     {formatCurrency(destination.estimatedCostPerPerson || 0)}
                   </span>
-                  <span className="text-xs text-[#757B81]">/ traveler</span>
+                  <span className="text-xs text-muted">/ traveler</span>
                 </div>
               </div>
 
               {destination.entryFee !== undefined && (
                 <div className="flex items-center justify-between text-xs py-2 border-y border-gray-100 dark:border-white/10">
-                  <span className="text-[#757B81]">Official Entry Fee:</span>
+                  <span className="text-muted">Entry fee (last recorded):</span>
                   <span className="font-bold text-[#090C11] dark:text-white">
                     {destination.entryFee === 0 ? 'Free' : formatCurrency(destination.entryFee)}
                   </span>
@@ -419,8 +415,8 @@ export const DestinationDetailPage: React.FC = () => {
               </div>
 
               <div className="pt-2 text-center">
-                <p className="text-[11px] text-[#757B81] dark:text-white/50">
-                  Ready for backend booking & ticket integration
+                <p className="text-[11px] text-muted dark:text-white/50">
+                  Fees and opening hours can change. Check with the site before you travel.
                 </p>
               </div>
             </div>

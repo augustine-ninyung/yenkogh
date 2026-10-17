@@ -40,7 +40,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <span className="absolute left-3 flex items-center justify-center text-[#757B81] pointer-events-none">
+            <span className="absolute left-3 flex items-center justify-center text-muted pointer-events-none">
               {leftIcon}
             </span>
           )}
@@ -53,7 +53,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             }
             aria-invalid={!!error}
             className={cn(
-              'w-full rounded-lg border bg-white dark:bg-[#262B32] text-[#090C11] dark:text-white placeholder:text-[#757B81] text-sm transition-all duration-200',
+              'w-full rounded-lg border bg-white dark:bg-[#262B32] text-[#090C11] dark:text-white placeholder:text-muted text-sm transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-[#FFD300] focus:border-transparent',
               error
                 ? 'border-red-500 focus:ring-red-500'
@@ -66,7 +66,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <span className="absolute right-3 flex items-center justify-center text-[#757B81]">
+            <span className="absolute right-3 flex items-center justify-center text-muted">
               {rightIcon}
             </span>
           )}
@@ -77,7 +77,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </p>
         )}
         {!error && hint && (
-          <p id={`${inputId}-hint`} className="text-xs text-[#757B81]">
+          <p id={`${inputId}-hint`} className="text-xs text-muted">
             {hint}
           </p>
         )}

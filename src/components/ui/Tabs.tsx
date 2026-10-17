@@ -53,7 +53,7 @@ export const Tabs: React.FC<TabsProps> = ({
                 'px-4 py-2.5 border-b-2 -mb-px rounded-none',
                 isActive
                   ? 'border-[#FFD300] text-[#090C11] dark:text-white'
-                  : 'border-transparent text-[#757B81] hover:text-[#262B32] dark:hover:text-white hover:border-gray-300 dark:hover:border-white/20',
+                  : 'border-transparent text-muted hover:text-[#262B32] dark:hover:text-white hover:border-gray-300 dark:hover:border-white/20',
               ],
 
               // Pills variant
@@ -61,7 +61,7 @@ export const Tabs: React.FC<TabsProps> = ({
                 'px-4 py-2 rounded-xl',
                 isActive
                   ? 'bg-[#FFD300] text-[#090C11] shadow-sm'
-                  : 'text-[#757B81] hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10',
+                  : 'text-muted hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10',
               ],
 
               // Underline variant
@@ -69,7 +69,7 @@ export const Tabs: React.FC<TabsProps> = ({
                 'pb-2.5 border-b-2 rounded-none',
                 isActive
                   ? 'border-[#FFD300] text-[#090C11] dark:text-white'
-                  : 'border-transparent text-[#757B81] hover:text-[#262B32] dark:hover:text-white',
+                  : 'border-transparent text-muted hover:text-[#262B32] dark:hover:text-white',
               ]
             )}
           >
@@ -81,7 +81,7 @@ export const Tabs: React.FC<TabsProps> = ({
                   'inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-semibold',
                   isActive
                     ? 'bg-[#090C11]/10 text-[#090C11]'
-                    : 'bg-gray-100 dark:bg-white/10 text-[#757B81] dark:text-white/60'
+                    : 'bg-gray-100 dark:bg-white/10 text-muted dark:text-white/60'
                 )}
               >
                 {tab.count}

@@ -9,7 +9,7 @@ import { isRowsField } from './resourceForm';
 import type { FieldDef, FormValue } from './resourceForm';
 
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-xl border bg-white dark:bg-[#090C11] text-sm text-[#090C11] dark:text-white placeholder:text-[#757B81]/70 focus:outline-none focus:ring-2 focus:ring-[#FFD300] focus:border-transparent';
+  'w-full px-3.5 py-2.5 rounded-xl border bg-white dark:bg-[#090C11] text-sm text-[#090C11] dark:text-white placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-[#FFD300] focus:border-transparent';
 const borderFor = (error?: string) => (error ? 'border-red-500' : 'border-gray-200 dark:border-white/15');
 
 interface FieldProps {
@@ -59,7 +59,7 @@ const ImageInput: React.FC<FieldProps & { id: string; describedBy?: string }> = 
         {url && !previewFailed ? (
           <img src={url} alt="" className="w-full h-full object-cover" onError={() => setPreviewFailed(true)} />
         ) : (
-          <ImageOff size={20} className="text-[#757B81]/60" aria-label={url ? 'This image could not be loaded' : 'No image yet'} />
+          <ImageOff size={20} className="text-muted/60" aria-label={url ? 'This image could not be loaded' : 'No image yet'} />
         )}
       </div>
       <div className="flex-1 min-w-0 space-y-2">
@@ -92,10 +92,10 @@ const ImageInput: React.FC<FieldProps & { id: string; describedBy?: string }> = 
                 <Upload size={14} />
                 {isUploading ? 'Uploading...' : 'Upload a file'}
               </Button>
-              <span className="text-xs text-[#757B81]">JPEG, PNG or WebP, up to 5 MB</span>
+              <span className="text-xs text-muted">JPEG, PNG or WebP, up to 5 MB</span>
             </>
           ) : (
-            <span className="text-xs text-[#757B81]">Paste an image link. File uploads are available once the database is connected.</span>
+            <span className="text-xs text-muted">Paste an image link. File uploads are available once the database is connected.</span>
           )}
           {url && (
             <Button type="button" variant="ghost" size="sm" onClick={() => onChange('')}>
@@ -125,16 +125,16 @@ const RoutesInput: React.FC<{ value: TransportRoute[]; onChange: (routes: Transp
 
   return (
     <div className="space-y-3">
-      {value.length === 0 && <p className="text-sm text-[#757B81]">No routes yet.</p>}
+      {value.length === 0 && <p className="text-sm text-muted">No routes yet.</p>}
       {value.map((route, i) => (
         <fieldset key={i} className="rounded-xl border border-gray-200 dark:border-white/10 p-3 space-y-2.5">
           <div className="flex items-center justify-between">
-            <legend className="text-xs font-bold uppercase tracking-wide text-[#757B81]">Route {i + 1}</legend>
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">Route {i + 1}</legend>
             <button
               type="button"
               onClick={() => onChange(value.filter((_, j) => j !== i))}
               aria-label={`Remove route ${i + 1}`}
-              className="p-1 text-[#757B81] hover:text-red-500"
+              className="p-1 text-muted hover:text-red-500"
             >
               <Trash2 size={15} />
             </button>
@@ -183,16 +183,16 @@ const ActivitiesInput: React.FC<{ value: Activity[]; onChange: (activities: Acti
 
   return (
     <div className="space-y-3">
-      {value.length === 0 && <p className="text-sm text-[#757B81]">No activities yet.</p>}
+      {value.length === 0 && <p className="text-sm text-muted">No activities yet.</p>}
       {value.map((activity, i) => (
         <fieldset key={i} className="rounded-xl border border-gray-200 dark:border-white/10 p-3 space-y-2.5">
           <div className="flex items-center justify-between">
-            <legend className="text-xs font-bold uppercase tracking-wide text-[#757B81]">Activity {i + 1}</legend>
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">Activity {i + 1}</legend>
             <button
               type="button"
               onClick={() => onChange(value.filter((_, j) => j !== i))}
               aria-label={`Remove activity ${i + 1}`}
-              className="p-1 text-[#757B81] hover:text-red-500"
+              className="p-1 text-muted hover:text-red-500"
             >
               <Trash2 size={15} />
             </button>
@@ -230,16 +230,16 @@ const AccessInput: React.FC<{ value: TransportOption[]; onChange: (options: Tran
 
   return (
     <div className="space-y-3">
-      {value.length === 0 && <p className="text-sm text-[#757B81]">No ways of getting there yet.</p>}
+      {value.length === 0 && <p className="text-sm text-muted">No ways of getting there yet.</p>}
       {value.map((option, i) => (
         <fieldset key={i} className="rounded-xl border border-gray-200 dark:border-white/10 p-3 space-y-2.5">
           <div className="flex items-center justify-between">
-            <legend className="text-xs font-bold uppercase tracking-wide text-[#757B81]">Way {i + 1}</legend>
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">Way {i + 1}</legend>
             <button
               type="button"
               onClick={() => onChange(value.filter((_, j) => j !== i))}
               aria-label={`Remove way ${i + 1}`}
-              className="p-1 text-[#757B81] hover:text-red-500"
+              className="p-1 text-muted hover:text-red-500"
             >
               <Trash2 size={15} />
             </button>
@@ -282,7 +282,7 @@ export const ResourceField: React.FC<FieldProps> = (props) => {
             />
             <span>
               <span className="text-sm font-semibold text-[#262B32] dark:text-white">{field.label}</span>
-              {field.hint && <span className="block text-xs text-[#757B81]">{field.hint}</span>}
+              {field.hint && <span className="block text-xs text-muted">{field.hint}</span>}
             </span>
           </label>
         </div>
@@ -351,7 +351,7 @@ export const ResourceField: React.FC<FieldProps> = (props) => {
           {field.required && <span className="text-red-500 ml-0.5" aria-hidden="true">*</span>}
         </label>
         {field.maxLength && field.type === 'textarea' && (
-          <span className={cn('text-xs', length > field.maxLength ? 'text-red-600 font-semibold' : 'text-[#757B81]')}>
+          <span className={cn('text-xs', length > field.maxLength ? 'text-red-600 font-semibold' : 'text-muted')}>
             {length}/{field.maxLength}
           </span>
         )}
@@ -362,7 +362,7 @@ export const ResourceField: React.FC<FieldProps> = (props) => {
           {error}
         </p>
       ) : field.hint ? (
-        <p id={`${id}-hint`} className="mt-1.5 text-xs text-[#757B81]">
+        <p id={`${id}-hint`} className="mt-1.5 text-xs text-muted">
           {field.hint}
         </p>
       ) : null}

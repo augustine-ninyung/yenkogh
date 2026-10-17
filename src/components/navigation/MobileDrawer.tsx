@@ -16,7 +16,7 @@ import {
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar } from '@/components/ui/Avatar';
-import { Button } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/Button';
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -62,7 +62,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
           </Link>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-[#757B81] hover:text-[#090C11] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+            className="p-2 rounded-xl text-muted hover:text-[#090C11] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
             aria-label="Close menu"
           >
             <X size={20} />
@@ -75,7 +75,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
             <Avatar src={user.avatar} name={user.name} size="md" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-[#090C11] dark:text-white truncate">{user.name}</p>
-              <p className="text-xs text-[#757B81] dark:text-white/60 truncate">{user.email}</p>
+              <p className="text-xs text-muted dark:text-white/60 truncate">{user.email}</p>
             </div>
           </div>
         )}
@@ -95,7 +95,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                     'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                     isActive
                       ? 'bg-[#FFD300] text-[#090C11] font-semibold shadow-sm'
-                      : 'text-[#757B81] dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#090C11] dark:hover:text-white'
+                      : 'text-muted dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-[#090C11] dark:hover:text-white'
                   )
                 }
               >
@@ -116,7 +116,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
             <>
               <div className="pt-4 pb-1">
                 <div className="h-px bg-gray-100 dark:bg-white/10 mx-3 mb-2" />
-                <p className="px-3 text-[11px] font-semibold text-[#757B81] uppercase tracking-wider">Account</p>
+                <p className="px-3 text-[11px] font-semibold text-muted uppercase tracking-wider">Account</p>
               </div>
               <NavLink
                 to="/dashboard"
@@ -126,7 +126,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                     'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors',
                     isActive
                       ? 'bg-[#FFD300] text-[#090C11] font-semibold'
-                      : 'text-[#757B81] dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
+                      : 'text-muted dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
                   )
                 }
               >
@@ -141,7 +141,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                     'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors',
                     isActive
                       ? 'bg-[#FFD300] text-[#090C11] font-semibold'
-                      : 'text-[#757B81] dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
+                      : 'text-muted dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
                   )
                 }
               >
@@ -174,16 +174,12 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
             </button>
           ) : (
             <div className="flex flex-col gap-2">
-              <Link to="/login" onClick={onClose} className="w-full">
-                <Button variant="outline" fullWidth size="md">
+              <ButtonLink to="/login" onClick={onClose} variant="outline" fullWidth size="md">
                   Log In
-                </Button>
-              </Link>
-              <Link to="/register" onClick={onClose} className="w-full">
-                <Button variant="primary" fullWidth size="md">
+                </ButtonLink>
+              <ButtonLink to="/register" onClick={onClose} variant="primary" fullWidth size="md">
                   Sign Up Free
-                </Button>
-              </Link>
+                </ButtonLink>
             </div>
           )}
         </div>

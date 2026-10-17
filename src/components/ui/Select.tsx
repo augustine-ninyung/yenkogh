@@ -71,7 +71,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             ))}
           </select>
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#757B81]">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted">
             <ChevronDown size={16} />
           </span>
         </div>

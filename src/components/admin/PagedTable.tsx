@@ -69,7 +69,7 @@ export function PagedTable<T>({ list, columns, rowKey, filters = [], searchPlace
       {/* Search and filters */}
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="relative flex-1 min-w-0">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#757B81]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <input
             type="search"
             value={list.search}
@@ -83,7 +83,7 @@ export function PagedTable<T>({ list, columns, rowKey, filters = [], searchPlace
               type="button"
               onClick={() => list.setSearch('')}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#757B81] hover:text-[#090C11] dark:hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-[#090C11] dark:hover:text-white"
             >
               <X size={14} />
             </button>
@@ -127,7 +127,7 @@ export function PagedTable<T>({ list, columns, rowKey, filters = [], searchPlace
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-white/10 text-left text-xs uppercase tracking-wide text-[#757B81]">
+                <tr className="border-b border-gray-200 dark:border-white/10 text-left text-xs uppercase tracking-wide text-muted">
                   {columns.map((column) => {
                     const sorted = list.sort?.column === column.sortColumn;
                     return (
@@ -185,7 +185,7 @@ export function PagedTable<T>({ list, columns, rowKey, filters = [], searchPlace
       </div>
 
       {!list.error && list.total > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#757B81]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
           <span aria-live="polite">
             Showing {firstRow}–{lastRow} of {list.total} {noun}
           </span>

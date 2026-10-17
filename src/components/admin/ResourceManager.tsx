@@ -36,7 +36,7 @@ const STATUS_FILTER: TableFilter = {
 };
 
 const iconButton =
-  'p-2 rounded-lg text-[#757B81] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-[#090C11] dark:hover:text-white transition-colors disabled:opacity-40';
+  'p-2 rounded-lg text-muted hover:bg-gray-100 dark:hover:bg-white/10 hover:text-[#090C11] dark:hover:text-white transition-colors disabled:opacity-40';
 
 // ─── ResourceManager ──────────────────────────────────────────────────────────
 // The whole admin screen for one kind of content, driven by a ResourceConfig:
@@ -317,7 +317,7 @@ export const ResourceManager: React.FC<{ config: ResourceConfig }> = ({ config }
 
           {sections.map((section) => (
             <section key={section.title}>
-              <h3 className="text-xs font-bold uppercase tracking-wide text-[#757B81] mb-3">{section.title}</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wide text-muted mb-3">{section.title}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {section.fields.map((field) => (
                   <ResourceField
@@ -334,7 +334,7 @@ export const ResourceManager: React.FC<{ config: ResourceConfig }> = ({ config }
           ))}
 
           <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-gray-100 dark:border-white/10">
-            <p className="text-xs text-[#757B81]">
+            <p className="text-xs text-muted">
               {isNew && config.publishable ? 'New records are saved as drafts and are not on the site until published.' : 'Fields marked * are required.'}
             </p>
             <div className="flex gap-2.5">

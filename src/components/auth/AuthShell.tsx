@@ -62,11 +62,11 @@ export const AuthShell: React.FC<AuthShellProps> = ({ title, subtitle, photo, he
       <main className="flex items-center justify-center px-4 sm:px-6 py-12 lg:py-16">
         <div className="w-full max-w-md">
           <h1 className="text-3xl font-black tracking-tight text-[#090C11] dark:text-white">{title}</h1>
-          <p className="mt-2 text-sm text-[#757B81] dark:text-white/60">{subtitle}</p>
+          <p className="mt-2 text-sm text-muted dark:text-white/60">{subtitle}</p>
 
           <div className="mt-8 space-y-6">{children}</div>
 
-          <p className="mt-8 pt-6 border-t border-gray-100 dark:border-white/10 text-center text-sm text-[#757B81] dark:text-white/60">
+          <p className="mt-8 pt-6 border-t border-gray-100 dark:border-white/10 text-center text-sm text-muted dark:text-white/60">
             {footer}
           </p>
         </div>

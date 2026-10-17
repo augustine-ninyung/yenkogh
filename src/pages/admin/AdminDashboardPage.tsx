@@ -56,7 +56,7 @@ const Panel: React.FC<{ title: string; to?: string; linkLabel?: string; children
     <div className="flex items-center justify-between gap-3 mb-4">
       <h2 className="font-bold text-[#090C11] dark:text-white">{title}</h2>
       {to && (
-        <Link to={to} className="inline-flex items-center gap-1 text-xs font-semibold text-[#757B81] hover:text-[#090C11] dark:hover:text-white">
+        <Link to={to} className="inline-flex items-center gap-1 text-xs font-semibold text-muted hover:text-[#090C11] dark:hover:text-white">
           {linkLabel ?? 'View all'} <ArrowRight size={12} />
         </Link>
       )}
@@ -66,7 +66,7 @@ const Panel: React.FC<{ title: string; to?: string; linkLabel?: string; children
 );
 
 const Empty: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="py-6 text-center text-sm text-[#757B81]">{children}</p>
+  <p className="py-6 text-center text-sm text-muted">{children}</p>
 );
 
 export const AdminDashboardPage: React.FC = () => {
@@ -123,11 +123,11 @@ export const AdminDashboardPage: React.FC = () => {
               const body = (
                 <>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-semibold text-[#757B81]">{tile.label}</span>
-                    <tile.icon size={16} className={tile.alert ? 'text-amber-500' : 'text-[#757B81]'} />
+                    <span className="text-xs font-semibold text-muted">{tile.label}</span>
+                    <tile.icon size={16} className={tile.alert ? 'text-amber-500' : 'text-muted'} />
                   </div>
                   <p className="mt-2 text-3xl font-black text-[#090C11] dark:text-white">{tile.value.toLocaleString()}</p>
-                  <p className="mt-1 text-xs text-[#757B81]">{tile.note}</p>
+                  <p className="mt-1 text-xs text-muted">{tile.note}</p>
                 </>
               );
               return tile.to ? (
@@ -147,7 +147,7 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <section className={`${card} p-5 xl:col-span-2`}>
           <h2 className="font-bold text-[#090C11] dark:text-white">Content by region</h2>
-          <p className="text-xs text-[#757B81] mb-4">Shows which regions are thin on destinations, festivals or events.</p>
+          <p className="text-xs text-muted mb-4">Shows which regions are thin on destinations, festivals or events.</p>
           <div className="h-72">
             {stats ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -170,7 +170,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         <section className={`${card} p-5`}>
           <h2 className="font-bold text-[#090C11] dark:text-white">New accounts</h2>
-          <p className="text-xs text-[#757B81] mb-4">Sign-ups in each of the last six months.</p>
+          <p className="text-xs text-muted mb-4">Sign-ups in each of the last six months.</p>
           <div className="h-72">
             {stats ? (
               <ResponsiveContainer width="100%" height="100%">
@@ -215,13 +215,13 @@ export const AdminDashboardPage: React.FC = () => {
                     ] as [string, string][]
                   ).map(([label, value]) => (
                     <div key={label} className="py-2.5 flex items-center justify-between gap-3">
-                      <dt className="text-[#757B81] dark:text-white/70">{label}</dt>
+                      <dt className="text-muted dark:text-white/70">{label}</dt>
                       <dd className="font-semibold whitespace-nowrap">{value}</dd>
                     </div>
                   ))}
                 </dl>
                 {data.stats.planner.ai === 0 && (
-                  <p className="pt-3 text-xs text-[#757B81]">
+                  <p className="pt-3 text-xs text-muted">
                     No plan has come from the AI planner in this period. If that is unexpected, check that GEMINI_API_KEY is set for the site and look at the function's log.
                   </p>
                 )}
@@ -238,18 +238,18 @@ export const AdminDashboardPage: React.FC = () => {
                   {data.stats.mostViewed.map((item, index) => (
                     <li key={item.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                       <span className="min-w-0 flex items-center gap-2.5">
-                        <span className="w-5 text-xs font-bold text-[#757B81]">{index + 1}</span>
+                        <span className="w-5 text-xs font-bold text-muted">{index + 1}</span>
                         <Link to={`/explore/${item.id}`} className="font-semibold truncate hover:underline">
                           {item.name}
                         </Link>
                       </span>
-                      <span className="text-xs text-[#757B81] whitespace-nowrap">
+                      <span className="text-xs text-muted whitespace-nowrap">
                         {item.views} {item.views === 1 ? 'view' : 'views'}
                       </span>
                     </li>
                   ))}
                 </ol>
-                <p className="pt-3 text-xs text-[#757B81]">
+                <p className="pt-3 text-xs text-muted">
                   {data.stats.viewsLast30Days} destination page {data.stats.viewsLast30Days === 1 ? 'view' : 'views'} in the last 30 days. A page reopened in the same visit is counted once.
                 </p>
               </>
@@ -265,9 +265,9 @@ export const AdminDashboardPage: React.FC = () => {
                   <li key={event.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                     <span className="min-w-0">
                       <span className="block font-semibold truncate">{event.name}</span>
-                      <span className="block text-xs text-[#757B81] truncate">{event.location}</span>
+                      <span className="block text-xs text-muted truncate">{event.location}</span>
                     </span>
-                    <span className="text-xs text-[#757B81] whitespace-nowrap">{formatAdminDate(event.start_date)}</span>
+                    <span className="text-xs text-muted whitespace-nowrap">{formatAdminDate(event.start_date)}</span>
                   </li>
                 ))}
               </ul>
@@ -283,7 +283,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <li key={destination.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                     <span className="min-w-0">
                       <span className="block font-semibold truncate">{destination.name}</span>
-                      <span className="block text-xs text-[#757B81]">{labelFromId(destination.region_id)} · {formatAdminDate(destination.updated_at)}</span>
+                      <span className="block text-xs text-muted">{labelFromId(destination.region_id)} · {formatAdminDate(destination.updated_at)}</span>
                     </span>
                     <StatusPill status={destination.status} />
                   </li>
@@ -301,9 +301,9 @@ export const AdminDashboardPage: React.FC = () => {
                   <li key={user.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                     <span className="min-w-0">
                       <span className="block font-semibold truncate">{user.name}</span>
-                      <span className="block text-xs text-[#757B81] truncate">{user.email}</span>
+                      <span className="block text-xs text-muted truncate">{user.email}</span>
                     </span>
-                    <span className="text-xs text-[#757B81] whitespace-nowrap">{formatAdminDate(user.createdAt)}</span>
+                    <span className="text-xs text-muted whitespace-nowrap">{formatAdminDate(user.createdAt)}</span>
                   </li>
                 ))}
               </ul>
@@ -319,7 +319,7 @@ export const AdminDashboardPage: React.FC = () => {
                   <li key={item.id} className="py-2.5 flex items-start justify-between gap-3 text-sm">
                     <span className="min-w-0">
                       <span className="block line-clamp-2">{item.message}</span>
-                      <span className="block text-xs text-[#757B81] truncate">
+                      <span className="block text-xs text-muted truncate">
                         {item.userName}
                         {item.subjectName && ` · ${item.subjectName}`}
                       </span>
@@ -341,10 +341,10 @@ export const AdminDashboardPage: React.FC = () => {
                     <li key={entry.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                       <span className="min-w-0">
                         <span className="font-semibold">{labelFromId(entry.action)}</span>
-                        {entry.summary && <span className="text-[#757B81]"> · {entry.summary}</span>}
-                        <span className="block text-xs text-[#757B81] truncate">{entry.actorEmail}</span>
+                        {entry.summary && <span className="text-muted"> · {entry.summary}</span>}
+                        <span className="block text-xs text-muted truncate">{entry.actorEmail}</span>
                       </span>
-                      <span className="text-xs text-[#757B81] whitespace-nowrap">{formatAdminDateTime(entry.createdAt)}</span>
+                      <span className="text-xs text-muted whitespace-nowrap">{formatAdminDateTime(entry.createdAt)}</span>
                     </li>
                   ))}
                 </ul>

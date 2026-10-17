@@ -1,3 +1,4 @@
+import { SkipLink } from '@/components/navigation/SkipLink';
 import React, { useState, Suspense } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
@@ -48,7 +49,7 @@ const SidebarLink: React.FC<{
         'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
         isActive
           ? 'bg-[#FFD300] text-[#090C11] shadow-sm'
-          : 'text-[#757B81] dark:text-[#9aa0a8] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-[#262B32] dark:hover:text-white'
+          : 'text-muted dark:text-[#9aa0a8] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-[#262B32] dark:hover:text-white'
       )
     }
   >
@@ -80,7 +81,7 @@ export const DashboardLayout: React.FC = () => {
         >
           <Logo className="h-8 w-auto text-[#191E25] dark:text-white" />
         </Link>
-        <p className="text-xs text-[#757B81] mt-1">My Dashboard</p>
+        <p className="text-xs text-muted mt-1">My Dashboard</p>
       </div>
 
       {/* User info */}
@@ -92,7 +93,7 @@ export const DashboardLayout: React.FC = () => {
               <p className="text-sm font-semibold text-[#262B32] dark:text-white truncate">
                 {user.name}
               </p>
-              <p className="text-xs text-[#757B81] truncate">{user.email}</p>
+              <p className="text-xs text-muted truncate">{user.email}</p>
             </div>
           </div>
         </div>
@@ -128,6 +129,7 @@ export const DashboardLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-[#090C11] text-[#262B32] dark:text-white">
+      <SkipLink />
       {/* ── Desktop Sidebar ── */}
       <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-white dark:bg-[#262B32] border-r border-gray-100 dark:border-white/10 fixed inset-y-0 left-0 z-30">
         {sidebarContent}
@@ -155,7 +157,7 @@ export const DashboardLayout: React.FC = () => {
         <button
           onClick={() => setMobileOpen(false)}
           aria-label="Close navigation menu"
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-[#757B81] hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-muted hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
         >
           <X size={20} />
         </button>
@@ -169,7 +171,7 @@ export const DashboardLayout: React.FC = () => {
           <button
             onClick={() => setMobileOpen(true)}
             aria-label="Open navigation menu"
-            className="p-2 rounded-lg text-[#757B81] hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+            className="p-2 rounded-lg text-muted hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
           >
             <Menu size={20} />
           </button>
@@ -186,10 +188,10 @@ export const DashboardLayout: React.FC = () => {
         </header>
 
         {/* Breadcrumb/page area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main id="main" tabIndex={-1} className="focus:outline-none flex-1 p-4 sm:p-6 lg:p-8">
           {/* Desktop header bar */}
           <div className="hidden lg:flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 text-sm text-[#757B81]">
+            <div className="flex items-center gap-2 text-sm text-muted">
               <Link to="/" className="hover:text-[#FFD300] transition-colors">
                 Home
               </Link>
@@ -202,7 +204,7 @@ export const DashboardLayout: React.FC = () => {
                   <p className="text-sm font-semibold text-[#262B32] dark:text-white">
                     {user.name}
                   </p>
-                  <p className="text-xs text-[#757B81]">{user.email}</p>
+                  <p className="text-xs text-muted">{user.email}</p>
                 </div>
                 <Avatar src={user.avatar} name={user.name} size="sm" />
               </div>

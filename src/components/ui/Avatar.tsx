@@ -55,7 +55,9 @@ export const Avatar: React.FC<AvatarProps> = ({
   const bgColor = useMemo(() => getColorFromName(name), [name]);
   const [imgError, setImgError] = React.useState(false);
 
-  const showImage = src && !imgError;
+  // Older accounts stored a ui-avatars.com link, which sent the person's name to
+  // that service on every page view. The initials below show instead.
+  const showImage = src && !src.startsWith('https://ui-avatars.com/') && !imgError;
 
   return (
     <div

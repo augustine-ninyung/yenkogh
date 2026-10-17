@@ -19,7 +19,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
       aria-pressed={isDark}
       className={cn(
         'relative inline-flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200',
-        'text-[#757B81] hover:text-[#262B32] dark:hover:text-white',
+        'text-muted hover:text-[#262B32] dark:hover:text-white',
         'hover:bg-gray-100 dark:hover:bg-white/10',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2',
         className

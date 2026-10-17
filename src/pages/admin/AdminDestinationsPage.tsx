@@ -30,7 +30,7 @@ const config: ResourceConfig = {
           )}
           <div className="min-w-0">
             <p className="font-semibold text-[#090C11] dark:text-white truncate">{row.name}</p>
-            <p className="text-xs text-[#757B81] truncate">/{String(row.slug)}</p>
+            <p className="text-xs text-muted truncate">/{String(row.slug)}</p>
           </div>
         </div>
       ),

@@ -46,7 +46,7 @@ const ACTION_COPY = {
 } as const;
 
 const iconButton =
-  'p-2 rounded-lg text-[#757B81] hover:bg-gray-100 dark:hover:bg-white/10 hover:text-[#090C11] dark:hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-transparent';
+  'p-2 rounded-lg text-muted hover:bg-gray-100 dark:hover:bg-white/10 hover:text-[#090C11] dark:hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-transparent';
 
 export const AdminUsersPage: React.FC = () => {
   const { user: me } = useAuth();
@@ -87,9 +87,9 @@ export const AdminUsersPage: React.FC = () => {
             <span className="min-w-0">
               <span className="block font-semibold text-[#090C11] dark:text-white truncate group-hover:underline">
                 {user.name}
-                {user.id === me?.id && <span className="ml-1.5 text-xs font-normal text-[#757B81]">(you)</span>}
+                {user.id === me?.id && <span className="ml-1.5 text-xs font-normal text-muted">(you)</span>}
               </span>
-              <span className="block text-xs text-[#757B81] truncate">{user.email}</span>
+              <span className="block text-xs text-muted truncate">{user.email}</span>
             </span>
           </button>
         ),
@@ -162,28 +162,28 @@ export const AdminUsersPage: React.FC = () => {
               <Avatar src={viewing.avatar} name={viewing.name} size="lg" />
               <div className="min-w-0">
                 <p className="text-lg font-bold text-[#090C11] dark:text-white truncate">{viewing.name}</p>
-                <p className="text-sm text-[#757B81] truncate">{viewing.email}</p>
+                <p className="text-sm text-muted truncate">{viewing.email}</p>
               </div>
             </div>
             <dl className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <dt className="text-xs text-[#757B81] mb-1">Role</dt>
+                <dt className="text-xs text-muted mb-1">Role</dt>
                 <dd><StatusPill status={viewing.role} /></dd>
               </div>
               <div>
-                <dt className="text-xs text-[#757B81] mb-1">Status</dt>
+                <dt className="text-xs text-muted mb-1">Status</dt>
                 <dd><StatusPill status={viewing.status} /></dd>
               </div>
               <div>
-                <dt className="text-xs text-[#757B81] mb-1">Joined</dt>
+                <dt className="text-xs text-muted mb-1">Joined</dt>
                 <dd className="font-medium">{formatAdminDate(viewing.createdAt)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-[#757B81] mb-1">Trips planned</dt>
+                <dt className="text-xs text-muted mb-1">Trips planned</dt>
                 <dd className="font-medium">{viewing.trips}</dd>
               </div>
             </dl>
-            <p className="text-xs text-[#757B81]">
+            <p className="text-xs text-muted">
               Administrators can see how many trips an account has, but not the trips or budgets themselves.
             </p>
           </div>

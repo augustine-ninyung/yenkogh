@@ -1,322 +1,202 @@
-# Project
-Final year project
+# YɛnkɔGH — Smart Tourism and Transportation Planning for Ghana
 
-# Smart Tourism and Transportation Planning Web Application
+Final-year BSc Information Technology project, University of Ghana.
 
-A modern AI-powered web application designed to simplify tourism planning in Ghana by providing destination discovery, transportation guidance, budget estimation, festival information, and personalized travel itinerary generation—all in one platform.
-
----
-
-## 📖 Overview
-
-Planning a trip in Ghana often requires navigating multiple websites for attractions, transportation, accommodation, events, and travel costs. This project addresses that challenge by providing a centralized platform that enables users to discover destinations, plan trips, estimate budgets, and generate intelligent travel itineraries using Artificial Intelligence.
+YɛnkɔGH is a web application for planning travel in Ghana. It brings destination discovery, festival listings, transport guidance, budget planning and an AI trip planner into one place.
 
 ---
 
-## ✨ Features
+## Overview
 
-### User Features
-
-- User Registration & Authentication
-- Secure Login System
-- Destination Discovery
-- Tourist Attraction Details
-- Festival & Event Listings
-- Transportation Guide
-- Budget Calculator
-- AI-Powered Trip Recommendations
-- AI Itinerary Generator
-- Responsive User Interface
-- User Profile Management
-
-### Admin Features
-
-- Dashboard
-- Manage Destinations
-- Manage Events
-- Manage Transportation Data
-- User Management
-- Content Management
-- Basic Analytics
+Planning a trip in Ghana usually means jumping between many websites for attractions, transport, events and costs. YɛnkɔGH puts these in one place. Visitors can browse destinations and festivals, check how to get between regions, estimate a budget, and get a day-by-day itinerary drafted by AI from the site's own listings.
 
 ---
 
-## 🧠 AI Capabilities
+## Features
 
-The application integrates a Large Language Model (LLM) to:
+### Travellers
 
-- Generate personalized travel itineraries
-- Recommend destinations based on user interests
-- Suggest transportation options
-- Estimate travel costs
-- Build day-by-day travel plans
+- Account registration, sign-in and password reset (email based)
+- Destination discovery with search, filters by region and type, and detail pages
+- Festival and event listings, including a catalogue of over 100 traditional festivals with cited sources
+- Transportation guide: trotro, STC/VIP buses, ride-hailing, domestic flights and ferries, with a route search
+- Budget planner with spending categories and charts
+- AI trip planner: describe a trip in plain words or use the form, and get a day-by-day itinerary
+- Save destinations and events, save trips, download itineraries as PDF
+- Feedback form on listings for reporting corrections
+- Profile management, password change and self-service account deletion
+- Light and dark themes, responsive layout
 
-To improve reliability, AI responses are grounded using Retrieval-Augmented Generation (RAG) with a curated knowledge base of Ghanaian tourism information.
+### Administrators
 
----
-
-## 🛠 Tech Stack
-
-### Frontend
-
-- React.js
-- TypeScript
-- Tailwind CSS
-
-### Backend
-
-- Node.js
-- Nest.js
-- Express.js
-
-### Database
-
-- PostgreSQL
-
-### Authentication
-
-- JSON Web Tokens (JWT)
-
-### Artificial Intelligence
-
-- OpenAI API
-- Retrieval-Augmented Generation (RAG)
+- Dashboard with content, usage and feedback statistics
+- Create, edit, publish and archive destinations, events, festivals, regions and transport options
+- Image upload to storage
+- User management (roles, suspension)
+- Feedback moderation
+- Audit log of administrator actions
 
 ---
 
-## 🏗 System Architecture
+## How the AI planner works
+
+The planner is grounded in retrieval rather than in what the model remembers:
+
+1. The request (free text and/or form) is parsed for trip length, budget, party size, dates and named places.
+2. Matching destinations, festivals and transport routes are retrieved from the database and ranked.
+3. Only those records are given to the language model (Google Gemini), which is told to build the plan from them.
+4. The model's answer is checked against the records before it is returned. Each run records how many activities were *grounded* in real listings.
+5. If the model is unavailable or returns something unusable, the plan is assembled directly from the same records instead.
+
+The model key is read only by the server function, so it never reaches the browser. The planner's logic is covered by the test suite.
+
+---
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, TypeScript, Vite 6, Tailwind CSS 4, React Router 7 |
+| Charts and export | Recharts, jsPDF |
+| Backend | Supabase: PostgreSQL, Auth, Storage, Row Level Security |
+| Server function | Vercel serverless function ([api/plan-trip.ts](api/plan-trip.ts)) |
+| AI | Google Gemini API, with retrieval over the site's own catalogue |
+| Hosting | Vercel |
+
+Without Supabase credentials, the app runs entirely in the browser on its bundled content and built-in demo accounts. This is useful for demonstrations and development.
+
+---
+
+## Architecture
 
 ```
-Frontend (Next.js)
-
-        │
-
-REST API
-
-        │
-
-Backend (Node.js + Express)
-
-        │
-
-PostgreSQL Database
-
-        │
-
-OpenAI API (AI Recommendation Engine)
+Browser (React SPA)
+   │
+   ├── Supabase JS client ──► Supabase
+   │                           ├── PostgreSQL (content, profiles, trips, budgets, feedback)
+   │                           ├── Auth (email + password, hashed by Supabase)
+   │                           ├── Storage (admin-uploaded images)
+   │                           └── Row Level Security: each user reads only their own rows
+   │
+   └── POST /api/plan-trip ──► Vercel function ──► Supabase (catalogue lookup)
+                                                └► Google Gemini (itinerary draft)
 ```
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
-smart-tourism-app/
-│
-├── client/
-│   ├── app/
-│   ├── components/
-│   ├── hooks/
-│   ├── lib/
-│   ├── styles/
-│   └── public/
-│
-├── server/
-│   ├── controllers/
-│   ├── routes/
-│   ├── middleware/
-│   ├── services/
-│   ├── models/
-│   └── config/
-│
-├── database/
-│
-├── docs/
-│
-├── README.md
-└── package.json
+api/
+  plan-trip.ts          AI trip planner (Vercel function; also mounted by the Vite dev server)
+public/                 Static files
+scripts/
+  build-seed.ts         Generates supabase/seed.sql and setup.sql from src/data
+src/
+  components/           UI components (ui/, cards/, navigation/, auth/, admin/, legal/ …)
+  config/site.ts        Operator and contact details used by the footer and legal pages
+  context/              Auth, theme, favourites and toast providers
+  data/                 Bundled starting content (destinations, festivals, regions, transport)
+  hooks/                Data and UI hooks
+  layouts/              Public, dashboard and admin layouts
+  pages/                Route pages, including admin/ and the legal pages
+  routes/               Route table and guards
+  services/             Data access (Supabase, with a local fallback)
+  utils/                Formatting, validation, trip planning helpers
+supabase/
+  setup.sql             Complete database setup (schema + admin + seed)
+  schema.sql, admin.sql Tables, policies and functions
+  seed.sql              Starting content (generated; do not edit by hand)
+  update-*.sql          One-off updates for databases created earlier
+tests/
+  planner.test.ts       Trip planner tests
 ```
 
 ---
 
-## Core Modules
+## Getting started
 
-- Authentication
-- Destination Management
-- Transportation Management
-- Event & Festival Management
-- Budget Planner
-- AI Recommendation Engine
-- AI Itinerary Generator
-- Admin Dashboard
-
----
-
-## Functional Requirements
-
-- User registration and login
-- Destination search
-- View attraction details
-- Browse festivals
-- Transportation guidance
-- Budget estimation
-- AI itinerary generation
-- Admin CRUD operations
-- Responsive interface
-
----
-
-## Non-Functional Requirements
-
-- Performance
-- Security
-- Scalability
-- Reliability
-- Maintainability
-- Accessibility
-- Responsive Design
-
----
-
-## Security
-
-The application follows modern security practices including:
-
-- JWT Authentication
-- Password Hashing
-- Role-Based Authorization
-- Input Validation
-- SQL Injection Prevention
-- XSS Protection
-- CSRF Protection
-- OWASP Top 10 Considerations
-
----
-
-## Future Improvements
-
-- Hotel Booking
-- Flight Booking
-- Mobile Money Integration
-- Real-time Transportation Tracking
-- Weather Integration
-- Google Maps Integration
-- Multi-language Support
-- Mobile Application
-- Offline Mode
-
----
-
-## Target Users
-
-- Local Tourists
-- International Visitors
-- Students
-- Tour Operators
-- Travel Agencies
-- Tourism Authorities
-
----
-
-## Development Methodology
-
-The project follows the Agile Software Development methodology with iterative development cycles involving:
-
-- Requirements Gathering
-- System Design
-- Development
-- Testing
-- Deployment
-- Documentation
-
----
-
-## Screens (Planned)
-
-- Landing Page
-- Login
-- Register
-- Home Dashboard
-- Explore Destinations
-- Destination Details
-- AI Planner
-- Budget Planner
-- Events & Festivals
-- Transportation Guide
-- Profile
-- Admin Dashboard
-
----
-
-## Installation
-
-### Clone the repository
+Requires Node.js 20 or later.
 
 ```bash
-git clone https://github.com/yourusername/smart-tourism.git
-```
-
-### Navigate into the project
-
-```bash
-cd smart-tourism
-```
-
-### Install dependencies
-
-Frontend
-
-```bash
-cd client
+git clone <repository-url>
+cd <repository-folder>
 npm install
-```
-
-Backend
-
-```bash
-cd server
-npm install
-```
-
-### Run Development Servers
-
-Frontend
-
-```bash
 npm run dev
 ```
 
-Backend
+The app opens at http://localhost:5173. With no configuration it runs in demo mode. Sign in with:
 
-```bash
-npm run dev
-```
+| Account | Email | Password |
+|---|---|---|
+| Traveller | `user@yenkogh.com` | `password123` |
+| Administrator | `admin@yenkogh.com` | `admin123` |
+
+### Connecting Supabase and the AI planner
+
+1. Create a Supabase project and run [supabase/setup.sql](supabase/setup.sql) in its SQL editor. If the database was created before October 2026, also run the `update-2026-10*.sql` files.
+2. Copy `.env.example` to `.env.local` and fill in:
+   - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`: from Project Settings → API
+   - `GEMINI_API_KEY`: optional; switches on the AI model (without it, plans are built from the catalogue)
+   - `VITE_CONTACT_EMAIL`: the public contact address shown on the legal pages
+3. Sign up in the app, then make yourself an administrator in the SQL editor:
+   ```sql
+   update public.profiles set role = 'admin' where email = 'you@example.com';
+   ```
+
+### Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Development server, including `/api/plan-trip` |
+| `npm run build` | Type-check and production build |
+| `npm run preview` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm test` | Trip planner tests |
+| `npm run db:seed` | Regenerate `supabase/seed.sql` and `setup.sql` from `src/data` |
+
+### Deploying
+
+The project deploys to Vercel as-is ([vercel.json](vercel.json) sets the build, SPA rewrites, security headers and the planner function's timeout). Set the same environment variables in the Vercel project.
 
 ---
 
-## Contributing
+## Security and privacy
 
-Contributions are welcome!
+- Passwords are hashed by Supabase Auth (in demo mode, salted PBKDF2 in the browser)
+- Row Level Security on every table; administrator actions are checked in the database and recorded in an audit log
+- The AI key stays server-side; planner requests are size-limited and validated
+- Security headers: HSTS, `X-Frame-Options: DENY`, `nosniff`, a strict referrer policy and a permissions policy
+- No analytics, advertising or tracking; fonts are self-hosted; no third-party cookies
+- Minimal data collection: planner runs keep counts, not request text; page views are anonymous daily totals
+- Users can delete their account and all linked data from their profile
+- Privacy Policy, Terms of Use and Cookie Policy pages at `/privacy`, `/terms` and `/cookies`, written against Ghana's Data Protection Act, 2012 (Act 843)
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push your branch
-5. Open a Pull Request
+## Accessibility
+
+- Text colours meet WCAG AA contrast in both themes
+- A skip link, visible keyboard focus, labelled controls and announced form errors
+- Dialogs trap focus and close with Escape
+- The hero slideshow can be paused and stays still for reduced-motion users
+
+---
+
+## Future work
+
+- Booking integration with transport and accommodation providers
+- Mobile Money payments
+- Real-time transport tracking
+- Weather and map integration
+- Twi, Ewe, Ga and French translations
+- Verified traveller reviews
+- Offline support
 
 ---
 
 ## Author
 
-**Augustine Ninyung**
+**Augustine Ninyung**: BSc Information Technology, University of Ghana
 
-- BSc Information Technology
-- University of Ghana
-- Frontend Developer
-- Cybersecurity Enthusiast
+## Licence
 
----
-
-## License
-
-This project is intended for academic and educational purposes.
+Developed for academic purposes. Photos are from Unsplash and Wikimedia Commons under their respective licences, credited on each page where required.

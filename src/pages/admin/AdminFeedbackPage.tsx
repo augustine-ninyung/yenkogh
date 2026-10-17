@@ -65,7 +65,7 @@ export const AdminFeedbackPage: React.FC = () => {
         header: 'Feedback',
         render: (item) => (
           <button type="button" onClick={() => open(item)} className="text-left min-w-[14rem] max-w-md group">
-            <span className="block text-xs font-semibold uppercase tracking-wide text-[#757B81]">
+            <span className="block text-xs font-semibold uppercase tracking-wide text-muted">
               {item.kind}
               {item.subjectName && <span className="normal-case font-normal"> · {item.subjectName}</span>}
             </span>
@@ -80,7 +80,7 @@ export const AdminFeedbackPage: React.FC = () => {
         render: (item) => (
           <div className="min-w-0">
             <p className="font-medium truncate">{item.userName}</p>
-            <p className="text-xs text-[#757B81] truncate">{item.userEmail}</p>
+            <p className="text-xs text-muted truncate">{item.userEmail}</p>
           </div>
         ),
       },
@@ -123,7 +123,7 @@ export const AdminFeedbackPage: React.FC = () => {
         {reviewing && (
           <form onSubmit={save} className="space-y-5">
             <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 p-4">
-              <p className="text-xs text-[#757B81] mb-2">
+              <p className="text-xs text-muted mb-2">
                 <span className="font-semibold uppercase tracking-wide">{reviewing.kind}</span>
                 {reviewing.subjectName && <> about <strong>{reviewing.subjectName}</strong></>} · from {reviewing.userName}
                 {reviewing.userEmail && ` (${reviewing.userEmail})`} · {formatAdminDateTime(reviewing.createdAt)}
@@ -153,7 +153,7 @@ export const AdminFeedbackPage: React.FC = () => {
                     />
                     <span>
                       <span className="block text-sm font-semibold">{option.label}</span>
-                      <span className="block text-xs text-[#757B81]">{option.meaning}</span>
+                      <span className="block text-xs text-muted">{option.meaning}</span>
                     </span>
                   </label>
                 ))}
@@ -165,7 +165,7 @@ export const AdminFeedbackPage: React.FC = () => {
                 <label htmlFor="feedback-note" className="text-sm font-semibold text-[#262B32] dark:text-white">
                   Note
                 </label>
-                <span className={`text-xs ${note.trim().length > NOTE_MAX ? 'text-red-600 font-semibold' : 'text-[#757B81]'}`}>
+                <span className={`text-xs ${note.trim().length > NOTE_MAX ? 'text-red-600 font-semibold' : 'text-muted'}`}>
                   {note.trim().length}/{NOTE_MAX}
                 </span>
               </div>

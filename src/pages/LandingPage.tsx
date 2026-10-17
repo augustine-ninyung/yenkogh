@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Compass, Bus, Brain, Wallet, Shield, Globe, Clock, ArrowRight } from 'lucide-react';
+import { Sparkles, Compass, Bus, Brain, Wallet, Shield, Globe, Clock, ArrowRight, Pause, Play } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { Badge } from '@/components/ui/Badge';
 import { DestinationCard } from '@/components/cards/DestinationCard';
@@ -12,12 +12,8 @@ import { useFeaturedEvents } from '@/hooks/useEvents';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { regions } from '@/data/regions';
 import { transportation } from '@/data/transportation';
-
-const STATS = [
-  { label: 'Regions to explore', value: '16' },
-  { label: 'Curated experiences', value: '500+' },
-  { label: 'AI trip planning', value: '24/7' },
-];
+import { destinations } from '@/data/destinations';
+import { festivals } from '@/data/festivals';
 
 const HERO_LOCATIONS = [
   { name: 'Cape Coast', position: 'top-[23%] left-[53%]' },
@@ -29,14 +25,14 @@ const FEATURES = [
   {
     icon: Compass,
     title: 'Discover Ghana',
-    description: 'Explore over 50 curated destinations across all 16 regions — from historical castles to pristine waterfalls and wildlife sanctuaries.',
+    description: 'Explore curated destinations across Ghana — from historical castles to waterfalls and wildlife sanctuaries.',
     color: 'text-blue-500',
     bg: 'bg-blue-50 dark:bg-blue-950',
   },
   {
     icon: Brain,
     title: 'AI Trip Planner',
-    description: 'Tell us your dates, budget, and interests and our AI will generate a personalised day-by-day Ghana itinerary in seconds.',
+    description: 'Tell us your dates, budget, and interests and our AI will draft a day-by-day Ghana itinerary for you to review.',
     color: 'text-purple-500',
     bg: 'bg-purple-50 dark:bg-purple-950',
   },
@@ -50,7 +46,7 @@ const FEATURES = [
   {
     icon: Wallet,
     title: 'Budget Planner',
-    description: 'Plan every cedi. Set a budget, track spending across categories, and know exactly how much your Ghana trip will cost.',
+    description: 'Plan every cedi. Set a budget, track spending across categories, and estimate what your Ghana trip will cost.',
     color: 'text-[#FFD300]',
     bg: 'bg-yellow-50 dark:bg-yellow-950',
   },
@@ -87,7 +83,10 @@ export default function LandingPage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [zoomReady, setZoomReady] = useState(false);
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
-  const zoomEnabled = zoomReady && !reducedMotion;
+  // Moving content must be pausable (WCAG 2.2.2); reduced-motion users start paused
+  const [pausedByUser, setPausedByUser] = useState<boolean | null>(null);
+  const paused = pausedByUser ?? reducedMotion;
+  const zoomEnabled = zoomReady && !paused;
 
   // Start the first slide's zoom one frame after mount so it animates instead of starting zoomed
   useEffect(() => {
@@ -97,12 +96,13 @@ export default function LandingPage() {
 
   // Advance automatically and loop; restarting on activeSlide gives a manual pick its full time
   useEffect(() => {
+    if (paused) return;
     const timer = setTimeout(
       () => setActiveSlide((i) => (i + 1) % HERO_SLIDES.length),
       HERO_SLIDE_MS,
     );
     return () => clearTimeout(timer);
-  }, [activeSlide]);
+  }, [activeSlide, paused]);
 
   return (
     <div className="min-h-screen">
@@ -183,9 +183,13 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Stats */}
+          {/* Stats, counted from the content actually on the site */}
           <div className="flex flex-wrap gap-x-10 gap-y-6">
-            {STATS.map((s) => (
+            {[
+              { label: 'Regions covered', value: String(regions.length) },
+              { label: 'Destinations', value: String(destinations.length) },
+              { label: 'Festivals documented', value: String(festivals.length) },
+            ].map((s) => (
               <div key={s.label}>
                 <p className="text-2xl font-extrabold">{s.value}</p>
                 <p className="text-sm text-white/75 mt-1">{s.label}</p>
@@ -196,6 +200,14 @@ export default function LandingPage() {
 
         {/* Slide indicators */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setPausedByUser(!paused)}
+            aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
+            className="mr-1 p-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300]"
+          >
+            {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+          </button>
           {HERO_SLIDES.map((slide, i) => (
             <button
               key={slide.id}
@@ -232,13 +244,13 @@ export default function LandingPage() {
               <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white">
                 Discover Ghana's Finest
               </h2>
-              <p className="text-[#757B81] mt-2 max-w-xl">
+              <p className="text-muted mt-2 max-w-xl">
                 From UNESCO heritage sites to pristine national parks — explore the destinations that define Ghana.
               </p>
             </div>
             <Link
               to="/explore"
-              className="inline-flex items-center gap-2 text-[#FFD300] font-semibold hover:gap-3 transition-all duration-200 flex-shrink-0"
+              className="inline-flex items-center gap-2 text-accent-ink font-semibold hover:gap-3 transition-all duration-200 flex-shrink-0"
             >
               View all destinations <ArrowRight className="w-4 h-4" />
             </Link>
@@ -253,7 +265,7 @@ export default function LandingPage() {
               {(featured.length > 0 ? featured : DESTINATIONS_PREVIEW.slice(0, 6).map(d => ({
                 id: d.slug, name: d.name, slug: d.slug, region: d.region, regionCode: d.region,
                 type: 'cultural' as const, description: '', shortDescription: '',
-                imageUrl: d.img, gallery: [], rating: 4.5, reviewCount: 100,
+                imageUrl: d.img, gallery: [], rating: 0, reviewCount: 0,
                 activities: [], thingsToDo: [], estimatedCostPerPerson: 200, transportOptions: [],
                 nearbyDestinations: [], featured: true, tags: [],
               }))).slice(0, 6).map((dest) => (
@@ -273,13 +285,13 @@ export default function LandingPage() {
               <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white">
                 Upcoming Celebrations
               </h2>
-              <p className="text-[#757B81] mt-2 max-w-xl">
+              <p className="text-muted mt-2 max-w-xl">
                 Immerse yourself in Ghana's vibrant festival calendar — from ancient harvest traditions to contemporary art festivals.
               </p>
             </div>
             <Link
               to="/events"
-              className="inline-flex items-center gap-2 text-[#FFD300] font-semibold hover:gap-3 transition-all duration-200 flex-shrink-0"
+              className="inline-flex items-center gap-2 text-accent-ink font-semibold hover:gap-3 transition-all duration-200 flex-shrink-0"
             >
               All events <ArrowRight className="w-4 h-4" />
             </Link>
@@ -301,7 +313,7 @@ export default function LandingPage() {
             <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white mb-3">
               Explore Ghana by Region
             </h2>
-            <p className="text-[#757B81] max-w-xl mx-auto">
+            <p className="text-muted max-w-xl mx-auto">
               Each of Ghana's 16 regions has its own unique character, culture, and attractions. Where will you go?
             </p>
           </div>
@@ -321,7 +333,9 @@ export default function LandingPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#090C11]/80 via-[#090C11]/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <p className="text-white font-semibold text-sm">{region.name}</p>
-                  <p className="text-white/70 text-xs">{region.destinationCount} places</p>
+                  <p className="text-white/70 text-xs">
+                    {region.destinationCount === 0 ? 'Coming soon' : `${region.destinationCount} ${region.destinationCount === 1 ? 'place' : 'places'}`}
+                  </p>
                 </div>
                 <div className={cn('absolute top-3 right-3 w-3 h-3 rounded-full', region.color)} />
               </Link>
@@ -331,7 +345,7 @@ export default function LandingPage() {
           <div className="text-center mt-8">
             <Link
               to="/explore"
-              className="inline-flex items-center gap-2 border border-[#FFD300] text-[#FFD300] hover:bg-[#FFD300] hover:text-[#090C11] font-semibold px-8 py-4 rounded-xl transition-all duration-200"
+              className="inline-flex items-center gap-2 border border-[#FFD300] text-accent-ink hover:bg-[#FFD300] hover:text-[#090C11] font-semibold px-8 py-4 rounded-xl transition-all duration-200"
             >
               Explore all regions <ArrowRight className="w-4 h-4" />
             </Link>
@@ -348,13 +362,13 @@ export default function LandingPage() {
               <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white">
                 Travel Across Ghana
               </h2>
-              <p className="text-[#757B81] mt-2 max-w-xl">
+              <p className="text-muted mt-2 max-w-xl">
                 From budget trotros to comfortable buses and domestic flights — understand your transport options.
               </p>
             </div>
             <Link
               to="/transportation"
-              className="inline-flex items-center gap-2 text-[#FFD300] font-semibold hover:gap-3 transition-all duration-200 flex-shrink-0"
+              className="inline-flex items-center gap-2 text-accent-ink font-semibold hover:gap-3 transition-all duration-200 flex-shrink-0"
             >
               Full guide <ArrowRight className="w-4 h-4" />
             </Link>
@@ -376,8 +390,8 @@ export default function LandingPage() {
             <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white mb-3">
               Your Complete Ghana Travel Companion
             </h2>
-            <p className="text-[#757B81] max-w-2xl mx-auto">
-              Everything you need to plan, book, and experience Ghana — all in one platform built for modern travelers.
+            <p className="text-muted max-w-2xl mx-auto">
+              Discover places, plan routes, and budget your trip across Ghana — all in one platform.
             </p>
           </div>
 
@@ -391,7 +405,7 @@ export default function LandingPage() {
                   <f.icon className={cn('w-6 h-6', f.color)} />
                 </div>
                 <h3 className="font-semibold text-[#262B32] dark:text-white text-lg mb-2">{f.title}</h3>
-                <p className="text-[#757B81] text-sm leading-relaxed">{f.description}</p>
+                <p className="text-muted text-sm leading-relaxed">{f.description}</p>
               </div>
             ))}
           </div>
@@ -399,9 +413,9 @@ export default function LandingPage() {
           {/* Additional trust signals */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
             {[
-              { icon: Shield, title: 'Safe & Trusted', desc: 'Verified information, safety tips, and travel advisories for every destination.' },
-              { icon: Clock, title: 'Always Updated', desc: 'Prices, schedules, and information kept current so you always have accurate data.' },
-              { icon: Globe, title: 'Ghana-First', desc: 'Built specifically for Ghana by people who love and know the country deeply.' },
+              { icon: Shield, title: 'Safety Tips', desc: 'Practical safety advice for getting around, gathered from public sources.' },
+              { icon: Clock, title: 'Check Before You Go', desc: 'Prices, fees and schedules are estimates. Confirm with operators before you travel.' },
+              { icon: Globe, title: 'Ghana-First', desc: 'Built specifically for travel within Ghana, with prices in Ghana Cedis.' },
             ].map((item) => (
               <div key={item.title} className="flex gap-4 p-6 rounded-2xl border border-gray-100 dark:border-white/10">
                 <div className="w-10 h-10 rounded-xl bg-[#FFD300]/10 flex items-center justify-center flex-shrink-0">
@@ -409,7 +423,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#262B32] dark:text-white mb-1">{item.title}</h4>
-                  <p className="text-[#757B81] text-sm">{item.desc}</p>
+                  <p className="text-muted text-sm">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -430,7 +444,7 @@ export default function LandingPage() {
             Ready to Experience Ghana?
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto mb-10">
-            Join the thousands of travelers who have used YɛnkɔGH to plan unforgettable trips across Ghana. Start your journey today — it's free.
+            Create a free account to plan trips, save places and keep a budget for each journey across Ghana.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -450,7 +464,7 @@ export default function LandingPage() {
           </div>
 
           <p className="text-white/40 text-sm mt-8">
-            No credit card required · Prices in Ghana Cedi (₵) · Updated daily
+            No credit card required · Prices in Ghana Cedi (₵)
           </p>
         </div>
       </section>

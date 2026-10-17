@@ -69,7 +69,7 @@ export const ForgotPasswordPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setSentTo(null)}
-            className="text-sm text-[#757B81] hover:text-[#090C11] dark:hover:text-white underline"
+            className="text-sm text-muted hover:text-[#090C11] dark:hover:text-white underline"
           >
             Use a different email address
           </button>

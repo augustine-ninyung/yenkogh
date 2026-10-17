@@ -59,7 +59,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           }
           aria-invalid={!!error}
           className={cn(
-            'w-full rounded-lg border bg-white dark:bg-[#262B32] text-[#090C11] dark:text-white placeholder:text-[#757B81] text-sm transition-all duration-200 resize-y min-h-[100px]',
+            'w-full rounded-lg border bg-white dark:bg-[#262B32] text-[#090C11] dark:text-white placeholder:text-muted text-sm transition-all duration-200 resize-y min-h-[100px]',
             'focus:outline-none focus:ring-2 focus:ring-[#FFD300] focus:border-transparent',
             'px-3 py-2.5',
             error
@@ -77,13 +77,13 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               </p>
             )}
             {!error && hint && (
-              <p id={`${textareaId}-hint`} className="text-xs text-[#757B81]">
+              <p id={`${textareaId}-hint`} className="text-xs text-muted">
                 {hint}
               </p>
             )}
           </div>
           {showCharCount && maxLength && (
-            <p className={cn('text-xs ml-auto', charCount >= maxLength ? 'text-red-500' : 'text-[#757B81]')}>
+            <p className={cn('text-xs ml-auto', charCount >= maxLength ? 'text-red-500' : 'text-muted')}>
               {charCount}/{maxLength}
             </p>
           )}

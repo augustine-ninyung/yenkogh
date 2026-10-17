@@ -104,7 +104,7 @@ const cardClass =
   'p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-4';
 const inputClass =
   'w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]';
-const labelClass = 'text-xs font-semibold text-[#757B81] block mb-1.5 uppercase';
+const labelClass = 'text-xs font-semibold text-muted block mb-1.5 uppercase';
 
 export const AIPlannerPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -513,7 +513,7 @@ export const AIPlannerPage: React.FC = () => {
             <li key={item.id} className="py-2.5 flex items-center justify-between gap-3 text-sm">
               <div className="min-w-0">
                 <p className="font-semibold truncate">{item.name}</p>
-                <span className="text-xs text-[#757B81]">
+                <span className="text-xs text-muted">
                   {EXTRA_CATEGORIES.find((c) => c.value === item.category)?.label}
                 </span>
               </div>
@@ -523,7 +523,7 @@ export const AIPlannerPage: React.FC = () => {
                   type="button"
                   onClick={() => setExtras((prev) => prev.filter((e) => e.id !== item.id))}
                   aria-label={`Remove ${item.name}`}
-                  className="text-[#757B81] hover:text-red-500 p-1"
+                  className="text-muted hover:text-red-500 p-1"
                 >
                   <Trash2 size={15} />
                 </button>
@@ -610,7 +610,7 @@ export const AIPlannerPage: React.FC = () => {
                   <Sparkles size={18} className="text-[#FFD300]" />
                   <label htmlFor="trip-prompt">Describe your trip</label>
                 </h2>
-                <p className="text-xs sm:text-sm text-[#757B81] mt-1">
+                <p className="text-xs sm:text-sm text-muted mt-1">
                   Say it in your own words: how long, where from, where to, how many people and what you want to spend. Anything you leave out is taken from the steps below.
                 </p>
               </div>
@@ -624,7 +624,7 @@ export const AIPlannerPage: React.FC = () => {
                 className={cn(inputClass, 'resize-y')}
               />
               <div className="flex flex-wrap gap-1.5">
-                <span className="text-xs text-[#757B81] w-full">Try one of these:</span>
+                <span className="text-xs text-muted w-full">Try one of these:</span>
                 {PROMPT_EXAMPLES.map((example) => (
                   <button
                     type="button"
@@ -637,7 +637,7 @@ export const AIPlannerPage: React.FC = () => {
                 ))}
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="text-xs text-[#757B81]">
+                <span className="text-xs text-muted">
                   {tripPrompt.length} of {MAX_PROMPT_LENGTH} characters
                 </span>
                 <Button type="button" variant="primary" onClick={handleDescribe} className="font-bold">
@@ -647,7 +647,7 @@ export const AIPlannerPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 text-xs font-semibold uppercase text-[#757B81]">
+            <div className="flex items-center gap-4 text-xs font-semibold uppercase text-muted">
               <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
               <span>or build it step by step</span>
               <span className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
@@ -658,7 +658,7 @@ export const AIPlannerPage: React.FC = () => {
               <h2 className="text-lg font-bold flex items-center gap-2">
                 <PartyPopper size={18} className="text-[#FFD300]" />
                 <span>1. Planning around a festival?</span>
-                <span className="text-xs font-medium text-[#757B81]">Optional</span>
+                <span className="text-xs font-medium text-muted">Optional</span>
               </h2>
 
               {festival ? (
@@ -667,10 +667,10 @@ export const AIPlannerPage: React.FC = () => {
                     <Link to={`/festivals/${festival.id}`} className="font-bold hover:underline">
                       {festival.name}
                     </Link>
-                    <p className="text-xs sm:text-sm text-[#757B81] dark:text-white/70 mt-1">
+                    <p className="text-xs sm:text-sm text-muted dark:text-white/70 mt-1">
                       {[festival.town, `${festival.region} Region`].filter(Boolean).join(' · ')}
                     </p>
-                    <p className="text-xs sm:text-sm text-[#757B81] dark:text-white/70 mt-1">
+                    <p className="text-xs sm:text-sm text-muted dark:text-white/70 mt-1">
                       Usually held: {festival.usualDate || festival.month || 'date not on record'}
                     </p>
                   </div>
@@ -678,7 +678,7 @@ export const AIPlannerPage: React.FC = () => {
                     type="button"
                     onClick={() => handleFestivalChange('')}
                     aria-label={`Remove ${festival.name} from this trip`}
-                    className="shrink-0 p-1.5 rounded-lg text-[#757B81] hover:text-red-500 hover:bg-white/60 dark:hover:bg-white/10"
+                    className="shrink-0 p-1.5 rounded-lg text-muted hover:text-red-500 hover:bg-white/60 dark:hover:bg-white/10"
                   >
                     <X size={16} />
                   </button>
@@ -741,12 +741,12 @@ export const AIPlannerPage: React.FC = () => {
                   </span>
                 ))}
                 {tripStops.length === 0 && (
-                  <span className="text-xs text-[#757B81]">Nothing selected yet. Add a place below.</span>
+                  <span className="text-xs text-muted">Nothing selected yet. Add a place below.</span>
                 )}
               </div>
 
               <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
                 <input
                   type="text"
                   value={destinationSearch}
@@ -758,7 +758,7 @@ export const AIPlannerPage: React.FC = () => {
               </div>
 
               <div>
-                <span className="text-xs text-[#757B81] block mb-2">
+                <span className="text-xs text-muted block mb-2">
                   {destinationSearch
                     ? 'Matching destinations:'
                     : festival
@@ -774,17 +774,17 @@ export const AIPlannerPage: React.FC = () => {
                       className="px-2.5 py-1 rounded-lg text-xs border border-gray-200 dark:border-white/10 hover:border-[#FFD300] hover:bg-[#FFD300]/10 transition-colors"
                     >
                       + {dest.name}
-                      <span className="text-[#757B81]"> · {dest.region}</span>
+                      <span className="text-muted"> · {dest.region}</span>
                     </button>
                   ))}
                   {destinationSuggestions.length === 0 && (
-                    <span className="text-xs text-[#757B81]">No destinations match that search.</span>
+                    <span className="text-xs text-muted">No destinations match that search.</span>
                   )}
                 </div>
               </div>
 
               <div className="pt-4 border-t border-gray-100 dark:border-white/10">
-                <span className="text-xs text-[#757B81] block mb-2">
+                <span className="text-xs text-muted block mb-2">
                   Going somewhere not listed? Add any city, town or place:
                 </span>
                 <div className="flex gap-2">
@@ -819,7 +819,7 @@ export const AIPlannerPage: React.FC = () => {
 
               {festival && (
                 <div className="flex gap-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 p-3 text-xs sm:text-sm">
-                  <Info size={16} className="shrink-0 mt-0.5 text-[#757B81]" />
+                  <Info size={16} className="shrink-0 mt-0.5 text-muted" />
                   <span>
                     {festivalWindow
                       ? <>The <strong>{festival.name}</strong> is held: <strong>{festivalWindow.label}</strong>. Pick dates that include it.</>
@@ -907,7 +907,7 @@ export const AIPlannerPage: React.FC = () => {
 
               <div className="space-y-4">
                 <div>
-                  <span className="text-xs font-semibold text-[#757B81] block mb-2 uppercase">
+                  <span className="text-xs font-semibold text-muted block mb-2 uppercase">
                     What excites you in Ghana?
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -919,7 +919,7 @@ export const AIPlannerPage: React.FC = () => {
                         className={`p-3 rounded-xl text-xs sm:text-sm font-medium border text-left flex items-center justify-between transition-all ${
                           interests.includes(interest)
                             ? 'bg-[#FFD300]/20 border-[#FFD300] text-[#090C11] dark:text-[#FFD300]'
-                            : 'border-gray-200 dark:border-white/10 text-[#757B81] dark:text-white/80 hover:bg-gray-50 dark:hover:bg-white/5'
+                            : 'border-gray-200 dark:border-white/10 text-muted dark:text-white/80 hover:bg-gray-50 dark:hover:bg-white/5'
                         }`}
                       >
                         <span>{interest}</span>
@@ -932,7 +932,7 @@ export const AIPlannerPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <span className="text-xs font-semibold text-[#757B81] block mb-2 uppercase">
+                  <span className="text-xs font-semibold text-muted block mb-2 uppercase">
                     Accommodation Tier
                   </span>
                   <div className="grid grid-cols-3 gap-3">
@@ -944,7 +944,7 @@ export const AIPlannerPage: React.FC = () => {
                         className={`py-2.5 rounded-xl text-xs sm:text-sm font-bold capitalize border text-center transition-all ${
                           accommodationType === tier
                             ? 'bg-[#FFD300] border-[#FFD300] text-[#090C11]'
-                            : 'border-gray-200 dark:border-white/10 text-[#757B81] dark:text-white/80'
+                            : 'border-gray-200 dark:border-white/10 text-muted dark:text-white/80'
                         }`}
                       >
                         {tier}
@@ -954,13 +954,13 @@ export const AIPlannerPage: React.FC = () => {
                       </button>
                     ))}
                   </div>
-                  <p className="text-xs text-[#757B81] mt-2">
+                  <p className="text-xs text-muted mt-2">
                     You can pick specific hotels and apartments for each stop once the itinerary is ready.
                   </p>
                 </div>
 
                 <div>
-                  <span className="text-xs font-semibold text-[#757B81] mb-2 uppercase flex items-center gap-1.5">
+                  <span className="text-xs font-semibold text-muted mb-2 uppercase flex items-center gap-1.5">
                     <Bus size={13} /> How do you want to get around?
                   </span>
                   <div className="flex flex-wrap gap-2">
@@ -973,7 +973,7 @@ export const AIPlannerPage: React.FC = () => {
                         className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium border transition-all ${
                           transport.includes(option.value)
                             ? 'bg-[#FFD300]/20 border-[#FFD300] text-[#090C11] dark:text-[#FFD300]'
-                            : 'border-gray-200 dark:border-white/10 text-[#757B81] dark:text-white/80 hover:bg-gray-50 dark:hover:bg-white/5'
+                            : 'border-gray-200 dark:border-white/10 text-muted dark:text-white/80 hover:bg-gray-50 dark:hover:bg-white/5'
                         }`}
                       >
                         {option.label}
@@ -989,9 +989,9 @@ export const AIPlannerPage: React.FC = () => {
               <h2 className="text-lg font-bold flex items-center gap-2">
                 <Wallet size={18} className="text-[#FFD300]" />
                 <span>5. Costs you already know about</span>
-                <span className="text-xs font-medium text-[#757B81]">Optional</span>
+                <span className="text-xs font-medium text-muted">Optional</span>
               </h2>
-              <p className="text-xs sm:text-sm text-[#757B81]">
+              <p className="text-xs sm:text-sm text-muted">
                 Add anything you plan to spend on. Each line counts against your {formatCurrency(budget)} budget and is saved to this trip's budget.
               </p>
               {extrasEditor}
@@ -1002,7 +1002,7 @@ export const AIPlannerPage: React.FC = () => {
               <h2 className="text-lg font-bold flex items-center gap-2">
                 <MessageSquare size={18} className="text-[#FFD300]" />
                 <span>6. Anything else we should know?</span>
-                <span className="text-xs font-medium text-[#757B81]">Optional</span>
+                <span className="text-xs font-medium text-muted">Optional</span>
               </h2>
               <textarea
                 value={specialRequests}
@@ -1021,6 +1021,11 @@ export const AIPlannerPage: React.FC = () => {
                 <Sparkles size={20} />
                 <span>Generate Smart Ghana Itinerary</span>
               </Button>
+              <p className="mt-4 text-xs text-muted max-w-md mx-auto">
+                Your request is sent to Google's Gemini AI to write the plan, without your name or email. Please leave out personal details.
+                AI plans can contain mistakes, so check them before you travel.{' '}
+                <Link to="/privacy#share" className="underline underline-offset-2">Privacy Policy</Link>
+              </p>
             </div>
           </form>
         ) : (
@@ -1035,7 +1040,7 @@ export const AIPlannerPage: React.FC = () => {
               <div className="p-16 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center space-y-4 shadow-xl">
                 <Spinner size="lg" color="primary" />
                 <h3 className="text-xl font-bold">Planning your trip...</h3>
-                <p className="text-sm text-[#757B81] max-w-md mx-auto">
+                <p className="text-sm text-muted max-w-md mx-auto">
                   Looking up matching destinations, festivals, entry fees and transport fares in the YɛnkɔGH catalogue, then arranging them day by day.
                 </p>
               </div>
@@ -1044,13 +1049,13 @@ export const AIPlannerPage: React.FC = () => {
                 {/* Header Action Card */}
                 <div className="p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs text-[#757B81] block mb-1">
+                    <span className="text-xs text-muted block mb-1">
                       {savedTripId ? 'Saved Trip' : 'Generated Itinerary'}
                     </span>
                     <h2 className="font-['Playfair_Display',serif] text-2xl sm:text-3xl font-bold">
                       {generatedItinerary.title}
                     </h2>
-                    <p className="text-xs sm:text-sm text-[#757B81] mt-1">
+                    <p className="text-xs sm:text-sm text-muted mt-1">
                       {generatedItinerary.days.length} Days · {numberOfTravelers}{' '}
                       {numberOfTravelers === 1 ? 'Traveler' : 'Travelers'} · Estimated Cost:{' '}
                       <span className="font-bold text-[#090C11] dark:text-[#FFD300]">
@@ -1103,10 +1108,10 @@ export const AIPlannerPage: React.FC = () => {
                         <Link to={`/festivals/${festival.id}`} className="font-bold text-lg hover:underline">
                           {festival.name}
                         </Link>
-                        <p className="text-sm text-[#757B81] dark:text-white/70 mt-1">
+                        <p className="text-sm text-muted dark:text-white/70 mt-1">
                           {[festival.town, `${festival.region} Region`].filter(Boolean).join(' · ')}
                         </p>
-                        <p className="text-sm text-[#757B81] dark:text-white/70 mt-1">
+                        <p className="text-sm text-muted dark:text-white/70 mt-1">
                           Usually held: {festival.usualDate || festival.month || 'date not on record'}
                         </p>
                       </div>
@@ -1122,18 +1127,18 @@ export const AIPlannerPage: React.FC = () => {
                     <h3 className="font-bold">Cost estimate</h3>
                     <dl className="space-y-2 text-sm">
                       <div className="flex justify-between gap-4">
-                        <dt className="text-[#757B81] dark:text-white/70">Activities, meals and transport</dt>
+                        <dt className="text-muted dark:text-white/70">Activities, meals and transport</dt>
                         <dd className="font-semibold">{formatCurrency(costs.itinerary)}</dd>
                       </div>
                       <div className="flex justify-between gap-4">
-                        <dt className="text-[#757B81] dark:text-white/70">
+                        <dt className="text-muted dark:text-white/70">
                           Places to stay{stays.length === 0 && ' (none chosen yet)'}
                         </dt>
                         <dd className="font-semibold">{stays.length > 0 ? formatCurrency(costs.stays) : 'Included above'}</dd>
                       </div>
                       {extras.length > 0 && (
                         <div className="flex justify-between gap-4">
-                          <dt className="text-[#757B81] dark:text-white/70">Your own costs ({extras.length})</dt>
+                          <dt className="text-muted dark:text-white/70">Your own costs ({extras.length})</dt>
                           <dd className="font-semibold">{formatCurrency(costs.extras)}</dd>
                         </div>
                       )}
@@ -1149,7 +1154,7 @@ export const AIPlannerPage: React.FC = () => {
                           style={{ width: `${Math.min(100, (costs.total / budget) * 100)}%` }}
                         />
                       </div>
-                      <p className={cn('text-xs mt-2', costs.total > budget ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-[#757B81]')}>
+                      <p className={cn('text-xs mt-2', costs.total > budget ? 'text-red-600 dark:text-red-400 font-semibold' : 'text-muted')}>
                         {costs.total > budget
                           ? `${formatCurrency(costs.total - budget)} over your ${formatCurrency(budget)} budget`
                           : `${formatCurrency(budget - costs.total)} under your ${formatCurrency(budget)} budget`}
@@ -1165,7 +1170,7 @@ export const AIPlannerPage: React.FC = () => {
                       <Database size={18} className="text-[#FFD300]" />
                       <span>How this plan was built</span>
                     </h3>
-                    <p className="text-sm text-[#757B81] dark:text-white/80">
+                    <p className="text-sm text-muted dark:text-white/80">
                       {planInfo.source === 'ai'
                         ? 'Written by the AI planner, using only records from the YɛnkɔGH catalogue.'
                         : 'Put together directly from the YɛnkɔGH catalogue, without the AI planner.'}
@@ -1195,12 +1200,12 @@ export const AIPlannerPage: React.FC = () => {
                         </Link>
                       ))}
                       {planInfo.grounding.transport.map((t) => (
-                        <span key={t.id} className="px-2.5 py-1 rounded-lg text-xs font-medium border border-gray-200 dark:border-white/10 text-[#757B81] dark:text-white/70">
+                        <span key={t.id} className="px-2.5 py-1 rounded-lg text-xs font-medium border border-gray-200 dark:border-white/10 text-muted dark:text-white/70">
                           {t.name}
                         </span>
                       ))}
                     </div>
-                    <p className="text-xs text-[#757B81]">
+                    <p className="text-xs text-muted">
                       {planInfo.grounding.groundedItems} of {planInfo.grounding.activityItems} activities are tied to a catalogue record. Entry fees and fares come from the catalogue; meal and overnight prices are typical figures.
                     </p>
                   </div>
@@ -1220,12 +1225,12 @@ export const AIPlannerPage: React.FC = () => {
                           </span>
                           <div>
                             <h3 className="font-bold text-base sm:text-lg">{day.location}</h3>
-                            <span className="text-xs text-[#757B81]">{day.description}</span>
+                            <span className="text-xs text-muted">{day.description}</span>
                           </div>
                         </div>
 
                         {day.date && (
-                          <span className="text-xs font-semibold text-[#757B81]">
+                          <span className="text-xs font-semibold text-muted">
                             {formatDate(day.date)}
                           </span>
                         )}
@@ -1244,14 +1249,14 @@ export const AIPlannerPage: React.FC = () => {
                             )}
                           >
                             <div className="flex items-start gap-3">
-                              <span className="font-mono text-xs font-bold text-[#FFD300] shrink-0 mt-0.5">
+                              <span className="font-mono text-xs font-bold text-accent-ink shrink-0 mt-0.5">
                                 {item.time || '10:00'}
                               </span>
                               <div>
                                 <h4 className="font-bold text-[#090C11] dark:text-white">
                                   {item.title}
                                 </h4>
-                                <p className="text-xs text-[#757B81] dark:text-white/70 mt-0.5">
+                                <p className="text-xs text-muted dark:text-white/70 mt-0.5">
                                   {item.description}
                                 </p>
                               </div>
@@ -1277,7 +1282,7 @@ export const AIPlannerPage: React.FC = () => {
                         <BedDouble size={18} className="text-[#FFD300]" />
                         <span>Where to stay</span>
                       </h3>
-                      <p className="text-xs sm:text-sm text-[#757B81] mt-1">
+                      <p className="text-xs sm:text-sm text-muted mt-1">
                         Optional. Add one place per stop and it is included in your cost estimate, saved trip and download. Prices are indicative for the tier, for {rooms} {rooms === 1 ? 'room' : 'rooms'}; nothing is booked.
                       </p>
                     </div>
@@ -1291,7 +1296,7 @@ export const AIPlannerPage: React.FC = () => {
                           <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
                             <h4 className="font-bold">
                               {stop}
-                              <span className="font-normal text-[#757B81] text-sm">
+                              <span className="font-normal text-muted text-sm">
                                 {' '}· {nights} {nights === 1 ? 'night' : 'nights'}
                                 {place.region && ` · ${place.region} Region`}
                               </span>
@@ -1319,7 +1324,7 @@ export const AIPlannerPage: React.FC = () => {
                                 >
                                   <div className="min-w-0">
                                     <p className="font-semibold text-sm truncate">{option.name}</p>
-                                    <p className="text-xs text-[#757B81] dark:text-white/60 capitalize truncate">
+                                    <p className="text-xs text-muted dark:text-white/60 capitalize truncate">
                                       {option.type} · <span className="normal-case">{option.town}</span>
                                     </p>
                                     <p className="text-xs mt-1">
@@ -1331,7 +1336,7 @@ export const AIPlannerPage: React.FC = () => {
                                       >
                                         {option.tier}
                                       </span>
-                                      <span className="text-[#757B81]">
+                                      <span className="text-muted">
                                         {' '}· about {formatCurrency(price)} a night · {formatCurrency(price * nights * rooms)} total
                                       </span>
                                     </p>
@@ -1364,7 +1369,7 @@ export const AIPlannerPage: React.FC = () => {
                         <Wallet size={18} className="text-[#FFD300]" />
                         <span>Your own costs</span>
                       </h3>
-                      <p className="text-xs sm:text-sm text-[#757B81] mt-1">
+                      <p className="text-xs sm:text-sm text-muted mt-1">
                         {savedTripId
                           ? 'Anything you add here is saved to this trip\'s budget straight away.'
                           : 'Anything you add here goes into this trip\'s budget when you save the trip.'}
@@ -1390,7 +1395,7 @@ export const AIPlannerPage: React.FC = () => {
       {/* Asked before generating when the chosen dates would miss the festival */}
       <Modal isOpen={showMissPrompt} onClose={() => setShowMissPrompt(false)} title="You would miss the festival" size="md">
         <div className="space-y-5">
-          <p className="text-sm text-[#757B81] dark:text-white/80">{dateConflict}</p>
+          <p className="text-sm text-muted dark:text-white/80">{dateConflict}</p>
           <div className="flex flex-col sm:flex-row sm:justify-end gap-2.5">
             <Button variant="outline" onClick={() => generate()}>
               Keep my dates anyway

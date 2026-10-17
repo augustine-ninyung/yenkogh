@@ -32,7 +32,7 @@ const config: ResourceConfig = {
       render: (row) => (
         <div className="min-w-[11rem]">
           <p className="font-semibold text-[#090C11] dark:text-white">{row.name}</p>
-          <p className="text-xs text-[#757B81]">{String(row.location || '')}</p>
+          <p className="text-xs text-muted">{String(row.location || '')}</p>
         </div>
       ),
     },
@@ -48,7 +48,7 @@ const config: ResourceConfig = {
               {formatAdminDate(String(row.start_date))}
               {row.end_date !== row.start_date && ` – ${formatAdminDate(String(row.end_date))}`}
             </p>
-            <span className="inline-flex items-center gap-1.5 text-xs text-[#757B81] capitalize">
+            <span className="inline-flex items-center gap-1.5 text-xs text-muted capitalize">
               <StatusDot tone={TIMING_TONE[timing]} />
               {timing}
             </span>

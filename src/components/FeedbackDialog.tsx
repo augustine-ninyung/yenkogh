@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Flag } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -66,7 +66,7 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ subjectType, sub
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className={`inline-flex items-center gap-1.5 text-sm text-[#757B81] hover:text-[#090C11] dark:hover:text-white transition-colors ${className ?? ''}`}
+        className={`inline-flex items-center gap-1.5 text-sm text-muted hover:text-[#090C11] dark:hover:text-white transition-colors ${className ?? ''}`}
       >
         <Flag size={14} />
         Report a problem or suggest a correction
@@ -96,7 +96,7 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ subjectType, sub
                 <label htmlFor="feedback-message" className="text-sm font-semibold text-[#262B32] dark:text-white">
                   Details
                 </label>
-                <span className={`text-xs ${length > max ? 'text-red-600 font-semibold' : 'text-[#757B81]'}`}>
+                <span className={`text-xs ${length > max ? 'text-red-600 font-semibold' : 'text-muted'}`}>
                   {length}/{max}
                 </span>
               </div>
@@ -122,6 +122,11 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ subjectType, sub
               )}
             </div>
 
+            <p className="text-xs text-muted">
+              Our editors will see your name and email with this message so they can follow up. It is not published.{' '}
+              <Link to="/privacy" className="underline underline-offset-2">Privacy Policy</Link>
+            </p>
+
             <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5">
               <Button type="button" variant="ghost" onClick={() => setIsOpen(false)} disabled={isSending}>
                 Cancel
@@ -133,14 +138,12 @@ export const FeedbackDialog: React.FC<FeedbackDialogProps> = ({ subjectType, sub
           </form>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-[#757B81] dark:text-white/80">
+            <p className="text-sm text-muted dark:text-white/80">
               Please log in to send feedback, so the team can follow up if they have a question.
             </p>
-            <Link to="/login" state={{ from: location }}>
-              <Button variant="primary" className="font-bold">
+            <ButtonLink to="/login" state={{ from: location }} variant="primary" className="font-bold">
                 Log in
-              </Button>
-            </Link>
+              </ButtonLink>
           </div>
         )}
       </Modal>

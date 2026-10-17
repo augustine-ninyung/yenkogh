@@ -41,7 +41,7 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, onDelete, classN
           {onDelete && (
             <button
               onClick={() => onDelete(budget.id)}
-              className="text-[#757B81] hover:text-red-500 p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+              className="text-muted hover:text-red-500 p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
               aria-label={`Delete budget ${budget.name}`}
             >
               <Trash2 size={15} />
@@ -51,7 +51,7 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, onDelete, classN
 
         {/* Progress Bar */}
         <div className="mb-4">
-          <div className="flex items-center justify-between text-xs text-[#757B81] dark:text-white/70 mb-1.5">
+          <div className="flex items-center justify-between text-xs text-muted dark:text-white/70 mb-1.5">
             <span>Spent: {formatCurrency(totalSpent)}</span>
             <span>Total: {formatCurrency(budget.totalBudget)}</span>
           </div>
@@ -61,13 +61,13 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, onDelete, classN
         {/* Financial Overview */}
         <div className="grid grid-cols-2 gap-2 text-xs p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 mb-4">
           <div>
-            <span className="text-[#757B81] dark:text-white/50 block text-[11px]">Remaining</span>
+            <span className="text-muted dark:text-white/50 block text-[11px]">Remaining</span>
             <span className={cn('font-bold', remaining < 0 ? 'text-red-500' : 'text-emerald-500')}>
               {formatCurrency(remaining)}
             </span>
           </div>
           <div>
-            <span className="text-[#757B81] dark:text-white/50 block text-[11px]">Expenses</span>
+            <span className="text-muted dark:text-white/50 block text-[11px]">Expenses</span>
             <span className="font-bold text-[#090C11] dark:text-white">
               {budget.items?.length || 0} logged
             </span>

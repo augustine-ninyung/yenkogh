@@ -94,7 +94,7 @@ export const Toast: React.FC<{ toast: ToastData; onRemove: (id: string) => void 
             {toast.title}
           </p>
           {toast.message && (
-            <p className="text-xs text-[#757B81] dark:text-[#9aa0a8] leading-relaxed break-words">
+            <p className="text-xs text-muted dark:text-[#9aa0a8] leading-relaxed break-words">
               {toast.message}
             </p>
           )}
@@ -105,7 +105,7 @@ export const Toast: React.FC<{ toast: ToastData; onRemove: (id: string) => void 
       <button
         onClick={handleDismiss}
         aria-label="Dismiss notification"
-        className="absolute top-3 right-3 p-0.5 rounded-md text-[#757B81] hover:text-[#262B32] dark:hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300]"
+        className="absolute top-3 right-3 p-0.5 rounded-md text-muted hover:text-[#262B32] dark:hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300]"
       >
         <X size={14} />
       </button>

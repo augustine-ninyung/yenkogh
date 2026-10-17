@@ -27,6 +27,9 @@ const RegisterPage = lazyPage(() => import('@/pages/RegisterPage'));
 const ForgotPasswordPage = lazyPage(() => import('@/pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazyPage(() => import('@/pages/ResetPasswordPage'));
 const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage'));
+const PrivacyPage = lazyPage(() => import('@/pages/PrivacyPage'));
+const TermsPage = lazyPage(() => import('@/pages/TermsPage'));
+const CookiesPage = lazyPage(() => import('@/pages/CookiesPage'));
 
 // Authenticated Pages
 const DashboardPage = lazyPage(() => import('@/pages/DashboardPage'));
@@ -59,6 +62,9 @@ export const AppRoutes: React.FC = () => {
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="reset-password" element={<ResetPasswordPage />} />
+        <Route path="privacy" element={<PrivacyPage />} />
+        <Route path="terms" element={<TermsPage />} />
+        <Route path="cookies" element={<CookiesPage />} />
 
         {/* Members only, shown inside the public layout */}
         <Route element={<ProtectedRoute />}>

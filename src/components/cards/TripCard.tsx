@@ -69,7 +69,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className })
           {onDelete && (
             <button
               onClick={() => onDelete(trip.id)}
-              className="text-[#757B81] hover:text-red-500 p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+              className="text-muted hover:text-red-500 p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
               aria-label={`Delete trip ${trip.name}`}
             >
               <Trash2 size={15} />
@@ -81,7 +81,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className })
           {trip.name}
         </h3>
 
-        <div className="space-y-2 text-xs text-[#757B81] dark:text-white/70 mb-4">
+        <div className="space-y-2 text-xs text-muted dark:text-white/70 mb-4">
           <div className="flex items-center gap-2">
             <Calendar size={14} className="text-[#FFD300] shrink-0" />
             <span>{formatDateRange(trip.startDate, trip.endDate)}</span>
@@ -117,7 +117,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className })
             <p className="font-semibold text-[#090C11] dark:text-white truncate">
               {trip.itinerary.title}
             </p>
-            <p className="text-[#757B81] dark:text-white/60">
+            <p className="text-muted dark:text-white/60">
               {trip.itinerary.days?.length || 0} Days Planned
             </p>
           </div>

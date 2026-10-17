@@ -82,10 +82,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
               <button
                 role="menuitem"
                 onClick={() => handleSelect(item.value)}
-                className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-[#262B32] dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-colors duration-150 focus:outline-none focus-visible:bg-gray-50 dark:focus-visible:bg-white/10"
+                className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left text-[#262B32] dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-colors duration-150 focus:outline-none focus-visible:bg-gray-100 dark:focus-visible:bg-white/10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FFD300] focus-visible:bg-gray-50 dark:focus-visible:bg-white/10"
               >
                 {item.icon && (
-                  <span className="shrink-0 text-[#757B81]" aria-hidden="true">
+                  <span className="shrink-0 text-muted" aria-hidden="true">
                     {item.icon}
                   </span>
                 )}

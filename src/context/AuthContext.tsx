@@ -7,6 +7,7 @@ interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  deleteAccount: () => Promise<void>;
   updateUser: (user: User) => void;
 }
 
@@ -82,6 +83,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setToken(null);
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    await authService.deleteAccount();
+    setUser(null);
+    setToken(null);
+  }, []);
+
   const updateUser = useCallback((updatedUser: User) => {
     setUser(updatedUser);
     authService._updateCurrentUser(updatedUser);
@@ -97,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         logout,
+        deleteAccount,
         updateUser,
       }}
     >

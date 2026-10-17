@@ -62,7 +62,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         aria-label="Previous page"
         className={cn(
           buttonBase,
-          'text-[#757B81] hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10',
+          'text-muted hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10',
           currentPage === 1 && 'opacity-40 cursor-not-allowed'
         )}
       >
@@ -75,7 +75,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           return (
             <span
               key={`dots-${idx}`}
-              className="inline-flex items-center justify-center w-9 h-9 text-[#757B81]"
+              className="inline-flex items-center justify-center w-9 h-9 text-muted"
               aria-hidden="true"
             >
               <MoreHorizontal size={16} />
@@ -93,7 +93,7 @@ export const Pagination: React.FC<PaginationProps> = ({
               buttonBase,
               isActive
                 ? 'bg-[#FFD300] text-[#090C11] font-semibold'
-                : 'text-[#757B81] hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10'
+                : 'text-muted hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10'
             )}
           >
             {page}
@@ -108,7 +108,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         aria-label="Next page"
         className={cn(
           buttonBase,
-          'text-[#757B81] hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10',
+          'text-muted hover:text-[#262B32] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10',
           currentPage === totalPages && 'opacity-40 cursor-not-allowed'
         )}
       >

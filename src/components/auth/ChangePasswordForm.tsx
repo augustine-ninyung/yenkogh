@@ -68,7 +68,7 @@ export const ChangePasswordForm: React.FC = () => {
     >
       <div>
         <h2 className="text-lg font-bold text-[#090C11] dark:text-white">Change password</h2>
-        <p className="text-sm text-[#757B81] mt-1">You will stay signed in on this device.</p>
+        <p className="text-sm text-muted mt-1">You will stay signed in on this device.</p>
       </div>
 
       <AuthField

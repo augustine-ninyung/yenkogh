@@ -29,7 +29,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       </div>
       <div className="flex flex-col gap-2 max-w-xs">
         <h3 className="text-base font-semibold text-[#262B32] dark:text-white">{title}</h3>
-        <p className="text-sm text-[#757B81]">{message}</p>
+        <p className="text-sm text-muted">{message}</p>
       </div>
       {onRetry && (
         <Button

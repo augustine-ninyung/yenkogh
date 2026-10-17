@@ -46,9 +46,9 @@ export const AdminAuditPage: React.FC = () => {
         header: 'What',
         render: (entry) => (
           <div className="min-w-[10rem]">
-            <p className="text-xs text-[#757B81]">{RESOURCE_OPTIONS.find((r) => r.value === entry.resource)?.label ?? entry.resource}</p>
+            <p className="text-xs text-muted">{RESOURCE_OPTIONS.find((r) => r.value === entry.resource)?.label ?? entry.resource}</p>
             <p className="line-clamp-1">{entry.summary || entry.resourceId || '—'}</p>
-            {changeDetail(entry.metadata) && <p className="text-xs text-[#757B81]">{changeDetail(entry.metadata)}</p>}
+            {changeDetail(entry.metadata) && <p className="text-xs text-muted">{changeDetail(entry.metadata)}</p>}
           </div>
         ),
       },

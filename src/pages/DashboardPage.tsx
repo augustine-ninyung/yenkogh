@@ -16,7 +16,7 @@ import { DestinationCard } from '@/components/cards/DestinationCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { TripCard } from '@/components/cards/TripCard';
 import { BudgetCard } from '@/components/cards/BudgetCard';
-import { Button } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import type { Trip, Budget } from '@/types';
 
@@ -78,18 +78,14 @@ export const DashboardPage: React.FC = () => {
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Link to="/planner">
-              <Button variant="primary" size="sm" className="font-bold">
+            <ButtonLink to="/planner" variant="primary" size="sm" className="font-bold">
                 <Sparkles size={16} />
                 <span>Create New Trip</span>
-              </Button>
-            </Link>
-            <Link to="/explore">
-              <Button variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
+              </ButtonLink>
+            <ButtonLink to="/explore" variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
                 <Compass size={16} />
                 <span>Discover Attractions</span>
-              </Button>
-            </Link>
+              </ButtonLink>
           </div>
         </div>
       </div>
@@ -97,7 +93,7 @@ export const DashboardPage: React.FC = () => {
       {/* Quick Stat Counter Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-[#757B81] uppercase font-semibold block mb-1">
+          <span className="text-xs text-muted uppercase font-semibold block mb-1">
             Planned Trips
           </span>
           <span className="text-2xl sm:text-3xl font-bold text-[#090C11] dark:text-white">
@@ -106,16 +102,16 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-[#757B81] uppercase font-semibold block mb-1">
+          <span className="text-xs text-muted uppercase font-semibold block mb-1">
             Saved Places
           </span>
-          <span className="text-2xl sm:text-3xl font-bold text-[#FFD300]">
+          <span className="text-2xl sm:text-3xl font-bold text-accent-ink">
             {savedDestinations.length}
           </span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-[#757B81] uppercase font-semibold block mb-1">
+          <span className="text-xs text-muted uppercase font-semibold block mb-1">
             Saved Festivals
           </span>
           <span className="text-2xl sm:text-3xl font-bold text-emerald-500">
@@ -124,7 +120,7 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-[#757B81] uppercase font-semibold block mb-1">
+          <span className="text-xs text-muted uppercase font-semibold block mb-1">
             Active Budgets
           </span>
           <span className="text-2xl sm:text-3xl font-bold text-blue-500">
@@ -138,14 +134,12 @@ export const DashboardPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold">My Planned Journeys</h2>
-            <p className="text-xs text-[#757B81]">Your personalized Ghana travel plans</p>
+            <p className="text-xs text-muted">Your personalized Ghana travel plans</p>
           </div>
-          <Link to="/planner">
-            <Button variant="outline" size="sm" className="gap-1.5">
+          <ButtonLink to="/planner" variant="outline" size="sm" className="gap-1.5">
               <Plus size={14} />
               <span>New Trip</span>
-            </Button>
-          </Link>
+            </ButtonLink>
         </div>
 
         {trips.length > 0 ? (
@@ -158,14 +152,12 @@ export const DashboardPage: React.FC = () => {
           <div className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-dashed border-gray-200 dark:border-white/10 text-center space-y-3">
             <Compass size={28} className="text-[#FFD300] mx-auto" />
             <h3 className="font-semibold text-base">No Planned Trips Yet</h3>
-            <p className="text-xs text-[#757B81] max-w-sm mx-auto">
+            <p className="text-xs text-muted max-w-sm mx-auto">
               Ready to visit Cape Coast, Mole National Park, or Lake Volta? Use our AI Planner to generate your first itinerary in 30 seconds.
             </p>
-            <Link to="/planner">
-              <Button variant="primary" size="sm">
+            <ButtonLink to="/planner" variant="primary" size="sm">
                 Generate First Trip
-              </Button>
-            </Link>
+              </ButtonLink>
           </div>
         )}
       </div>
@@ -175,7 +167,7 @@ export const DashboardPage: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold">My Travel Budgets</h2>
-            <Link to="/budget" className="text-xs text-[#FFD300] hover:underline font-semibold">
+            <Link to="/budget" className="text-xs text-accent-ink hover:underline font-semibold">
               Manage Budgets
             </Link>
           </div>
@@ -192,9 +184,9 @@ export const DashboardPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold">Saved Attractions</h2>
-            <p className="text-xs text-[#757B81]">Places you've bookmarked for your visit</p>
+            <p className="text-xs text-muted">Places you've bookmarked for your visit</p>
           </div>
-          <Link to="/explore" className="text-xs text-[#FFD300] hover:underline font-semibold">
+          <Link to="/explore" className="text-xs text-accent-ink hover:underline font-semibold">
             Browse More Places
           </Link>
         </div>
@@ -206,7 +198,7 @@ export const DashboardPage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center text-xs text-[#757B81]">
+          <div className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 text-center text-xs text-muted">
             You haven't saved any destinations yet. Click the heart icon on any destination card to save it here!
           </div>
         )}
@@ -217,9 +209,9 @@ export const DashboardPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold">Recommended for You</h2>
-            <p className="text-xs text-[#757B81]">Top attractions across Ghana</p>
+            <p className="text-xs text-muted">Top attractions across Ghana</p>
           </div>
-          <Link to="/explore" className="text-xs text-[#FFD300] hover:underline font-semibold flex items-center gap-1">
+          <Link to="/explore" className="text-xs text-accent-ink hover:underline font-semibold flex items-center gap-1">
             <span>See all</span>
             <ArrowRight size={13} />
           </Link>
@@ -237,9 +229,9 @@ export const DashboardPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold">Upcoming Ghanaian Festivals</h2>
-            <p className="text-xs text-[#757B81]">Don't miss these cultural spectacles</p>
+            <p className="text-xs text-muted">Don't miss these cultural spectacles</p>
           </div>
-          <Link to="/events" className="text-xs text-[#FFD300] hover:underline font-semibold flex items-center gap-1">
+          <Link to="/events" className="text-xs text-accent-ink hover:underline font-semibold flex items-center gap-1">
             <span>View festival calendar</span>
             <ArrowRight size={13} />
           </Link>

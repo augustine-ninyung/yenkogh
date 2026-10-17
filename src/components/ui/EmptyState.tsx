@@ -25,7 +25,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         className
       )}
     >
-      <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-100 dark:bg-white/10 text-[#757B81]">
+      <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-gray-100 dark:bg-white/10 text-muted">
         {icon ?? <PackageOpen size={28} />}
       </div>
       <div className="flex flex-col gap-2 max-w-xs">
@@ -33,7 +33,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           {title}
         </h3>
         {description && (
-          <p className="text-sm text-[#757B81]">{description}</p>
+          <p className="text-sm text-muted">{description}</p>
         )}
       </div>
       {action && (

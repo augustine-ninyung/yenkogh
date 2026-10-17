@@ -13,7 +13,7 @@ import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Avatar } from '@/components/ui/Avatar';
-import { Button } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/Button';
 import { MobileDrawer } from './MobileDrawer';
 
 const navLinks = [
@@ -97,9 +97,9 @@ export const Navbar: React.FC = () => {
                     cn(
                       'relative px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-1.5',
                       isActive
-                        ? 'text-[#FFD300] font-semibold'
+                        ? (!isHome || isScrolled) ? 'text-accent-ink font-semibold' : 'text-[#FFD300] font-semibold'
                         : (!isHome || isScrolled)
-                          ? 'text-[#757B81] dark:text-white/80 hover:text-[#090C11] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
+                          ? 'text-muted dark:text-white/80 hover:text-[#090C11] dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
                           : 'text-white/90 hover:text-white hover:bg-white/10'
                     )
                   }
@@ -130,7 +130,7 @@ export const Navbar: React.FC = () => {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="flex items-center gap-2 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors focus:outline-none"
+                    className="flex items-center gap-2 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2"
                     aria-label="User profile menu"
                   >
                     <Avatar src={user.avatar} name={user.name} size="sm" />
@@ -139,7 +139,7 @@ export const Navbar: React.FC = () => {
                       className={cn(
                         'transition-transform duration-200',
                         profileDropdownOpen && 'rotate-180',
-                        (!isHome || isScrolled) ? 'text-[#757B81] dark:text-white/70' : 'text-white/80'
+                        (!isHome || isScrolled) ? 'text-muted dark:text-white/70' : 'text-white/80'
                       )}
                     />
                   </button>
@@ -150,7 +150,7 @@ export const Navbar: React.FC = () => {
                         <p className="text-sm font-semibold text-[#090C11] dark:text-white truncate">
                           {user.name}
                         </p>
-                        <p className="text-xs text-[#757B81] dark:text-white/60 truncate">{user.email}</p>
+                        <p className="text-xs text-muted dark:text-white/60 truncate">{user.email}</p>
                       </div>
 
                       <div className="py-1">
@@ -194,22 +194,12 @@ export const Navbar: React.FC = () => {
               ) : (
                 /* Auth Buttons */
                 <div className="hidden sm:flex items-center gap-2">
-                  <Link to="/login">
-                    <Button
-                      variant={!isHome || isScrolled ? 'ghost' : 'outline'}
-                      size="sm"
-                      className={cn(
-                        isHome && !isScrolled && 'text-white border-white/40 hover:bg-white/10 hover:text-white'
-                      )}
-                    >
+                  <ButtonLink to="/login" variant={!isHome || isScrolled ? 'ghost' : 'outline'} size="sm" className={cn( isHome && !isScrolled && 'text-white border-white/40 hover:bg-white/10 hover:text-white' )}>
                       Log In
-                    </Button>
-                  </Link>
-                  <Link to="/register">
-                    <Button variant="primary" size="sm">
+                    </ButtonLink>
+                  <ButtonLink to="/register" variant="primary" size="sm">
                       Get Started
-                    </Button>
-                  </Link>
+                    </ButtonLink>
                 </div>
               )}
 
@@ -217,7 +207,7 @@ export const Navbar: React.FC = () => {
               <button
                 onClick={() => setMobileDrawerOpen(true)}
                 className={cn(
-                  'md:hidden p-2 rounded-xl transition-colors focus:outline-none',
+                  'md:hidden p-2 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2',
                   (!isHome || isScrolled)
                     ? 'text-[#262B32] dark:text-white hover:bg-gray-100 dark:hover:bg-white/10'
                     : 'text-white hover:bg-white/10'

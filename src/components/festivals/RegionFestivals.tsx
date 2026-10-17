@@ -36,7 +36,7 @@ export const RegionFestivals: React.FC<RegionFestivalsProps> = ({ regionName, cl
           <h3 className="font-['Playfair_Display',serif] text-2xl font-bold">
             {regionName ? `Festivals in the ${regionName} Region` : 'Festivals Across Ghana'}
           </h3>
-          <p className="text-sm text-[#757B81] dark:text-white/60 mt-1">
+          <p className="text-sm text-muted dark:text-white/60 mt-1">
             {regionName
               ? 'Time your visit around a traditional celebration.'
               : 'Pick a region to see its celebrations, or browse them all.'}

@@ -5,10 +5,23 @@
    and the theme toggle has no effect. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Text colours that meet WCAG AA (4.5:1) on both themes' surfaces.
+   `muted` is secondary text; `accent-ink` is brand gold for text and links —
+   #FFD300 itself is only 1.4:1 on white, so light mode uses a deeper gold. */
+@theme {
+  --color-muted: #656b71;
+  --color-accent-ink: #806500;
+}
+
+.dark {
+  --color-muted: #9aa0a6;
+  --color-accent-ink: #ffd300;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
   }
 
   body {
@@ -16,7 +29,7 @@
   }
 
   h1, h2, h3, .font-display {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter Variable', 'Inter', system-ui, sans-serif;
   }
 }
 

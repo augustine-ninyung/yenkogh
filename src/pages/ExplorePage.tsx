@@ -25,7 +25,7 @@ const DESTINATION_TYPES: { label: string; value: DestinationType | 'all' }[] = [
 ];
 
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: 'Most Popular / Featured', value: 'rating-desc' },
+  { label: 'Featured first', value: 'rating-desc' },
   { label: 'Name (A to Z)', value: 'name-asc' },
   { label: 'Name (Z to A)', value: 'name-desc' },
   { label: 'Price (Low to High)', value: 'cost-asc' },
@@ -81,7 +81,7 @@ export const ExplorePage: React.FC = () => {
         case 'name-desc':
           return b.name.localeCompare(a.name);
         case 'rating-desc':
-          return b.rating - a.rating;
+          return Number(b.featured) - Number(a.featured);
         case 'cost-asc':
           return (a.estimatedCostPerPerson || 0) - (b.estimatedCostPerPerson || 0);
         case 'cost-desc':
@@ -135,7 +135,7 @@ export const ExplorePage: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           {/* Search Input */}
           <div className="relative w-full md:w-96">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#757B81] w-4 h-4" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
             <input
               type="text"
               placeholder="Search by name, tags, or town..."
@@ -171,7 +171,7 @@ export const ExplorePage: React.FC = () => {
 
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-[#757B81] hidden sm:inline">Sort:</span>
+              <span className="text-xs text-muted hidden sm:inline">Sort:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -199,7 +199,7 @@ export const ExplorePage: React.FC = () => {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="text-xs text-[#FFD300] hover:underline font-medium"
+                    className="text-xs text-accent-ink hover:underline font-medium"
                   >
                     Reset All
                   </button>
@@ -208,7 +208,7 @@ export const ExplorePage: React.FC = () => {
 
               {/* Category Filter */}
               <div>
-                <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-2 uppercase">
+                <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-2 uppercase">
                   Category
                 </label>
                 <div className="space-y-1">
@@ -222,7 +222,7 @@ export const ExplorePage: React.FC = () => {
                       className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                         selectedType === type.value
                           ? 'bg-[#FFD300] text-[#090C11] font-semibold'
-                          : 'text-[#757B81] dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
+                          : 'text-muted dark:text-white/80 hover:bg-gray-100 dark:hover:bg-white/5'
                       }`}
                     >
                       {type.label}
@@ -233,7 +233,7 @@ export const ExplorePage: React.FC = () => {
 
               {/* Region Filter */}
               <div>
-                <label className="text-xs font-semibold text-[#757B81] dark:text-white/70 block mb-2 uppercase">
+                <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-2 uppercase">
                   Region
                 </label>
                 <select
@@ -267,7 +267,7 @@ export const ExplorePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-[#757B81] block mb-2 uppercase">Category</label>
+                  <label className="text-xs font-semibold text-muted block mb-2 uppercase">Category</label>
                   <div className="grid grid-cols-2 gap-2">
                     {DESTINATION_TYPES.map((type) => (
                       <button
@@ -279,7 +279,7 @@ export const ExplorePage: React.FC = () => {
                         className={`px-3 py-2 rounded-lg text-xs font-medium border text-center ${
                           selectedType === type.value
                             ? 'bg-[#FFD300] border-[#FFD300] text-[#090C11] font-semibold'
-                            : 'border-gray-200 dark:border-white/10 text-[#757B81] dark:text-white/80'
+                            : 'border-gray-200 dark:border-white/10 text-muted dark:text-white/80'
                         }`}
                       >
                         {type.label}
@@ -289,7 +289,7 @@ export const ExplorePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-[#757B81] block mb-2 uppercase">Region</label>
+                  <label className="text-xs font-semibold text-muted block mb-2 uppercase">Region</label>
                   <select
                     value={selectedRegion}
                     onChange={(e) => {
@@ -330,7 +330,7 @@ export const ExplorePage: React.FC = () => {
             {/* Active Pills */}
             {hasActiveFilters && (
               <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className="text-xs text-[#757B81]">Active filters:</span>
+                <span className="text-xs text-muted">Active filters:</span>
                 {searchQuery && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gray-200 dark:bg-white/10 text-xs">
                     "{searchQuery}"
@@ -349,13 +349,13 @@ export const ExplorePage: React.FC = () => {
                     <X size={12} className="cursor-pointer" onClick={() => setSelectedRegion('')} />
                   </span>
                 )}
-                <button onClick={clearFilters} className="text-xs text-[#FFD300] hover:underline ml-2">
+                <button onClick={clearFilters} className="text-xs text-accent-ink hover:underline ml-2">
                   Clear all
                 </button>
               </div>
             )}
 
-            <div className="text-xs text-[#757B81] dark:text-white/60 mb-4">
+            <div className="text-xs text-muted dark:text-white/60 mb-4">
               Showing <span className="font-bold text-[#090C11] dark:text-white">{filteredDestinations.length}</span> destinations in Ghana
             </div>
 

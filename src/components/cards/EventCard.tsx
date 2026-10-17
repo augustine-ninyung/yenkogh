@@ -51,7 +51,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
           onClick={handleFavoriteClick}
           aria-label={isSaved ? `Remove ${event.name} from saved` : `Save ${event.name}`}
           className={cn(
-            'absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all duration-200 focus:outline-none',
+            'absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2',
             isSaved
               ? 'bg-rose-500 text-white shadow-md'
               : 'bg-black/30 text-white hover:bg-black/50 hover:scale-110'
@@ -79,13 +79,13 @@ export const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
         <div>
           {/* Date & Location Info */}
           <div className="space-y-1.5 mb-2.5">
-            <div className="flex items-center gap-1.5 text-xs text-[#757B81] dark:text-white/60">
+            <div className="flex items-center gap-1.5 text-xs text-muted dark:text-white/60">
               <Calendar size={13} className="text-[#FFD300] shrink-0" />
               <span className="font-medium text-[#090C11] dark:text-white/90">
                 {formatDateRange(event.startDate, event.endDate)}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-[#757B81] dark:text-white/60">
+            <div className="flex items-center gap-1.5 text-xs text-muted dark:text-white/60">
               <MapPin size={13} className="text-[#FFD300] shrink-0" />
               <span className="truncate">{event.location}, {event.region}</span>
             </div>
@@ -99,7 +99,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
           </h3>
 
           {/* Description */}
-          <p className="text-xs sm:text-sm text-[#757B81] dark:text-white/70 line-clamp-2 leading-relaxed mb-4">
+          <p className="text-xs sm:text-sm text-muted dark:text-white/70 line-clamp-2 leading-relaxed mb-4">
             {event.shortDescription || event.description}
           </p>
         </div>

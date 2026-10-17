@@ -220,7 +220,7 @@ export const BudgetPlannerPage: React.FC = () => {
             Ghana Travel Budget Calculator
           </h1>
           <p className="text-white/70 max-w-2xl text-sm sm:text-base">
-            Know exactly what your trip costs before you pack. Allocate funds across transport, hotels, meals, park entrance fees, and souvenirs in Ghana Cedis.
+            Estimate what your trip will cost before you pack. Allocate funds across transport, hotels, meals, park entrance fees, and souvenirs in Ghana Cedis.
           </p>
         </div>
       </div>
@@ -230,7 +230,7 @@ export const BudgetPlannerPage: React.FC = () => {
         {budgets.length > 0 && (
           <div className="p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="min-w-0">
-              <label htmlFor="budget-select" className="text-xs uppercase font-semibold text-[#757B81] block mb-1.5">
+              <label htmlFor="budget-select" className="text-xs uppercase font-semibold text-muted block mb-1.5">
                 Budget for
               </label>
               <select
@@ -250,7 +250,7 @@ export const BudgetPlannerPage: React.FC = () => {
 
             {activeTrip && (
               <div className="text-sm md:text-right">
-                <p className="text-[#757B81] dark:text-white/70">
+                <p className="text-muted dark:text-white/70">
                   {formatDateRange(activeTrip.startDate, activeTrip.endDate)} · {activeTrip.numberOfTravelers}{' '}
                   {activeTrip.numberOfTravelers === 1 ? 'traveler' : 'travelers'}
                 </p>
@@ -268,7 +268,7 @@ export const BudgetPlannerPage: React.FC = () => {
         {/* Top Overview Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div className="p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-2">
-            <span className="text-xs uppercase font-semibold text-[#757B81] block">
+            <span className="text-xs uppercase font-semibold text-muted block">
               Total Budget
             </span>
             <div className="flex items-center gap-3">
@@ -277,7 +277,7 @@ export const BudgetPlannerPage: React.FC = () => {
               </span>
             </div>
             <div className="pt-2 flex items-center gap-2">
-              <span className="text-xs text-[#757B81]">Adjust target:</span>
+              <span className="text-xs text-muted">Adjust target:</span>
               <input
                 type="number"
                 step={100}
@@ -289,20 +289,20 @@ export const BudgetPlannerPage: React.FC = () => {
           </div>
 
           <div className="p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-2">
-            <span className="text-xs uppercase font-semibold text-[#757B81] block">
+            <span className="text-xs uppercase font-semibold text-muted block">
               Total Estimated Expenses
             </span>
             <div className="flex items-center gap-2">
               <span className="text-3xl font-bold text-[#090C11] dark:text-white">
                 {formatCurrency(totalSpent)}
               </span>
-              <span className="text-xs font-medium text-[#757B81]">({percentSpent}%)</span>
+              <span className="text-xs font-medium text-muted">({percentSpent}%)</span>
             </div>
             <ProgressBar value={percentSpent} size="sm" />
           </div>
 
           <div className="p-6 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-2">
-            <span className="text-xs uppercase font-semibold text-[#757B81] block">
+            <span className="text-xs uppercase font-semibold text-muted block">
               Budget Remaining
             </span>
             <div className="flex items-center gap-2">
@@ -314,7 +314,7 @@ export const BudgetPlannerPage: React.FC = () => {
                 {formatCurrency(remaining)}
               </span>
             </div>
-            <p className="text-xs text-[#757B81]">
+            <p className="text-xs text-muted">
               {remaining < 0
                 ? 'Warning: Expenses exceed your allocated budget!'
                 : 'You are well within your planned travel funds.'}
@@ -392,7 +392,7 @@ export const BudgetPlannerPage: React.FC = () => {
               </div>
 
               {items.length === 0 ? (
-                <p className="text-xs text-[#757B81] text-center py-8">
+                <p className="text-xs text-muted text-center py-8">
                   No expense items added yet. Use the form above to add your expected costs.
                 </p>
               ) : (
@@ -415,7 +415,7 @@ export const BudgetPlannerPage: React.FC = () => {
                             <p className="font-semibold text-[#090C11] dark:text-white">
                               {item.name}
                             </p>
-                            <span className="text-[11px] text-[#757B81]">
+                            <span className="text-[11px] text-muted">
                               {meta.label}
                               {fromPlan && ' · from the trip plan'}
                             </span>
@@ -427,13 +427,13 @@ export const BudgetPlannerPage: React.FC = () => {
                             {formatCurrency(item.amount)}
                           </span>
                           {fromPlan ? (
-                            <span className="p-1 text-[#757B81]/60" title="Change this in the trip planner">
+                            <span className="p-1 text-muted/60" title="Change this in the trip planner">
                               <Lock size={15} aria-label="Set by the trip plan" />
                             </span>
                           ) : (
                             <button
                               onClick={() => handleRemoveItem(item.id)}
-                              className="text-[#757B81] hover:text-red-500 p-1 transition-colors"
+                              className="text-muted hover:text-red-500 p-1 transition-colors"
                               aria-label={`Remove ${item.name}`}
                             >
                               <Trash2 size={15} />
@@ -479,7 +479,7 @@ export const BudgetPlannerPage: React.FC = () => {
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <div className="h-48 flex items-center justify-center text-xs text-[#757B81]">
+                <div className="h-48 flex items-center justify-center text-xs text-muted">
                   Add items to view visual breakdown
                 </div>
               )}
@@ -490,7 +490,7 @@ export const BudgetPlannerPage: React.FC = () => {
                   <div key={entry.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }} />
-                      <span className="text-[#757B81] dark:text-white/70 truncate max-w-[140px]">
+                      <span className="text-muted dark:text-white/70 truncate max-w-[140px]">
                         {entry.name}
                       </span>
                     </div>

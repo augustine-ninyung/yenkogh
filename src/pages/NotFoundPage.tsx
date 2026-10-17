@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Compass, Home } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/Button';
 
 export const NotFoundPage: React.FC = () => {
   return (
@@ -12,28 +11,24 @@ export const NotFoundPage: React.FC = () => {
         </div>
 
         <div>
-          <h1 className="font-['Playfair_Display',serif] text-6xl font-extrabold text-[#FFD300] mb-2">
+          <h1 className="font-['Playfair_Display',serif] text-6xl font-extrabold text-accent-ink mb-2">
             404
           </h1>
           <h2 className="text-2xl font-bold mb-2">Trail Not Found</h2>
-          <p className="text-sm text-[#757B81] dark:text-white/70 leading-relaxed">
+          <p className="text-sm text-muted dark:text-white/70 leading-relaxed">
             The destination or trail you're searching for seems to have wandered off the Ghanaian map. Let's get you back on track!
           </p>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link to="/">
-            <Button variant="primary" size="md">
+          <ButtonLink to="/" variant="primary" size="md">
               <Home size={16} />
               <span>Back to Home</span>
-            </Button>
-          </Link>
-          <Link to="/explore">
-            <Button variant="outline" size="md">
+            </ButtonLink>
+          <ButtonLink to="/explore" variant="outline" size="md">
               <Compass size={16} />
               <span>Explore Destinations</span>
-            </Button>
-          </Link>
+            </ButtonLink>
         </div>
       </div>
     </div>

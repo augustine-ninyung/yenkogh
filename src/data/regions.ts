@@ -8,7 +8,7 @@ export const regions: Region[] = [
     capital: 'Accra',
     description: 'The capital region of Ghana, home to the bustling city of Accra, historic landmarks, beautiful beaches, and vibrant nightlife. It is the economic and political hub of the country.',
     imageUrl: 'https://images.unsplash.com/photo-1589825743636-23a879d4b8e2?w=800&q=80',
-    destinationCount: 12,
+    destinationCount: 5,
     color: 'bg-blue-600',
   },
   {
@@ -18,7 +18,7 @@ export const regions: Region[] = [
     capital: 'Kumasi',
     description: 'The cultural heartland of Ghana, known for its rich Ashanti heritage, the Golden Stool, Kente cloth weaving, and the magnificent Manhyia Palace. Kumasi is Ghana\'s second-largest city.',
     imageUrl: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=800&q=80',
-    destinationCount: 10,
+    destinationCount: 3,
     color: 'bg-yellow-600',
   },
   {
@@ -28,7 +28,7 @@ export const regions: Region[] = [
     capital: 'Cape Coast',
     description: 'Home to Cape Coast and Elmina castles, powerful reminders of Ghana\'s slave trade history, as well as the spectacular Kakum National Park with its canopy walkway.',
     imageUrl: 'https://images.unsplash.com/photo-1575986767340-5d17ae767ab0?w=800&q=80',
-    destinationCount: 9,
+    destinationCount: 3,
     color: 'bg-green-700',
   },
   {
@@ -38,7 +38,7 @@ export const regions: Region[] = [
     capital: 'Sekondi-Takoradi',
     description: 'Known for its lush rainforests, scenic beaches, and the unique floating village of Nzulezu. The region is also rich in natural resources including oil and cocoa.',
     imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
-    destinationCount: 7,
+    destinationCount: 1,
     color: 'bg-emerald-700',
   },
   {
@@ -48,7 +48,7 @@ export const regions: Region[] = [
     capital: 'Koforidua',
     description: 'A region of scenic landscapes featuring the Aburi Botanical Gardens, beautiful waterfalls, and the Akwapim Hills. The area is known for its pleasant climate and stunning views.',
     imageUrl: 'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=800&q=80',
-    destinationCount: 8,
+    destinationCount: 3,
     color: 'bg-lime-700',
   },
   {
@@ -58,7 +58,7 @@ export const regions: Region[] = [
     capital: 'Ho',
     description: 'Home to the magnificent Wli Waterfalls — the highest in West Africa — as well as Lake Volta, one of the world\'s largest man-made lakes. The region boasts dramatic mountain scenery.',
     imageUrl: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=800&q=80',
-    destinationCount: 8,
+    destinationCount: 2,
     color: 'bg-teal-600',
   },
   {
@@ -68,7 +68,7 @@ export const regions: Region[] = [
     capital: 'Tamale',
     description: 'Gateway to northern Ghana, featuring unique traditional architecture, vibrant markets, Larabanga Mosque, and proximity to Mole National Park. Rich in Islamic heritage and culture.',
     imageUrl: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80',
-    destinationCount: 6,
+    destinationCount: 0,
     color: 'bg-orange-700',
   },
   {
@@ -78,7 +78,7 @@ export const regions: Region[] = [
     capital: 'Bolgatanga',
     description: 'Known for Paga\'s sacred crocodile pond, the Bolgatanga cultural market, and unique Frafra pottery. The region shares borders with Burkina Faso and Togo.',
     imageUrl: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
-    destinationCount: 4,
+    destinationCount: 1,
     color: 'bg-red-700',
   },
   {
@@ -88,7 +88,7 @@ export const regions: Region[] = [
     capital: 'Wa',
     description: 'The most north-westerly region, featuring the Wa Naa\'s Palace, the Wechiau Community Hippo Sanctuary, and unique traditional culture and architecture.',
     imageUrl: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
-    destinationCount: 3,
+    destinationCount: 0,
     color: 'bg-purple-700',
   },
   {
@@ -98,7 +98,7 @@ export const regions: Region[] = [
     capital: 'Sunyani',
     description: 'The "Garden City" region, known for its lush vegetation, numerous rivers, and the serene Tanoso Forest Reserve. The region is an important agricultural zone.',
     imageUrl: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80',
-    destinationCount: 4,
+    destinationCount: 0,
     color: 'bg-green-600',
   },
   {
@@ -108,7 +108,7 @@ export const regions: Region[] = [
     capital: 'Techiman',
     description: 'Home to the spectacular Kintampo Waterfalls and the Techiman market, one of Ghana\'s largest. The region sits at the geographic centre of Ghana.',
     imageUrl: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=800&q=80',
-    destinationCount: 4,
+    destinationCount: 1,
     color: 'bg-cyan-700',
   },
   {
@@ -118,7 +118,7 @@ export const regions: Region[] = [
     capital: 'Goaso',
     description: 'A newer region known for its rich forests, abundant water resources, and gold mining. The region offers pristine natural landscapes and authentic rural Ghana experiences.',
     imageUrl: 'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=800&q=80',
-    destinationCount: 2,
+    destinationCount: 0,
     color: 'bg-amber-700',
   },
   {
@@ -128,7 +128,7 @@ export const regions: Region[] = [
     capital: 'Damongo',
     description: 'Gateway to Mole National Park — Ghana\'s largest wildlife sanctuary — where visitors can spot elephants, antelopes, warthogs, and over 300 bird species in their natural habitat.',
     imageUrl: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80',
-    destinationCount: 5,
+    destinationCount: 2,
     color: 'bg-yellow-700',
   },
   {
@@ -138,7 +138,7 @@ export const regions: Region[] = [
     capital: 'Nalerigu',
     description: 'One of Ghana\'s newest regions, known for the Gambaga Escarpment, Nalerigu Fort, and diverse ethnic communities with rich cultural traditions.',
     imageUrl: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80',
-    destinationCount: 2,
+    destinationCount: 0,
     color: 'bg-rose-700',
   },
   {
@@ -148,7 +148,7 @@ export const regions: Region[] = [
     capital: 'Dambai',
     description: 'A region bordering Togo and Benin, known for its scenic riverside landscapes along the Oti River, diverse ethnic groups, and the unique Kpassa culture.',
     imageUrl: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=800&q=80',
-    destinationCount: 2,
+    destinationCount: 0,
     color: 'bg-indigo-700',
   },
   {
@@ -158,7 +158,7 @@ export const regions: Region[] = [
     capital: 'Sefwi Wiawso',
     description: 'Known for its vast cocoa farms, dense tropical forests, and gold mines. The region offers a glimpse into rural Ghanaian life and natural beauty.',
     imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
-    destinationCount: 2,
+    destinationCount: 0,
     color: 'bg-fuchsia-700',
   },
 ];

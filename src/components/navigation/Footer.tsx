@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
+import { SITE } from '@/config/site';
 
 export const Footer: React.FC = () => {
   return (
@@ -15,17 +16,17 @@ export const Footer: React.FC = () => {
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
               <Logo className="h-10 w-auto text-[#191E25] dark:text-white" />
             </Link>
-            <p className="text-[#757B81] dark:text-white/70 text-sm leading-relaxed max-w-sm">
-              Ghana's premier smart tourism and transportation discovery platform. Explore historical landmarks, pristine natural wonders, vibrant festivals, and plan your entire journey with confidence.
+            <p className="text-muted dark:text-white/70 text-sm leading-relaxed max-w-sm">
+              A smart tourism and transportation guide to Ghana. Explore historical landmarks, pristine natural wonders, vibrant festivals, and plan your entire journey with confidence.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold text-[#090C11] dark:text-[#FFD300] tracking-wider uppercase mb-4">
+            <h2 className="text-sm font-semibold text-[#090C11] dark:text-[#FFD300] tracking-wider uppercase mb-4">
               Discover
-            </h4>
-            <ul className="space-y-2.5 text-sm text-[#757B81] dark:text-white/70">
+            </h2>
+            <ul className="space-y-2.5 text-sm text-muted dark:text-white/70">
               <li>
                 <Link to="/explore" className="hover:text-[#090C11] dark:hover:text-white hover:underline transition-colors">
                   All Destinations
@@ -56,10 +57,10 @@ export const Footer: React.FC = () => {
 
           {/* Travel Tools */}
           <div>
-            <h4 className="text-sm font-semibold text-[#090C11] dark:text-[#FFD300] tracking-wider uppercase mb-4">
+            <h2 className="text-sm font-semibold text-[#090C11] dark:text-[#FFD300] tracking-wider uppercase mb-4">
               Travel Tools
-            </h4>
-            <ul className="space-y-2.5 text-sm text-[#757B81] dark:text-white/70">
+            </h2>
+            <ul className="space-y-2.5 text-sm text-muted dark:text-white/70">
               <li>
                 <Link to="/planner" className="hover:text-[#090C11] dark:hover:text-white hover:underline transition-colors flex items-center gap-1.5">
                   <span>AI Trip Planner</span>
@@ -91,10 +92,10 @@ export const Footer: React.FC = () => {
 
           {/* Regional Highlights */}
           <div>
-            <h4 className="text-sm font-semibold text-[#090C11] dark:text-[#FFD300] tracking-wider uppercase mb-4">
+            <h2 className="text-sm font-semibold text-[#090C11] dark:text-[#FFD300] tracking-wider uppercase mb-4">
               Regions
-            </h4>
-            <ul className="space-y-2.5 text-sm text-[#757B81] dark:text-white/70">
+            </h2>
+            <ul className="space-y-2.5 text-sm text-muted dark:text-white/70">
               <li>
                 <Link to="/explore?region=GA" className="hover:text-[#090C11] dark:hover:text-white hover:underline transition-colors">
                   Greater Accra
@@ -125,13 +126,27 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 mt-8 border-t border-gray-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#757B81] dark:text-white/50">
-          <p>© {new Date().getFullYear()} YɛnkɔGH Platform. All rights reserved. Crafted with care for Ghana Tourism.</p>
-          <div className="flex items-center gap-6">
-            <span>Currency: Ghana Cedi (GH₵)</span>
-            <span className="hidden sm:inline">•</span>
-            <span>English & Multi-language Ready</span>
+        <div className="pt-8 mt-8 border-t border-gray-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted dark:text-white/50">
+          <div className="space-y-1 text-center sm:text-left">
+            <p>© {new Date().getFullYear()} {SITE.name}. Run by {SITE.operator}, {SITE.operatorDescription}.</p>
+            {(SITE.contactEmail || SITE.postalAddress) && (
+              <p>
+                {SITE.contactEmail && (
+                  <a href={`mailto:${SITE.contactEmail}`} className="underline underline-offset-2 hover:text-[#090C11] dark:hover:text-white">
+                    {SITE.contactEmail}
+                  </a>
+                )}
+                {SITE.contactEmail && SITE.postalAddress && " · "}
+                {SITE.postalAddress}
+              </p>
+            )}
           </div>
+          <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <Link to="/privacy" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Privacy</Link>
+            <Link to="/terms" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Terms</Link>
+            <Link to="/cookies" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Cookies</Link>
+            <span>Prices in Ghana Cedi (GH₵)</span>
+          </nav>
         </div>
       </div>
     </footer>

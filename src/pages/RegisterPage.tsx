@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -22,6 +22,8 @@ export const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [agreed, setAgreed] = useState(false);
+  const consentId = useId();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Someone sent here from a members-only page goes back to it once registered
@@ -46,13 +48,15 @@ export const RegisterPage: React.FC = () => {
     const emailErr = validateEmail(email);
     const passErr = validatePassword(password);
     const confErr = validateConfirmPassword(password, confirmPassword);
+    const consentErr = agreed ? '' : 'Please agree to the Terms of Use and Privacy Policy to create an account.';
 
-    if (nameErr || emailErr || passErr || confErr) {
+    if (nameErr || emailErr || passErr || confErr || consentErr) {
       setErrors({
         ...(nameErr && { name: nameErr }),
         ...(emailErr && { email: emailErr }),
         ...(passErr && { password: passErr }),
         ...(confErr && { confirmPassword: confErr }),
+        ...(consentErr && { consent: consentErr }),
       });
       return;
     }
@@ -147,6 +151,32 @@ export const RegisterPage: React.FC = () => {
           placeholder="Type it again"
           autoComplete="new-password"
         />
+
+        <div>
+          <div className="flex items-start gap-3">
+            <input
+              id={consentId}
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => editing('consent', (v) => setAgreed(v === 'yes'))(e.target.checked ? 'yes' : '')}
+              aria-invalid={Boolean(errors.consent)}
+              aria-describedby={errors.consent ? `${consentId}-error` : undefined}
+              className="mt-0.5 w-5 h-5 shrink-0 rounded border-gray-300 accent-[#090C11] dark:accent-[#FFD300] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2"
+            />
+            <label htmlFor={consentId} className="text-sm text-[#262B32] dark:text-white/85 leading-snug">
+              I agree to the{' '}
+              <Link to="/terms" target="_blank" className="font-semibold underline underline-offset-2">Terms of Use</Link>
+              {' '}and have read the{' '}
+              <Link to="/privacy" target="_blank" className="font-semibold underline underline-offset-2">Privacy Policy</Link>
+              <span className="sr-only"> (links open in a new tab)</span>.
+            </label>
+          </div>
+          {errors.consent && (
+            <p id={`${consentId}-error`} role="alert" className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">
+              {errors.consent}
+            </p>
+          )}
+        </div>
 
         <Button
           type="submit"
