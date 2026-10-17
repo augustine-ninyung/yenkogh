@@ -281,6 +281,9 @@ export const BudgetPlannerPage: React.FC = () => {
               <input
                 type="number"
                 step={100}
+                min={0}
+                max={100000000}
+                aria-label="Target budget in Ghana Cedis"
                 value={totalBudget}
                 onChange={(e) => handleTotalChange(parseFloat(e.target.value) || 0)}
                 className="w-28 px-2 py-1 rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-xs font-bold"
@@ -338,8 +341,10 @@ export const BudgetPlannerPage: React.FC = () => {
                   <input
                     type="text"
                     placeholder="Expense title (e.g., Fufu dinner, STC Bus)"
+                    aria-label="Expense title"
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
+                    maxLength={80}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
                     required
                   />
@@ -349,6 +354,7 @@ export const BudgetPlannerPage: React.FC = () => {
                   <input
                     type="number"
                     placeholder="Cost (GH₵)"
+                    aria-label="Cost in Ghana Cedis"
                     value={itemAmount}
                     onChange={(e) => setItemAmount(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
@@ -358,6 +364,7 @@ export const BudgetPlannerPage: React.FC = () => {
 
                 <div>
                   <select
+                    aria-label="Expense category"
                     value={itemCategory}
                     onChange={(e) => setItemCategory(e.target.value as BudgetCategoryKey)}
                     className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"

@@ -90,10 +90,10 @@ export const TransportationPage: React.FC = () => {
 
           <form onSubmit={handleRouteSearch} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-1.5 uppercase">
+              <label htmlFor="transportation-departure" className="text-xs font-semibold text-muted dark:text-white/70 block mb-1.5 uppercase">
                 Departure (From)
               </label>
-              <select
+              <select id="transportation-departure"
                 value={fromCity}
                 onChange={(e) => setFromCity(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
@@ -108,10 +108,10 @@ export const TransportationPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-1.5 uppercase">
+              <label htmlFor="transportation-destination" className="text-xs font-semibold text-muted dark:text-white/70 block mb-1.5 uppercase">
                 Destination (To)
               </label>
-              <select
+              <select id="transportation-destination"
                 value={toCity}
                 onChange={(e) => setToCity(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"

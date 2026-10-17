@@ -61,7 +61,7 @@ const config: ResourceConfig = {
       title: 'Photos',
       fields: [
         { key: 'image_url', label: 'Main photo', type: 'image', wide: true },
-        { key: 'details.imageCredit', label: 'Photo credit link', type: 'text', maxLength: 300, wide: true, hint: 'For photos that must be credited, such as Wikimedia Commons: the page that names the author and licence.' },
+        { key: 'details.imageCredit', label: 'Photo credit link', type: 'url', maxLength: 300, wide: true, hint: 'For photos that must be credited, such as Wikimedia Commons: the page that names the author and licence.' },
         { key: 'details.gallery', label: 'Gallery', type: 'gallery', wide: true, rows: 3, hint: 'One image link per line.' },
       ],
     },

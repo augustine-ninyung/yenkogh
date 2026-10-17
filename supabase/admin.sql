@@ -629,6 +629,37 @@ create policy "planner runs: admins read" on public.planner_runs
   for select to authenticated
   using (public.is_admin());
 
+-- ─── Planner quota ───────────────────────────────────────────────────────────
+-- Read by the planner before each run, for per-account rate limits and a
+-- site-wide daily cap on AI use (the spending cap). Travellers can add rows of
+-- their own, so in the site-wide figure each account counts for at most
+-- p_per_user_cap runs: one account cannot use up everyone's allowance.
+
+create index if not exists planner_runs_user_created_idx on public.planner_runs (user_id, created_at desc);
+
+create or replace function public.planner_quota(p_per_user_cap integer)
+returns json
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select json_build_object(
+    'mine_hour', (select count(*) from public.planner_runs
+                  where user_id = auth.uid() and created_at > now() - interval '1 hour'),
+    'mine_day',  (select count(*) from public.planner_runs
+                  where user_id = auth.uid() and created_at > now() - interval '1 day'),
+    'ai_day',    (select coalesce(sum(least(n, greatest(p_per_user_cap, 1))), 0) from (
+                    select count(*) as n from public.planner_runs
+                    where source = 'ai' and created_at > now() - interval '1 day'
+                    group by user_id
+                  ) per_user)
+  );
+$$;
+
+revoke all on function public.planner_quota(integer) from public, anon;
+grant execute on function public.planner_quota(integer) to authenticated;
+
 -- ─── Dashboard figures ───────────────────────────────────────────────────────
 -- One round trip for every number on the admin dashboard.
 

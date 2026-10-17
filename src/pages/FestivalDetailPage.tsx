@@ -15,6 +15,7 @@ import { tripService } from '@/services/tripService';
 import { addDays, getFestivalDateConflict, getFestivalWindow, getNextFestivalStart, toIsoDate } from '@/utils/tripPlanning';
 import { Modal } from '@/components/ui/Modal';
 import { cn } from '@/utils/cn';
+import { safeUrl } from '@/utils/safeUrl';
 
 const FESTIVALS_URL = '/events?view=festivals';
 
@@ -164,9 +165,9 @@ export const FestivalDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {festival.imageCredit && (
+        {safeUrl(festival.imageCredit) && (
           <a
-            href={festival.imageCredit}
+            href={safeUrl(festival.imageCredit)}
             target="_blank"
             rel="noopener noreferrer"
             className="absolute top-3 right-4 text-[11px] text-white/60 hover:text-white/90 transition-colors"
@@ -293,7 +294,7 @@ export const FestivalDetailPage: React.FC = () => {
           <div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-[#262B32] p-6">
             <h2 className="font-bold mb-3">Sources</h2>
             <ul className="space-y-2">
-              {festival.sources.map((url) => (
+              {festival.sources.flatMap((source) => safeUrl(source) ?? []).map((url) => (
                 <li key={url}>
                   <a
                     href={url}
@@ -356,16 +357,16 @@ export const FestivalDetailPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">Start date</label>
-              <input type="date" value={tripStart} min={todayIso} onChange={(e) => setTripStart(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
+              <label htmlFor="festivaldetail-start-date" className="text-xs font-semibold text-muted block mb-1.5 uppercase">Start date</label>
+              <input id="festivaldetail-start-date" type="date" value={tripStart} min={todayIso} onChange={(e) => setTripStart(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">End date</label>
-              <input type="date" value={tripEnd} min={tripStart || todayIso} onChange={(e) => setTripEnd(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
+              <label htmlFor="festivaldetail-end-date" className="text-xs font-semibold text-muted block mb-1.5 uppercase">End date</label>
+              <input id="festivaldetail-end-date" type="date" value={tripEnd} min={tripStart || todayIso} onChange={(e) => setTripEnd(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">Travelers</label>
-              <input
+              <label htmlFor="festivaldetail-travelers" className="text-xs font-semibold text-muted block mb-1.5 uppercase">Travelers</label>
+              <input id="festivaldetail-travelers"
                 type="number"
                 min={1}
                 max={20}

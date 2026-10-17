@@ -18,6 +18,7 @@ import { useToast } from '@/context/ToastContext';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
+import { safeUrl } from '@/utils/safeUrl';
 
 export const EventDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -217,9 +218,9 @@ export const EventDetailPage: React.FC = () => {
                   Plan Trip to this Festival
                 </Button>
 
-                {event.website && (
+                {safeUrl(event.website) && (
                   <a
-                    href={event.website}
+                    href={safeUrl(event.website)}
                     target="_blank"
                     rel="noreferrer"
                     className="flex items-center justify-center gap-1.5 w-full py-2.5 text-xs font-semibold rounded-xl border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"

@@ -217,7 +217,7 @@ export const AIPlannerPage: React.FC = () => {
     const timer = setTimeout(() => {
       budgetService.syncForTrip(user.id, {
         tripId: savedTripId,
-        name: `${generatedItinerary.title} budget`,
+        name: `${generatedItinerary.title.slice(0, 110)} budget`,
         totalBudget: budget,
         items: [...buildPlanBudgetItems(generatedItinerary, stays, numberOfTravelers), ...extras],
       });
@@ -415,7 +415,7 @@ export const AIPlannerPage: React.FC = () => {
     try {
       const details = {
         userId: user.id,
-        name: generatedItinerary.title,
+        name: generatedItinerary.title.slice(0, 120),
         destinations: tripStops,
         startDate,
         endDate,
@@ -430,7 +430,7 @@ export const AIPlannerPage: React.FC = () => {
         : await tripService.create(user.id, details);
       const linked = await budgetService.syncForTrip(user.id, {
         tripId: saved.id,
-        name: `${saved.name} budget`,
+        name: `${saved.name.slice(0, 110)} budget`,
         totalBudget: budget,
         items: [...buildPlanBudgetItems(generatedItinerary, stays, numberOfTravelers), ...extras],
       });
@@ -843,8 +843,8 @@ export const AIPlannerPage: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className={labelClass}>Start Date</label>
-                  <input
+                  <label htmlFor="aiplanner-start-date" className={labelClass}>Start Date</label>
+                  <input id="aiplanner-start-date"
                     type="date"
                     value={startDate}
                     min={todayIso}
@@ -857,8 +857,8 @@ export const AIPlannerPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>End Date</label>
-                  <input
+                  <label htmlFor="aiplanner-end-date" className={labelClass}>End Date</label>
+                  <input id="aiplanner-end-date"
                     type="date"
                     value={endDate}
                     min={startDate || todayIso}
@@ -871,8 +871,8 @@ export const AIPlannerPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>Travelers</label>
-                  <input
+                  <label htmlFor="aiplanner-travelers" className={labelClass}>Travelers</label>
+                  <input id="aiplanner-travelers"
                     type="number"
                     min={1}
                     max={20}
@@ -884,8 +884,8 @@ export const AIPlannerPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className={labelClass}>Target Budget (GH₵)</label>
-                  <input
+                  <label htmlFor="aiplanner-target-budget" className={labelClass}>Target Budget (GH₵)</label>
+                  <input id="aiplanner-target-budget"
                     type="number"
                     min={100}
                     step={100}

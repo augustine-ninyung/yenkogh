@@ -23,6 +23,7 @@ import { Button, ButtonLink } from '@/components/ui/Button';
 import { FeedbackDialog } from '@/components/FeedbackDialog';
 import { Spinner } from '@/components/ui/Spinner';
 import { recordDestinationView } from '@/services/viewService';
+import { safeUrl } from '@/utils/safeUrl';
 
 export const DestinationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -177,10 +178,10 @@ export const DestinationDetailPage: React.FC = () => {
         {/* Gallery */}
         <div className="mb-10">
           <ImageGallery images={galleryImages} />
-          {destination.imageCredit && (
+          {safeUrl(destination.imageCredit) && (
             <p className="mt-2 text-xs text-muted">
               Main photo:{' '}
-              <a href={destination.imageCredit} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#090C11] dark:hover:text-white">
+              <a href={safeUrl(destination.imageCredit)} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#090C11] dark:hover:text-white">
                 author and licence on Wikimedia Commons
               </a>
             </p>

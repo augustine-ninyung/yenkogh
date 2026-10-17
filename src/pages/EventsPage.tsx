@@ -132,7 +132,7 @@ export const EventsPage: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="relative w-full md:w-96">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
-            <input
+            <input aria-label="Search festivals and events"
               type="text"
               placeholder="Search festivals by name, town..."
               value={searchQuery}

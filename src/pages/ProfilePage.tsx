@@ -129,23 +129,24 @@ export const ProfilePage: React.FC = () => {
         <form onSubmit={handleSaveProfile} className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm space-y-6 max-w-2xl">
           <div className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
+              <label htmlFor="profile-full-name" className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                 Full Name
               </label>
-              <input
+              <input id="profile-full-name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                maxLength={60}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
                 required
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
+              <label htmlFor="profile-email-address" className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                 Email Address
               </label>
-              <input
+              <input id="profile-email-address"
                 type="email"
                 value={user?.email || ''}
                 disabled
@@ -155,12 +156,13 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
+              <label htmlFor="profile-bio-travel-style" className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                 Bio / Travel Style
               </label>
-              <textarea
+              <textarea id="profile-bio-travel-style"
                 rows={3}
                 value={bio}
+                maxLength={500}
                 onChange={(e) => setBio(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
               />
@@ -168,10 +170,10 @@ export const ProfilePage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div>
-                <label className="text-xs font-semibold text-muted block mb-1.5 uppercase">
+                <label htmlFor="profile-preferred-currency" className="text-xs font-semibold text-muted block mb-1.5 uppercase">
                   Preferred Currency
                 </label>
-                <select
+                <select id="profile-preferred-currency"
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#090C11] text-sm"

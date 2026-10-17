@@ -15,6 +15,7 @@ import handler, {
   type PlanOptions,
 
 } from '../api/plan-trip';
+import { safeUrl } from '@/utils/safeUrl';
 import { destinations } from '@/data/destinations';
 import { festivals } from '@/data/festivals';
 import { regions } from '@/data/regions';
@@ -363,18 +364,24 @@ const call = async (options: { method?: string; token?: string; body?: unknown; 
   return { status: res.statusCode, headers: res.headers, json: JSON.parse(res.text) };
 };
 
-/** Stands in for Supabase: one signed-in user and the seeded catalogue. */
-const supabaseStub = (profileStatus = 'active', calls: string[] = []) =>
+interface QuotaReply { mine_hour: number; mine_day: number; ai_day: number }
+const NO_USE: QuotaReply = { mine_hour: 0, mine_day: 0, ai_day: 0 };
+// Each stubbed sign-in is a different account, so tests do not share the burst limit
+let stubAccounts = 0;
+
+/** Stands in for Supabase: one signed-in user, the seeded catalogue and their planner use so far. */
+const supabaseStub = (profileStatus = 'active', calls: string[] = [], quota: QuotaReply | null = NO_USE) =>
   (async (url: string, init?: { body?: string }) => {
-    calls.push(url.includes('/planner_runs') ? `${url} ${init?.body}` : url);
+    calls.push(url.includes('/planner_runs') || url.includes('/rpc/') ? `${url} ${init?.body}` : url);
     const reply = (data: unknown, ok = true) => ({ ok, status: ok ? 200 : 401, json: async () => data, text: async () => '' });
-    if (url.includes('/auth/v1/user')) return reply({ id: `user-${profileStatus}-${calls.length}` });
+    if (url.includes('/auth/v1/user')) return reply({ id: `user-${profileStatus}-${++stubAccounts}` });
     if (url.includes('/rest/v1/profiles')) return reply([{ status: profileStatus }]);
     if (url.includes('/rest/v1/regions')) return reply(rows.regions);
     if (url.includes('/rest/v1/destinations')) return reply(rows.destinations);
     if (url.includes('/rest/v1/festivals')) return reply(rows.festivals);
     if (url.includes('/rest/v1/transport_options')) return reply(rows.transport);
     if (url.includes('/rest/v1/planner_runs')) return reply(null);
+    if (url.includes('/rest/v1/rpc/planner_quota')) return quota ? reply(quota) : reply({ message: 'function missing' }, false);
     throw new Error(`unexpected call to ${url}`);
   }) as unknown as typeof fetch;
 
@@ -430,4 +437,54 @@ test('the endpoint slows down a client that calls it too quickly', async () => {
   for (let i = 0; i < 10; i++) statuses.push((await call({ token: 't', fetch: stub, body: { prompt: '1 day at Labadi Beach' } })).status);
   assert.deepEqual(statuses.slice(0, 8), Array(8).fill(200));
   assert.deepEqual(statuses.slice(8), [429, 429]);
+});
+
+// ─── Durable limits and the AI spending cap ───────────────────────────────────
+
+const KAKUM = { prompt: '1 day at Kakum' };
+
+test('an account over its hourly or daily planner limit is told to wait', async () => {
+  const hourly = await call({ token: 't', fetch: supabaseStub('active', [], { ...NO_USE, mine_hour: 15 }), body: KAKUM });
+  assert.equal(hourly.status, 429);
+  assert.match(hourly.json.error, /last hour/);
+  const daily = await call({ token: 't', fetch: supabaseStub('active', [], { ...NO_USE, mine_day: 40 }), body: KAKUM });
+  assert.equal(daily.status, 429);
+  assert.match(daily.json.error, /today's limit of 40/);
+  // Limits can be changed per deployment
+  const raised = await call({ token: 't', fetch: supabaseStub('active', [], { ...NO_USE, mine_day: 40 }), body: KAKUM, env: { PLANNER_DAILY_LIMIT: '100' } });
+  assert.equal(raised.status, 200);
+});
+
+test('the site-wide count only credits each account up to its own daily limit', async () => {
+  const calls: string[] = [];
+  await call({ token: 't', fetch: supabaseStub('active', calls), body: KAKUM, env: { PLANNER_DAILY_LIMIT: '25' } });
+  const rpc = calls.find((u) => u.includes('/rpc/planner_quota'));
+  assert.ok(rpc, 'the quota is read');
+  assert.deepEqual(JSON.parse(rpc.slice(rpc.indexOf(' ') + 1)), { p_per_user_cap: 25 });
+});
+
+test('past the daily AI allowance, plans come from the catalogue without calling the model', async () => {
+  const model = (calls: string[]) => calls.some((u) => u.includes('generativelanguage.googleapis.com'));
+  const underCap: string[] = [];
+  await call({ token: 't', fetch: supabaseStub('active', underCap), body: KAKUM, env: { GEMINI_API_KEY: 'key' } });
+  assert.ok(model(underCap), 'the model is used while under the cap');
+
+  const overCap: string[] = [];
+  const response = await call({ token: 't', fetch: supabaseStub('active', overCap, { ...NO_USE, ai_day: 1000 }), body: KAKUM, env: { GEMINI_API_KEY: 'key' } });
+  assert.equal(response.status, 200);
+  assert.equal(response.json.source, 'catalogue');
+  assert.ok(!model(overCap), 'the model is not called once the cap is reached');
+});
+
+test('if the quota cannot be read, the planner still works', async () => {
+  const response = await call({ token: 't', fetch: supabaseStub('active', [], null), body: KAKUM });
+  assert.equal(response.status, 200);
+});
+
+test('links from the database only pass if they are http(s)', () => {
+  assert.equal(safeUrl('https://example.com/a?b=1'), 'https://example.com/a?b=1');
+  assert.equal(safeUrl(' http://example.com '), 'http://example.com/');
+  for (const bad of ['javascript:alert(1)', 'JavaScript:alert(1)', 'data:text/html,<script>1</script>', '/relative', '', null, undefined]) {
+    assert.equal(safeUrl(bad), undefined, String(bad));
+  }
 });

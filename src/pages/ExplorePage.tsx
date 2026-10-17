@@ -136,7 +136,7 @@ export const ExplorePage: React.FC = () => {
           {/* Search Input */}
           <div className="relative w-full md:w-96">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted w-4 h-4" />
-            <input
+            <input aria-label="Search destinations"
               type="text"
               placeholder="Search by name, tags, or town..."
               value={searchQuery}
@@ -172,7 +172,7 @@ export const ExplorePage: React.FC = () => {
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted hidden sm:inline">Sort:</span>
-              <select
+              <select aria-label="Sort destinations"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#262B32] text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FFD300]"
@@ -233,10 +233,10 @@ export const ExplorePage: React.FC = () => {
 
               {/* Region Filter */}
               <div>
-                <label className="text-xs font-semibold text-muted dark:text-white/70 block mb-2 uppercase">
+                <label htmlFor="explore-region" className="text-xs font-semibold text-muted dark:text-white/70 block mb-2 uppercase">
                   Region
                 </label>
-                <select
+                <select id="explore-region"
                   value={selectedRegion}
                   onChange={(e) => {
                     setSelectedRegion(e.target.value);
@@ -289,8 +289,8 @@ export const ExplorePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-muted block mb-2 uppercase">Region</label>
-                  <select
+                  <label htmlFor="explore-region-2" className="text-xs font-semibold text-muted block mb-2 uppercase">Region</label>
+                  <select id="explore-region-2"
                     value={selectedRegion}
                     onChange={(e) => {
                       setSelectedRegion(e.target.value);

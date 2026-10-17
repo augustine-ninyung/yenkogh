@@ -1078,7 +1078,17 @@ interface ServerEnv {
   apiKey: string;
   model: string;
   fallbackModel: string | undefined;
+  /** Plans one account may make per hour and per day */
+  hourlyLimit: number;
+  dailyLimit: number;
+  /** AI-written plans per day across the site; past it, plans come from the catalogue */
+  aiDailyLimit: number;
 }
+
+const limit = (value: string | undefined, fallback: number) => {
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : fallback;
+};
 
 const readEnv = (): ServerEnv => {
   const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
@@ -1088,6 +1098,9 @@ const readEnv = (): ServerEnv => {
     apiKey: env.GEMINI_API_KEY || '',
     model: env.GEMINI_MODEL || '',
     fallbackModel: env.GEMINI_FALLBACK_MODEL,
+    hourlyLimit: limit(env.PLANNER_HOURLY_LIMIT, 15),
+    dailyLimit: limit(env.PLANNER_DAILY_LIMIT, 40),
+    aiDailyLimit: limit(env.PLANNER_AI_DAILY_LIMIT, 1000),
   };
 };
 
@@ -1118,8 +1131,9 @@ const loadKnowledge = async (env: ServerEnv, token: string, fetcher: FetchLike):
 
 // ─── The HTTP handler ─────────────────────────────────────────────────────────
 
-// Best-effort limit per account. Serverless instances do not share memory, so
-// this slows a runaway client rather than guaranteeing a hard cap.
+// Burst limit per account, kept in memory. Serverless instances do not share
+// memory, so this only slows a runaway client; the durable hourly and daily
+// limits come from the database (see readQuota).
 const RATE_LIMIT = 8;
 const RATE_WINDOW_MS = 60 * 1000;
 const recentCalls = new Map<string, number[]>();
@@ -1135,6 +1149,32 @@ const overLimit = (userId: string) => {
   recentCalls.set(userId, calls);
   if (recentCalls.size > 5000) recentCalls.clear();
   return false;
+};
+
+interface Quota {
+  mine_hour: number;
+  mine_day: number;
+  ai_day: number;
+}
+
+/**
+ * The caller's recent planner use and the site's AI use today, or null when it
+ * cannot be read (for example a database not yet updated). Failing open keeps
+ * the planner working; the provider-side budget remains the hard spending cap.
+ */
+const readQuota = async (env: ServerEnv, auth: Record<string, string>, fetcher: FetchLike): Promise<Quota | null> => {
+  try {
+    const response = await fetcher(`${env.supabaseUrl}/rest/v1/rpc/planner_quota`, {
+      method: 'POST',
+      headers: { ...auth, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_per_user_cap: env.dailyLimit }),
+    });
+    if (!response.ok) throw new Error(`planner_quota returned ${response.status}`);
+    return (await response.json()) as Quota;
+  } catch (err) {
+    console.warn('Planner quota unavailable, continuing without it:', err);
+    return null;
+  }
 };
 
 interface IncomingRequest {
@@ -1197,6 +1237,17 @@ export default async function handler(req: IncomingRequest, res: OutgoingRespons
 
     if (overLimit(user.id)) return send(429, { error: 'You are planning trips very quickly. Please wait a minute and try again.' });
 
+    const quota = await readQuota(env, auth, fetcher);
+    if (quota && quota.mine_hour >= env.hourlyLimit) {
+      return send(429, { error: 'You have planned a lot of trips in the last hour. Please try again a little later.' });
+    }
+    if (quota && quota.mine_day >= env.dailyLimit) {
+      return send(429, { error: `You have reached today's limit of ${env.dailyLimit} plans. Please come back tomorrow.` });
+    }
+    // Past the site's daily AI allowance, plans are still made, from the catalogue alone
+    const aiAllowed = !quota || quota.ai_day < env.aiDailyLimit;
+    if (!aiAllowed) console.warn('Daily AI limit reached; planning from the catalogue.');
+
     let body: unknown;
     try {
       body = await readBody(req);
@@ -1211,7 +1262,7 @@ export default async function handler(req: IncomingRequest, res: OutgoingRespons
     try {
       const started = Date.now();
       const result = await planTrip(body as PlanRequest, knowledge, {
-        apiKey: env.apiKey,
+        apiKey: aiAllowed ? env.apiKey : '',
         model: env.model,
         fallbackModel: env.fallbackModel,
         fetch: fetcher,
