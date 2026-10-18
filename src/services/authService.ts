@@ -417,6 +417,14 @@ export const authService = {
    */
   async deleteAccount(): Promise<void> {
     if (supabase) {
+      // Profile photos are public files, so remove them before the account goes
+      const { data: session } = await supabase.auth.getUser();
+      const uid = session.user?.id;
+      if (uid) {
+        const { data: files } = await supabase.storage.from('avatars').list(uid, { limit: 100 });
+        const paths = (files ?? []).map((f) => `${uid}/${f.name}`);
+        if (paths.length) await supabase.storage.from('avatars').remove(paths);
+      }
       const { error } = await supabase.rpc('delete_own_account');
       if (error) throw new Error('Could not delete the account. Please try again.', { cause: error });
       await supabase.auth.signOut();

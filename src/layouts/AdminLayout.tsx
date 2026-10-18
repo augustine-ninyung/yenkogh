@@ -13,7 +13,7 @@ import {
   Users,
   MessageSquareWarning,
   ScrollText,
-  ExternalLink,
+  ArrowLeft,
   LogOut,
   Menu,
   X,
@@ -138,6 +138,14 @@ export const AdminLayout: React.FC = () => {
             </div>
           </div>
         )}
+        <Link
+          to="/"
+          onClick={() => setMobileOpen(false)}
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+        >
+          <ArrowLeft size={18} className="shrink-0" aria-hidden="true" />
+          <span>Back to site</span>
+        </Link>
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-200"
@@ -219,9 +227,11 @@ export const AdminLayout: React.FC = () => {
           <div className="ml-auto flex items-center gap-3">
             <Link
               to="/"
-              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-[#090C11] dark:hover:text-white"
+              aria-label="Back to site"
+              className="inline-flex items-center gap-1.5 p-2 sm:p-0 rounded-lg text-sm font-medium text-muted hover:text-[#090C11] dark:hover:text-white hover:bg-gray-100 sm:hover:bg-transparent dark:hover:bg-white/10 sm:dark:hover:bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300]"
             >
-              View site <ExternalLink size={14} />
+              <ArrowLeft size={16} aria-hidden="true" />
+              <span className="hidden sm:inline">Back to site</span>
             </Link>
             <ThemeToggle />
             {user && (

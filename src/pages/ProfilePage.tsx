@@ -8,7 +8,7 @@ import { useDestinations } from '@/hooks/useDestinations';
 import { useEvents } from '@/hooks/useEvents';
 import { userService } from '@/services/userService';
 import { useToast } from '@/context/ToastContext';
-import { Avatar } from '@/components/ui/Avatar';
+import { AvatarEditor } from '@/components/auth/AvatarEditor';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { Button } from '@/components/ui/Button';
@@ -71,7 +71,7 @@ export const ProfilePage: React.FC = () => {
     <div className="space-y-8">
       {/* Top Banner / Avatar */}
       <div className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-6">
-        <Avatar src={user?.avatar} name={user?.name || 'Traveler'} size="xl" />
+        <AvatarEditor />
 
         <div className="text-center sm:text-left flex-1 space-y-1">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">

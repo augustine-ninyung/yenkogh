@@ -83,7 +83,7 @@ begin
   for c in select * from (values
     ('profiles', 'profiles_name_length',     'char_length(name) <= 80'),
     ('profiles', 'profiles_bio_length',      'bio is null or char_length(bio) <= 500'),
-    ('profiles', 'profiles_avatar_url',      'avatar is null or (char_length(avatar) <= 500 and avatar ~* ''^https://'')'),
+    ('profiles', 'profiles_avatar_url',      'avatar is null or avatar ~ (''^https://[a-z0-9]+\.supabase\.co/storage/v1/object/public/avatars/'' || id::text || ''/[0-9]+-[0-9a-f]{8}\.(webp|jpg)$'')'),
     ('profiles', 'profiles_saved_count',     'cardinality(saved_destinations) <= 500 and cardinality(saved_events) <= 500'),
     ('profiles', 'profiles_preferences_size','pg_column_size(preferences) <= 2048'),
     ('trips',    'trips_name_length',        'char_length(name) between 1 and 120'),
@@ -111,12 +111,12 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, name, email, avatar)
+  -- The profile photo starts empty: it is only ever set by uploading one
+  insert into public.profiles (id, name, email)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data ->> 'name', split_part(new.email, '@', 1)),
-    new.email,
-    new.raw_user_meta_data ->> 'avatar'
+    left(coalesce(nullif(btrim(new.raw_user_meta_data ->> 'name'), ''), split_part(new.email, '@', 1)), 80),
+    new.email
   )
   on conflict (id) do nothing;
   return new;
@@ -1018,6 +1018,33 @@ begin
     execute 'create policy "media: admins replace" on storage.objects for update to authenticated using (bucket_id = ''media'' and public.is_admin()) with check (bucket_id = ''media'' and public.is_admin())';
     execute 'drop policy if exists "media: admins remove" on storage.objects';
     execute 'create policy "media: admins remove" on storage.objects for delete to authenticated using (bucket_id = ''media'' and public.is_admin())';
+  end if;
+end $$;
+
+-- ─── Profile photos ──────────────────────────────────────────────────────────
+-- A public bucket so photos load anywhere on the site, but each person can
+-- only add, replace, list or remove files in their own folder (named after
+-- their user id). Small images only: the app crops and re-encodes photos to
+-- about 320 px before upload. No SVG, which can carry script.
+
+do $$
+begin
+  if exists (select 1 from pg_namespace where nspname = 'storage') then
+    insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+    values ('avatars', 'avatars', true, 2097152, array['image/jpeg', 'image/webp'])
+    on conflict (id) do update
+      set public = excluded.public,
+          file_size_limit = excluded.file_size_limit,
+          allowed_mime_types = excluded.allowed_mime_types;
+
+    execute 'drop policy if exists "avatars: owner lists" on storage.objects';
+    execute 'create policy "avatars: owner lists" on storage.objects for select to authenticated using (bucket_id = ''avatars'' and (storage.foldername(name))[1] = auth.uid()::text)';
+    execute 'drop policy if exists "avatars: owner uploads" on storage.objects';
+    execute 'create policy "avatars: owner uploads" on storage.objects for insert to authenticated with check (bucket_id = ''avatars'' and (storage.foldername(name))[1] = auth.uid()::text and array_length(storage.foldername(name), 1) = 1 and public.is_active())';
+    execute 'drop policy if exists "avatars: owner replaces" on storage.objects';
+    execute 'create policy "avatars: owner replaces" on storage.objects for update to authenticated using (bucket_id = ''avatars'' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = ''avatars'' and (storage.foldername(name))[1] = auth.uid()::text and array_length(storage.foldername(name), 1) = 1 and public.is_active())';
+    execute 'drop policy if exists "avatars: owner removes" on storage.objects';
+    execute 'create policy "avatars: owner removes" on storage.objects for delete to authenticated using (bucket_id = ''avatars'' and (storage.foldername(name))[1] = auth.uid()::text)';
   end if;
 end $$;
 

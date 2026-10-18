@@ -56,7 +56,7 @@ export const DeleteAccountSection: React.FC = () => {
           Delete account
         </h2>
         <p className="text-sm text-muted mt-1">
-          Permanently removes your account, profile, saved places, trips, budgets and feedback. This cannot be undone.
+          Permanently removes your account, profile photo, saved places, trips, budgets and feedback. This cannot be undone.
         </p>
       </div>
       <Button type="button" variant="danger" onClick={() => setIsOpen(true)}>

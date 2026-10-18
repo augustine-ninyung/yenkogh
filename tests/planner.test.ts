@@ -488,3 +488,33 @@ test('links from the database only pass if they are http(s)', () => {
     assert.equal(safeUrl(bad), undefined, String(bad));
   }
 });
+
+// ─── Profile photos ───────────────────────────────────────────────────────────
+
+test('the database only accepts a profile photo from the owner\'s own folder', async () => {
+  const { readFileSync } = await import('node:fs');
+  const sql = readFileSync('supabase/update-2026-10-avatars.sql', 'utf8');
+  const match = sql.match(/add constraint profiles_avatar_url\s+check \(avatar is null or avatar ~ \('([^']+)' \|\| id::text \|\| '([^']+)'\)\)/);
+  assert.ok(match, 'the rule is found in the migration');
+  const rule = (id: string) => new RegExp(match[1] + id + match[2]);
+  const me = '8b0a6e1c-1f2d-4c3b-9a8e-123456789abc';
+  const other = '0f0f0f0f-aaaa-4bbb-8ccc-dddddddddddd';
+  const base = 'https://abcd.supabase.co/storage/v1/object/public/avatars';
+  // What the app uploads
+  assert.ok(rule(me).test(`${base}/${me}/1760000000000-1a2b3c4d.webp`));
+  assert.ok(rule(me).test(`${base}/${me}/1760000000000-1a2b3c4d.jpg`));
+  // Anything else is refused
+  for (const bad of [
+    `${base}/${other}/1760000000000-1a2b3c4d.webp`,
+    `${base}/${me}/../${other}/1760000000000-1a2b3c4d.webp`,
+    `${base}/${me}/1760000000000-1a2b3c4d.svg`,
+    `${base}/${me}/photo.webp`,
+    `http://abcd.supabase.co/storage/v1/object/public/avatars/${me}/1760000000000-1a2b3c4d.webp`,
+    `https://tracker.example/storage/v1/object/public/avatars/${me}/1760000000000-1a2b3c4d.webp?x=1`,
+    `https://tracker.example/storage/v1/object/public/avatars/${me}/1760000000000-1a2b3c4d.webp`,
+    `https://abcd.supabase.co.tracker.example/storage/v1/object/public/avatars/${me}/1760000000000-1a2b3c4d.webp`,
+    `https://abcd-supabase-co/storage/v1/object/public/avatars/${me}/1760000000000-1a2b3c4d.webp`,
+    'https://tracker.example/pixel.gif',
+    'javascript:alert(1)',
+  ]) assert.equal(rule(me).test(bad), false, bad);
+});

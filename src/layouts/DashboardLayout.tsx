@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/AuthContext';
@@ -111,6 +112,10 @@ export const DashboardLayout: React.FC = () => {
             onClick={() => setMobileOpen(false)}
           />
         ))}
+        {/* Shown only to admins; the admin pages also check the role themselves */}
+        {user?.role === 'admin' && (
+          <SidebarLink to="/admin" label="Admin Panel" icon={ShieldCheck} onClick={() => setMobileOpen(false)} />
+        )}
       </nav>
 
       {/* Logout */}

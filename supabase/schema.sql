@@ -79,7 +79,7 @@ begin
   for c in select * from (values
     ('profiles', 'profiles_name_length',     'char_length(name) <= 80'),
     ('profiles', 'profiles_bio_length',      'bio is null or char_length(bio) <= 500'),
-    ('profiles', 'profiles_avatar_url',      'avatar is null or (char_length(avatar) <= 500 and avatar ~* ''^https://'')'),
+    ('profiles', 'profiles_avatar_url',      'avatar is null or avatar ~ (''^https://[a-z0-9]+\.supabase\.co/storage/v1/object/public/avatars/'' || id::text || ''/[0-9]+-[0-9a-f]{8}\.(webp|jpg)$'')'),
     ('profiles', 'profiles_saved_count',     'cardinality(saved_destinations) <= 500 and cardinality(saved_events) <= 500'),
     ('profiles', 'profiles_preferences_size','pg_column_size(preferences) <= 2048'),
     ('trips',    'trips_name_length',        'char_length(name) between 1 and 120'),
@@ -107,12 +107,12 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, name, email, avatar)
+  -- The profile photo starts empty: it is only ever set by uploading one
+  insert into public.profiles (id, name, email)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data ->> 'name', split_part(new.email, '@', 1)),
-    new.email,
-    new.raw_user_meta_data ->> 'avatar'
+    left(coalesce(nullif(btrim(new.raw_user_meta_data ->> 'name'), ''), split_part(new.email, '@', 1)), 80),
+    new.email
   )
   on conflict (id) do nothing;
   return new;
