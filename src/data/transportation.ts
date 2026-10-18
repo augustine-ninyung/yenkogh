@@ -7,7 +7,7 @@ export const transportation: Transportation[] = [
     name: 'STC Bus (State Transport Corporation)',
     description:
       'The State Transport Corporation (STC) operates the most comfortable and reliable intercity bus service in Ghana. With air-conditioned coaches connecting major cities, STC is the preferred option for comfortable long-distance travel. Buses depart from designated STC terminals in major cities and reservations can be made in advance.',
-    imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/ISTC_TRANSPORT_YARD_by_Blaise_Daniel_Korley_Ahumah.jpg?width=800',
     providers: ['State Transport Corporation (STC)'],
     routes: [
       { from: 'Accra', to: 'Kumasi', estimatedDuration: '4.5 hours', estimatedCost: { min: 80, max: 120 }, frequency: 'Multiple daily departures', notes: 'Departs from Accra STC Terminal, Tudu' },
@@ -33,7 +33,7 @@ export const transportation: Transportation[] = [
     name: 'VIP Jeoun Bus',
     description:
       'VIP Jeoun is a popular private intercity bus company offering comfortable, air-conditioned coaches between major Ghanaian cities at competitive prices. VIP buses often offer more frequent departures than STC and are a favourite among students, business travelers, and tourists. The "Executive Class" seats offer extra legroom and individual entertainment screens.',
-    imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/VIP_bus_at_station.jpg?width=800',
     providers: ['VIP Jeoun'],
     routes: [
       { from: 'Accra', to: 'Kumasi', estimatedDuration: '4.5 hours', estimatedCost: { min: 70, max: 110 }, frequency: 'Every 30 minutes, 5am–10pm' },
@@ -56,7 +56,7 @@ export const transportation: Transportation[] = [
     name: 'Metro Mass Transit (MMT)',
     description:
       'Metro Mass Transit is the part state-owned bus company set up in 2003 to give Ghanaians affordable public transport. Its orange buses run city routes, links to rural towns that other operators do not serve, and long-distance services between the regional capitals. The buses are plainer than the STC and VIP coaches and make more stops, but fares are usually among the lowest on a route.',
-    imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Metro_Mass_Transit_bus%2C_Atimpoku_(P1090966).jpg?width=800',
     providers: ['Metro Mass Transit Company Limited'],
     routes: [
       { from: 'Kumasi', to: 'Tamale', estimatedDuration: '6–7 hours', estimatedCost: { min: 115, max: 115 }, frequency: 'Daily', notes: 'Fare published by MMT for 2026' },
@@ -80,7 +80,7 @@ export const transportation: Transportation[] = [
     name: 'Trotro (Shared Minibus)',
     description:
       'The trotro is the backbone of Ghana\'s transport system — a shared minibus that operates on fixed urban and inter-urban routes. Inexpensive, ubiquitous, and deeply embedded in Ghanaian daily life, trotros serve almost every neighbourhood and town. They depart when full rather than on fixed schedules. Learning to use the trotro system is a rewarding way to experience authentic Ghanaian life and travel on a budget.',
-    imageUrl: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Trotro_boarding.jpg?width=800',
     routes: [
       { from: 'Accra (Kaneshie)', to: 'Cape Coast', estimatedDuration: '3.5 hours', estimatedCost: { min: 20, max: 35 }, frequency: 'Departs when full, throughout the day', notes: 'Cheaper but less comfortable than STC/VIP' },
       { from: 'Accra (Kejetia)', to: 'Kumasi (Kejetia)', estimatedDuration: '5 hours', estimatedCost: { min: 30, max: 50 }, frequency: 'Throughout the day' },
@@ -103,7 +103,7 @@ export const transportation: Transportation[] = [
     name: 'Metered & Shared Taxi',
     description:
       'Taxis are widely available in all Ghanaian cities and towns. They operate in two modes: chartered (private hire, you pay for the whole car) and shared (multiple passengers traveling in the same direction split the fare). Chartered taxis are ideal for direct, comfortable transport. Shared taxis are inexpensive for short urban trips. Fares should always be negotiated in advance — always agree on the price before entering a chartered taxi.',
-    imageUrl: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Taxi_%C3%A0_Accra.JPG?width=800',
     routes: [
       { from: 'Accra Airport', to: 'Accra City Centre', estimatedDuration: '20–45 mins', estimatedCost: { min: 60, max: 120 }, notes: 'Negotiate fare at official taxi rank outside arrivals' },
       { from: 'Accra', to: 'Cape Coast', estimatedDuration: '2.5 hours', estimatedCost: { min: 250, max: 450 }, notes: 'Chartered. Split with other travelers to reduce cost.' },
@@ -125,7 +125,7 @@ export const transportation: Transportation[] = [
     name: 'Uber, Bolt & Yango',
     description:
       'Uber and Bolt operate in Accra and other major Ghanaian cities including Kumasi, Takoradi, and Tamale, and Yango operates in Accra and Kumasi. Ride-hailing apps offer the convenience of transparent pricing, cashless payment, driver tracking, and safety features — making them the preferred option for tourists visiting Ghana for the first time. Prices are generally reasonable by international standards.',
-    imageUrl: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Traffic_Accra.jpg?width=800',
     providers: ['Uber', 'Bolt', 'Yango'],
     routes: [
       { from: 'Accra Airport', to: 'Accra City Centre', estimatedDuration: '20–45 mins', estimatedCost: { min: 50, max: 100 }, notes: 'Much cheaper and safer than airport taxis' },
@@ -149,7 +149,7 @@ export const transportation: Transportation[] = [
     name: 'Domestic Flights',
     description:
       'Domestic flights connect Accra (Kotoka International Airport) with Kumasi and Tamale, offering a fast alternative to the long road journeys to northern Ghana. Africa World Airlines (AWA) and PassionAir operate the main domestic routes. Flights to Tamale save approximately 8–10 hours compared to road travel and are ideal for travelers with limited time who want to visit Mole National Park.',
-    imageUrl: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Kotoka_International_Airport_Apron_1.JPG?width=800',
     providers: ['Africa World Airlines (AWA)', 'PassionAir'],
     routes: [
       { from: 'Accra (KIA)', to: 'Kumasi (KMS)', estimatedDuration: '40 mins', estimatedCost: { min: 350, max: 600 }, frequency: 'Multiple daily flights', notes: 'Book in advance for best prices' },
@@ -171,7 +171,7 @@ export const transportation: Transportation[] = [
     name: 'Lake Volta Ferry',
     description:
       'The Volta River Transport Company (VRTC) operates a passenger ferry service on Lake Volta between Akosombo and Yeji — one of the most unique and memorable journeys in Ghana. The multi-day ferry voyage takes passengers through the heart of the lake, stopping at small villages along the way. It is an adventurous, scenic, and deeply authentic Ghanaian experience. Shorter boat trips are also available at Ada Foah and other coastal/lake destinations.',
-    imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Captured(February_6%2C2023)%3BFerry_with_Cars_and_passengers_crossing_Volta_River_in_Ghana-West_Africa.jpg?width=800',
     providers: ['Volta River Transport Company (VRTC)'],
     routes: [
       { from: 'Akosombo', to: 'Yeji', estimatedDuration: '18–22 hours', estimatedCost: { min: 80, max: 250 }, frequency: 'Weekly departures', notes: 'Cabin and deck class available. Bring food and water.' },
@@ -194,7 +194,7 @@ export const transportation: Transportation[] = [
     name: 'Long-Distance Shared Taxi',
     description:
       'Long-distance shared taxis (often Toyota Camrys or similar saloon cars) operate between towns and cities, departing from specific lorry parks (bus stations) when the car is full. They are faster than trotros and less expensive than chartered taxis, offering a middle-ground option for intercity travel. Passengers pay per seat and can often negotiate the price for the entire car.',
-    imageUrl: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/The_Road_from_Accra_to_Nkawkaw_in_the_Eastern_Region_of_Ghana.jpg?width=800',
     routes: [
       { from: 'Accra', to: 'Cape Coast', estimatedDuration: '2.5–3 hours', estimatedCost: { min: 35, max: 60 }, frequency: 'Departs when full, throughout the day' },
       { from: 'Cape Coast', to: 'Elmina', estimatedDuration: '20 mins', estimatedCost: { min: 8, max: 15 }, frequency: 'Very frequent' },
@@ -215,7 +215,7 @@ export const transportation: Transportation[] = [
     name: 'Okada (Motorcycle Taxi)',
     description:
       'Okada motorcycle taxis are widely used in smaller towns, rural areas, and northern Ghana for short distances where other transport options are limited. They are fast for navigating traffic and narrow roads, and very inexpensive. However, they carry significant safety risks and visitors should exercise caution. Note: Okada operations in Accra are restricted.',
-    imageUrl: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Moto_taxi_Okada_%C3%A0_Madina_(Accra).jpg?width=800',
     routes: [
       { from: 'Tamale Centre', to: 'Tamale Suburbs', estimatedDuration: '10–20 mins', estimatedCost: { min: 5, max: 20 }, notes: 'Very common in northern towns' },
       { from: 'Bolgatanga', to: 'Paga', estimatedDuration: '45 mins', estimatedCost: { min: 30, max: 50 }, notes: 'Option when other transport is unavailable' },

@@ -12,7 +12,7 @@ export const events: Event[] = [
       'Homowo, meaning "to hoot at hunger" in the Ga language, is one of Ghana\'s most beloved annual harvest festivals celebrated by the Ga people of Greater Accra. The festival commemorates a historic famine that the Ga people survived, and celebrates the subsequent abundant harvest. Families gather for communal feasts of palm nut soup and kpokpoi (a traditional dish), libations are poured to ancestors, and traditional drumming and dance fill the streets. The festival strengthens family bonds and cultural identity.',
     shortDescription:
       'The Ga people\'s vibrant "hooting at hunger" harvest festival — a joyful celebration of abundance, family, and ancestral memory.',
-    imageUrl: 'https://images.unsplash.com/photo-1589825743636-23a879d4b8e2?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Accra_Homowo_um1900_300dpi.jpg?width=1200',
     startDate: '2026-08-01',
     endDate: '2026-08-31',
     location: 'Accra',
@@ -41,7 +41,7 @@ export const events: Event[] = [
       'Chale Wote ("friend, let\'s go" in Ga) is Accra\'s most vibrant annual street art festival, transforming the historic James Town neighbourhood into an open-air gallery. The festival features murals, installations, live music, spoken word, performance art, fashion, and film screenings by African artists. It celebrates the creativity, diversity, and resilience of African urban culture and draws visitors from across the continent and the world.',
     shortDescription:
       'Accra\'s electrifying annual street art festival — transforming James Town into a canvas of colour, music, performance, and Pan-African creativity.',
-    imageUrl: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Chale_Wote_Street_Art_Festival_10.jpg?width=1200',
     startDate: '2026-08-21',
     endDate: '2026-08-23',
     location: 'James Town, Accra',
@@ -73,7 +73,7 @@ export const events: Event[] = [
       'PANAFEST (Pan African Historical Theatre Festival) is a biennial festival held at Cape Coast and Elmina that celebrates Pan-African culture, history, and the diaspora. The festival includes theatre performances, seminars, music, durbars, and visits to the historic slave castles — creating a powerful space for reflection on African identity, the transatlantic slave trade, and African unity. It draws African diaspora communities from the Americas, Caribbean, and Europe to reconnect with their ancestral homeland.',
     shortDescription:
       'A powerful biennial Pan-African festival blending theatre, music, heritage visits, and deep reflection on African history and identity.',
-    imageUrl: 'https://images.unsplash.com/photo-1575986767340-5d17ae767ab0?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cape_Coast_Castle_Courtyard_02_Sept_2012.jpg?width=1200',
     startDate: '2026-07-25',
     endDate: '2026-08-01',
     location: 'Cape Coast & Elmina',
@@ -104,7 +104,7 @@ export const events: Event[] = [
       'Hogbetsotso is the annual festival of the Anlo Ewe people of the Volta Region, celebrating their migration from Notsie (in present-day Togo) to their current homeland centuries ago. The festival features spectacular durbar processions with chiefs in palanquins, colourful traditional attire, energetic traditional dance (Agbadza), drumming, libation ceremonies, and the firing of muskets. It is one of Ghana\'s most visually spectacular traditional festivals.',
     shortDescription:
       'The spectacular Anlo Ewe migration festival — witness breathtaking durbars, traditional Agbadza dance, and centuries of living culture.',
-    imageUrl: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hogb1.jpg?width=1200',
     startDate: '2026-11-07',
     endDate: '2026-11-08',
     location: 'Anloga, Volta Region',
@@ -133,7 +133,7 @@ export const events: Event[] = [
       'Aboakyir — the deer hunting festival of the Efutu people of Winneba in the Central Region — is one of Ghana\'s oldest and most thrilling traditional festivals. Two rival Asafo companies (warrior groups) compete to be first to capture a live deer with their bare hands and present it to the chief. The successful group earns great honour and bragging rights for the entire year. The festival is accompanied by colourful processions, traditional music, and elaborate ceremonies.',
     shortDescription:
       'One of Ghana\'s oldest festivals — two warrior companies race to capture a live deer bare-handed in this thrilling Central Region tradition.',
-    imageUrl: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Fisherboats_in_Winneba%2C_Ghana-2.jpg?width=1200',
     startDate: '2026-05-02',
     endDate: '2026-05-03',
     location: 'Winneba, Central Region',
@@ -162,7 +162,7 @@ export const events: Event[] = [
       'The Ghana Jollof Festival is a colourful food and culture festival celebrating Ghana\'s rich culinary heritage and settling, once and for all, the friendly West African debate about whose jollof rice reigns supreme. Beyond jollof rice, the festival showcases traditional Ghanaian dishes, street food, international cuisine, live cooking demonstrations, music, and cultural entertainment. A joyful celebration of food and community.',
     shortDescription:
       'A delicious celebration of Ghana\'s rich food culture — taste jollof rice showdowns, traditional dishes, street food, and live cooking demos.',
-    imageUrl: 'https://images.unsplash.com/photo-1589825743636-23a879d4b8e2?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ghana_Jollof_Rice.JPG?width=1200',
     startDate: '2026-10-16',
     endDate: '2026-10-18',
     location: 'Accra',
@@ -192,7 +192,7 @@ export const events: Event[] = [
       'Damba is an Islamic festival celebrated by several northern Ghanaian peoples — including the Dagomba, Gonjas, and Mamprusis — to commemorate the birth and naming of the Prophet Muhammad (Mawlid). The festival features magnificent horse parades (the Damba Festival is famous for its horse-riding displays), drumming, dancing, the chiefs giving speeches from horseback, and communal celebrations. It is a beautiful blend of Islamic faith and traditional northern Ghanaian culture.',
     shortDescription:
       'A magnificent blend of Islamic faith and northern Ghanaian tradition — spectacular horse parades, royal durbars, and vibrant cultural performances.',
-    imageUrl: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Image_of_Damba_festival.jpg?width=1200',
     startDate: '2026-11-15',
     endDate: '2026-11-17',
     location: 'Tamale, Northern Region',
@@ -221,7 +221,7 @@ export const events: Event[] = [
       'Bakatue, meaning "the opening of the lagoon", is the traditional festival of the people of Elmina in the Central Region marking the start of the fishing season on the Benya Lagoon. The festival includes a canoe procession on the lagoon, libations to the gods of the sea, casting of nets to mark the beginning of fishing, colourful durbars of chiefs, and cultural performances. It is a vibrant celebration of the fishing community\'s livelihood and spiritual heritage.',
     shortDescription:
       'Elmina\'s colourful lagoon-opening festival — a joyful ceremony blessing the start of the fishing season with canoe processions and royal durbars.',
-    imageUrl: 'https://images.unsplash.com/photo-1575986767340-5d17ae767ab0?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bakatue_2016_001_B001.jpg?width=1200',
     startDate: '2026-07-04',
     endDate: '2026-07-05',
     location: 'Elmina, Central Region',
@@ -250,7 +250,7 @@ export const events: Event[] = [
       'Asafotufiam is the annual festival of the Ada people of the Greater Accra Region, held at Ada Foah. The festival commemorates the victory of the Ada people over external aggressors and celebrates their resilience, bravery, and unity. It features spectacular military-style Asafo company displays, musket firing, traditional dances, colourful processions, and durbars of paramount chiefs. The backdrop of the beautiful Ada lagoon adds to the spectacular setting.',
     shortDescription:
       'The Ada people\'s bold celebration of military victory — spectacular warrior processions, musket fire, and durbars at the stunning Ada Foah lagoon.',
-    imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ada_Foah_Beach_2.jpg?width=1200',
     startDate: '2026-08-04',
     endDate: '2026-08-08',
     location: 'Ada Foah, Greater Accra',
@@ -279,7 +279,7 @@ export const events: Event[] = [
       'The Ghana International Film Festival is an annual celebration of African and international cinema, showcasing feature films, documentaries, and short films. The festival provides a platform for Ghanaian and African filmmakers, hosts masterclasses with industry professionals, and engages film lovers across Accra. Screenings take place at multiple venues including outdoor settings, and the event culminates in a prestigious awards ceremony.',
     shortDescription:
       'Ghana\'s premier cinema event — celebrating African storytelling with screenings, masterclasses, and awards across Accra\'s venues.',
-    imageUrl: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ghana_National_Theater_(21927550006).jpg?width=1200',
     startDate: '2026-10-08',
     endDate: '2026-10-13',
     location: 'Accra',
@@ -310,7 +310,7 @@ export const events: Event[] = [
       'The Kumasi Choral Festival is a prestigious annual celebration of Ghanaian choral music held in Kumasi, Ghana\'s cultural capital. The festival brings together choirs from across Ghana — church choirs, school choirs, and community ensembles — to perform a rich repertoire of classical choral works, Ghanaian folk songs, and gospel music. It is one of the most beloved musical events in Ashanti Region, drawing thousands of music lovers.',
     shortDescription:
       'Ghana\'s premier choral music gathering — choirs from across the country converge on Kumasi for an unforgettable celebration of voice and harmony.',
-    imageUrl: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Centre_for_National_Culture%2C_Kumasi.jpg?width=1200',
     startDate: '2026-10-23',
     endDate: '2026-10-25',
     location: 'Kumasi',
@@ -340,7 +340,7 @@ export const events: Event[] = [
       'Kundum is an ancient harvest and purification festival celebrated by the Ahanta and Nzema peoples of Ghana\'s Western Region. The festival is marked by elaborate purification rites, communal celebrations of the yam harvest, traditional music and dance, libations to ancestral spirits, and colourful processions. Each town celebrates Kundum at different times between August and October, creating a rolling series of festivals throughout the region.',
     shortDescription:
       'An ancient harvest purification festival of the Ahanta and Nzema — elaborate rites, yam celebrations, and ancestral music across the Western Region.',
-    imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80',
+    imageUrl: 'https://commons.wikimedia.org/wiki/Special:FilePath/Kundum_Festival_Dance.jpg?width=1200',
     startDate: '2026-09-15',
     endDate: '2026-10-15',
     location: 'Sekondi-Takoradi area, Western Region',

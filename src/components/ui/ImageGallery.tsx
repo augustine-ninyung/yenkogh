@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { commonsPage } from '@/utils/imageCredit';
 import { createPortal } from 'react-dom';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -122,9 +123,19 @@ const Lightbox: React.FC<LightboxProps> = ({ images, initialIndex, onClose }) =>
           </button>
         </div>
 
-        {/* Caption */}
+        {/* Caption and photo credit */}
         {image.caption && (
           <p className="mt-4 text-center text-white/80 text-sm max-w-lg">{image.caption}</p>
+        )}
+        {commonsPage(image.url) && (
+          <a
+            href={commonsPage(image.url)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 text-xs text-white/70 hover:text-white underline underline-offset-2"
+          >
+            Photo: author and licence on Wikimedia Commons
+          </a>
         )}
 
         {/* Thumbnail strip */}

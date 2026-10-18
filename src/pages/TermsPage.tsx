@@ -95,8 +95,8 @@ const sections: LegalSection[] = [
     body: (
       <p>
         The site's design, text and code belong to the operator. Photos come from Unsplash (under the Unsplash
-        licence) and Wikimedia Commons (under the licence shown on each photo's credit link). Their copyright stays
-        with the photographers. Festival and destination descriptions cite their public sources where available.
+        licence) and Wikimedia Commons (under the licence shown on each photo's page). Their copyright stays with
+        the photographers; every photo's source is listed on the <Link to="/credits">Photo credits</Link> page. Festival and destination descriptions cite their public sources where available.
       </p>
     ),
   },

@@ -53,12 +53,12 @@ const FEATURES = [
 ];
 
 const DESTINATIONS_PREVIEW = [
-  { name: 'Cape Coast', region: 'Central', img: 'https://images.unsplash.com/photo-1575986767340-5d17ae767ab0?w=400&q=80', slug: 'cape-coast-castle', type: 'Historical' },
-  { name: 'Kakum NP', region: 'Central', img: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=400&q=80', slug: 'kakum-national-park', type: 'National Park' },
-  { name: 'Mole NP', region: 'Savannah', img: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=400&q=80', slug: 'mole-national-park', type: 'Wildlife' },
-  { name: 'Wli Falls', region: 'Volta', img: 'https://images.unsplash.com/photo-1564419320461-6870880221ad?w=400&q=80', slug: 'wli-waterfalls', type: 'Waterfall' },
-  { name: 'Labadi Beach', region: 'Greater Accra', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80', slug: 'labadi-beach', type: 'Beach' },
-  { name: 'Manhyia Palace', region: 'Ashanti', img: 'https://images.unsplash.com/photo-1565373677928-80cf5b789d2e?w=400&q=80', slug: 'manhyia-palace', type: 'Cultural' },
+  { name: 'Cape Coast', region: 'Central', img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cape_Coast_Castle%2C_Cape_Coast%2C_Ghana.JPG?width=400', slug: 'cape-coast-castle', type: 'Historical' },
+  { name: 'Kakum NP', region: 'Central', img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Canopy_walkway_in_Kakum_National_Park_3.jpg?width=400', slug: 'kakum-national-park', type: 'National Park' },
+  { name: 'Mole NP', region: 'Savannah', img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mole_National_Park%2C_West_Gonja_(P1100448).jpg?width=400', slug: 'mole-national-park', type: 'Wildlife' },
+  { name: 'Wli Falls', region: 'Volta', img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Wli_Lower_Fall-4.jpg?width=400', slug: 'wli-waterfalls', type: 'Waterfall' },
+  { name: 'Labadi Beach', region: 'Greater Accra', img: 'https://commons.wikimedia.org/wiki/Special:FilePath/La-Beach_(Labadi_Accra).jpg?width=400', slug: 'labadi-beach', type: 'Beach' },
+  { name: 'Manhyia Palace', region: 'Ashanti', img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Manhyia_Palace_Museum_(Kumasi%2C_Ghana_2017).jpg?width=400', slug: 'manhyia-palace', type: 'Cultural' },
 ];
 
 // Hero background slideshow (Unsplash photos, served straight from their CDN)

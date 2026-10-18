@@ -19,6 +19,7 @@ import { formatDateRange, formatCurrency } from '@/utils/formatters';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { safeUrl } from '@/utils/safeUrl';
+import { commonsPage } from '@/utils/imageCredit';
 
 export const EventDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -120,6 +121,16 @@ export const EventDetailPage: React.FC = () => {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+          {commonsPage(event.imageUrl) && (
+            <a
+              href={commonsPage(event.imageUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute top-3 right-4 text-[11px] text-white/70 hover:text-white transition-colors"
+            >
+              Photo: Wikimedia Commons
+            </a>
+          )}
 
           <div className="absolute bottom-6 left-6 right-6">
             <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#FFD300] text-[#090C11] inline-block mb-3">

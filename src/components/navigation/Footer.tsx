@@ -145,6 +145,7 @@ export const Footer: React.FC = () => {
             <Link to="/privacy" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Privacy</Link>
             <Link to="/terms" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Terms</Link>
             <Link to="/cookies" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Cookies</Link>
+            <Link to="/credits" className="hover:text-[#090C11] dark:hover:text-white hover:underline">Photo credits</Link>
             <span>Prices in Ghana Cedi (GH₵)</span>
           </nav>
         </div>

@@ -30,6 +30,7 @@ const NotFoundPage = lazyPage(() => import('@/pages/NotFoundPage'));
 const PrivacyPage = lazyPage(() => import('@/pages/PrivacyPage'));
 const TermsPage = lazyPage(() => import('@/pages/TermsPage'));
 const CookiesPage = lazyPage(() => import('@/pages/CookiesPage'));
+const CreditsPage = lazyPage(() => import('@/pages/CreditsPage'));
 
 // Authenticated Pages
 const DashboardPage = lazyPage(() => import('@/pages/DashboardPage'));
@@ -65,6 +66,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="privacy" element={<PrivacyPage />} />
         <Route path="terms" element={<TermsPage />} />
         <Route path="cookies" element={<CookiesPage />} />
+        <Route path="credits" element={<CreditsPage />} />
 
         {/* Members only, shown inside the public layout */}
         <Route element={<ProtectedRoute />}>
