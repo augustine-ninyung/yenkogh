@@ -136,7 +136,7 @@ export const EventDetailPage: React.FC = () => {
             <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#FFD300] text-[#090C11] inline-block mb-3">
               {event.category}
             </span>
-            <h1 className="font-['Playfair_Display',serif] text-2xl sm:text-4xl lg:text-5xl font-bold text-white drop-shadow-md">
+            <h1 className="tracking-tight text-2xl sm:text-4xl lg:text-5xl font-bold text-white drop-shadow-md">
               {event.name}
             </h1>
           </div>

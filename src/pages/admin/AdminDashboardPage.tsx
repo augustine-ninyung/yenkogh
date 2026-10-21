@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, FileClock, Map, MapPin, MessageSquareWarning, PartyPopper, Route, Users } from 'lucide-react';
+import { ArrowRight, Calendar, FileClock, Map, MapPin, MessageSquareWarning, CalendarDays, Route, Users } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { AdminPageHeader, StatusPill } from '@/components/admin/adminUi';
 import { formatAdminDate, formatAdminDateTime, labelFromId } from '@/components/admin/adminFormat';
@@ -103,7 +103,7 @@ export const AdminDashboardPage: React.FC = () => {
     ? [
         { label: 'Accounts', value: stats.users.total, note: `${stats.users.active} active · ${stats.users.newThisMonth} new this month`, icon: Users, to: '/admin/users' },
         { label: 'Destinations', value: stats.content.destinations.published, note: `published, of ${stats.content.destinations.total}`, icon: MapPin, to: '/admin/destinations' },
-        { label: 'Festivals', value: stats.content.festivals.published, note: `published, of ${stats.content.festivals.total}`, icon: PartyPopper, to: '/admin/festivals' },
+        { label: 'Festivals', value: stats.content.festivals.published, note: `published, of ${stats.content.festivals.total}`, icon: CalendarDays, to: '/admin/festivals' },
         { label: 'Upcoming events', value: stats.upcomingEvents, note: `of ${stats.content.events.total} events in total`, icon: Calendar, to: '/admin/events' },
         { label: 'Regions', value: stats.regions, note: 'with content assigned', icon: Map, to: '/admin/regions' },
         { label: 'Trips planned', value: stats.trips, note: 'by travellers, all time', icon: Route },

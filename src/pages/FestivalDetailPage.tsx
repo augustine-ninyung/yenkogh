@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Users, Clock, Landmark, ChevronLeft, CheckCircle2, ExternalLink, Info, Compass, ArrowRight, Sparkles, Bookmark, AlertTriangle } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, Landmark, ChevronLeft, CheckCircle2, ExternalLink, Info, Compass, ArrowRight, Bookmark, AlertTriangle } from 'lucide-react';
 import { getFestivalById, getFestivalsByRegion, getEventIdForFestival } from '@/data/festivals';
 import { destinations } from '@/data/destinations';
 import { regions } from '@/data/regions';
@@ -243,7 +243,6 @@ export const FestivalDetailPage: React.FC = () => {
             </p>
             <div className="space-y-2.5">
               <ButtonLink to={`/planner?festival=${festival.id}`} variant="primary" fullWidth className="gap-2 font-bold">
-                  <Sparkles size={16} />
                   Plan a trip to this festival
                 </ButtonLink>
               {tripState === 'saved' ? (

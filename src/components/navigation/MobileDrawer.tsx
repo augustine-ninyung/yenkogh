@@ -6,7 +6,7 @@ import {
   Compass,
   Calendar,
   Bus,
-  Sparkles,
+  Route,
   Wallet,
   LayoutDashboard,
   User,
@@ -28,7 +28,7 @@ const navLinks = [
   { to: '/explore', label: 'Explore Destinations', icon: Compass },
   { to: '/events', label: 'Events & Festivals', icon: Calendar },
   { to: '/transportation', label: 'Transportation Guide', icon: Bus },
-  { to: '/planner', label: 'AI Trip Planner', icon: Sparkles, badge: 'AI' },
+  { to: '/planner', label: 'Trip Planner', icon: Route },
   { to: '/budget', label: 'Budget Planner', icon: Wallet },
 ];
 
@@ -103,11 +103,6 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                   <Icon size={18} />
                   <span>{link.label}</span>
                 </div>
-                {link.badge && (
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-[#090C11] text-[#FFD300] dark:bg-white dark:text-[#090C11]">
-                    {link.badge}
-                  </span>
-                )}
               </NavLink>
             );
           })}

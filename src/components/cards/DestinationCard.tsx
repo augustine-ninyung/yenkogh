@@ -69,18 +69,14 @@ export const DestinationCard: React.FC<DestinationCardProps> = ({
           <Heart size={16} fill={isSaved ? 'currentColor' : 'none'} />
         </button>
 
-        {/* Rating overlay */}
-        <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-xs font-medium">
-          <Star size={13} className="text-[#FFD300] fill-[#FFD300]" />
-          {destination.reviewCount > 0 ? (
-            <>
-              <span>{destination.rating.toFixed(1)}</span>
-              <span className="text-white/60">({destination.reviewCount})</span>
-            </>
-          ) : (
-            <span>New</span>
-          )}
-        </div>
+        {/* Rating, only once real reviews exist */}
+        {destination.reviewCount > 0 && (
+          <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-xs font-medium">
+            <Star size={13} className="text-[#FFD300] fill-[#FFD300]" aria-hidden="true" />
+            <span>{destination.rating.toFixed(1)}</span>
+            <span className="text-white/80">({destination.reviewCount} reviews)</span>
+          </div>
+        )}
       </div>
 
       {/* Content */}

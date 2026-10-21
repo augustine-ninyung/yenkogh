@@ -5,8 +5,6 @@ import { hydrateContent } from '@/services/content/contentStore';
 // Fonts are bundled with the site rather than loaded from Google, so no
 // visitor data goes to a third party just to draw text.
 import '@fontsource-variable/inter';
-import '@fontsource/playfair-display/700.css';
-import '@fontsource/playfair-display/800.css';
 import './index.css';
 
 // The site's content comes from the database. It is loaded before the first

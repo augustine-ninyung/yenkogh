@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Compass,
-  Sparkles,
   ArrowRight,
   Plus,
 } from 'lucide-react';
@@ -17,7 +16,7 @@ import { EventCard } from '@/components/cards/EventCard';
 import { TripCard } from '@/components/cards/TripCard';
 import { BudgetCard } from '@/components/cards/BudgetCard';
 import { ButtonLink } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { PageHeader } from '@/components/ui/PageHeader';
 import type { Trip, Budget } from '@/types';
 
 export const DashboardPage: React.FC = () => {
@@ -62,68 +61,52 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-10">
-      {/* Personalized Welcome Banner */}
-      <div className="p-8 rounded-3xl bg-gradient-to-r from-[#262B32] to-[#090C11] text-white shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-80 h-80 bg-[#FFD300]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 max-w-2xl">
-          <Badge variant="primary" className="mb-3">
-            Ghana Traveler Hub
-          </Badge>
-          <h1 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold mb-2">
-            {greeting}, {user?.name || 'Traveler'} 👋
-          </h1>
-          <p className="text-white/70 text-sm sm:text-base mb-6">
-            Where in Ghana will your next adventure take you? Explore coastal castles, hike misty waterfalls, or plan a custom journey in minutes.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <ButtonLink to="/planner" variant="primary" size="sm" className="font-bold">
-                <Sparkles size={16} />
-                <span>Create New Trip</span>
-              </ButtonLink>
-            <ButtonLink to="/explore" variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
-                <Compass size={16} />
-                <span>Discover Attractions</span>
-              </ButtonLink>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        variant="inline"
+        title={`${greeting}, ${user?.name?.split(' ')[0] || 'traveller'}`}
+        description="Your trips, saved places and budgets in one place."
+        actions={
+          <>
+            <ButtonLink to="/planner" variant="primary" size="sm">Plan a trip</ButtonLink>
+            <ButtonLink to="/explore" variant="outline" size="sm">Browse destinations</ButtonLink>
+          </>
+        }
+      />
 
       {/* Quick Stat Counter Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-muted uppercase font-semibold block mb-1">
-            Planned Trips
+          <span className="text-sm text-muted block mb-1">
+            Trips
           </span>
-          <span className="text-2xl sm:text-3xl font-bold text-[#090C11] dark:text-white">
+          <span className="text-2xl sm:text-3xl font-semibold text-[#090C11] dark:text-white">
             {trips.length}
           </span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-muted uppercase font-semibold block mb-1">
-            Saved Places
+          <span className="text-sm text-muted block mb-1">
+            Saved places
           </span>
-          <span className="text-2xl sm:text-3xl font-bold text-accent-ink">
+          <span className="text-2xl sm:text-3xl font-semibold text-[#090C11] dark:text-white">
             {savedDestinations.length}
           </span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-muted uppercase font-semibold block mb-1">
-            Saved Festivals
+          <span className="text-sm text-muted block mb-1">
+            Saved festivals
           </span>
-          <span className="text-2xl sm:text-3xl font-bold text-emerald-500">
+          <span className="text-2xl sm:text-3xl font-semibold text-[#090C11] dark:text-white">
             {savedEvents.length}
           </span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white dark:bg-[#262B32] border border-gray-100 dark:border-white/10 shadow-sm">
-          <span className="text-xs text-muted uppercase font-semibold block mb-1">
-            Active Budgets
+          <span className="text-sm text-muted block mb-1">
+            Budgets
           </span>
-          <span className="text-2xl sm:text-3xl font-bold text-blue-500">
+          <span className="text-2xl sm:text-3xl font-semibold text-[#090C11] dark:text-white">
             {budgets.length}
           </span>
         </div>
@@ -133,12 +116,11 @@ export const DashboardPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold">My Planned Journeys</h2>
-            <p className="text-xs text-muted">Your personalized Ghana travel plans</p>
+            <h2 className="text-xl font-semibold">Your trips</h2>
           </div>
           <ButtonLink to="/planner" variant="outline" size="sm" className="gap-1.5">
               <Plus size={14} />
-              <span>New Trip</span>
+              <span>New trip</span>
             </ButtonLink>
         </div>
 
@@ -151,12 +133,12 @@ export const DashboardPage: React.FC = () => {
         ) : (
           <div className="p-8 rounded-3xl bg-white dark:bg-[#262B32] border border-dashed border-gray-200 dark:border-white/10 text-center space-y-3">
             <Compass size={28} className="text-[#FFD300] mx-auto" />
-            <h3 className="font-semibold text-base">No Planned Trips Yet</h3>
+            <h3 className="font-semibold text-base">No trips yet</h3>
             <p className="text-xs text-muted max-w-sm mx-auto">
-              Ready to visit Cape Coast, Mole National Park, or Lake Volta? Use our AI Planner to generate your first itinerary in 30 seconds.
+              Describe a trip in a sentence, or pick places and dates, and the planner builds a day-by-day plan you can save here.
             </p>
             <ButtonLink to="/planner" variant="primary" size="sm">
-                Generate First Trip
+                Plan your first trip
               </ButtonLink>
           </div>
         )}
@@ -166,7 +148,7 @@ export const DashboardPage: React.FC = () => {
       {budgets.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">My Travel Budgets</h2>
+            <h2 className="text-xl font-semibold">Your budgets</h2>
             <Link to="/budget" className="text-xs text-accent-ink hover:underline font-semibold">
               Manage Budgets
             </Link>
@@ -183,11 +165,10 @@ export const DashboardPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold">Saved Attractions</h2>
-            <p className="text-xs text-muted">Places you've bookmarked for your visit</p>
+            <h2 className="text-xl font-semibold">Saved places</h2>
           </div>
           <Link to="/explore" className="text-xs text-accent-ink hover:underline font-semibold">
-            Browse More Places
+            Browse more places
           </Link>
         </div>
 
@@ -208,8 +189,7 @@ export const DashboardPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold">Recommended for You</h2>
-            <p className="text-xs text-muted">Top attractions across Ghana</p>
+            <h2 className="text-xl font-semibold">Featured destinations</h2>
           </div>
           <Link to="/explore" className="text-xs text-accent-ink hover:underline font-semibold flex items-center gap-1">
             <span>See all</span>
@@ -228,8 +208,7 @@ export const DashboardPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold">Upcoming Ghanaian Festivals</h2>
-            <p className="text-xs text-muted">Don't miss these cultural spectacles</p>
+            <h2 className="text-xl font-semibold">Upcoming festivals</h2>
           </div>
           <Link to="/events" className="text-xs text-accent-ink hover:underline font-semibold flex items-center gap-1">
             <span>View festival calendar</span>

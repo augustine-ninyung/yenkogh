@@ -51,7 +51,7 @@ test('every photo on the credits page links to its source', async ({ page }) => 
 
 test('an unknown address shows the not-found page', async ({ page }) => {
   await page.goto('/this-page-does-not-exist');
-  await expect(page.getByRole('heading', { name: 'Trail Not Found' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
   await page.getByRole('link', { name: 'Back to Home' }).click();
   await expect(page).toHaveURL(/\/$/);
 });

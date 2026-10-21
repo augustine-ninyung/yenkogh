@@ -127,7 +127,7 @@ export const Modal: React.FC<ModalProps> = ({
             {title && (
               <h2
                 id="modal-title"
-                className="text-lg font-semibold text-[#090C11] dark:text-white font-[Playfair_Display]"
+                className="text-lg font-semibold text-[#090C11] dark:text-white"
               >
                 {title}
               </h2>

@@ -4,7 +4,7 @@ import { Search, X } from 'lucide-react';
 import { EventCard } from '@/components/cards/EventCard';
 import { FestivalCard } from '@/components/cards/FestivalCard';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { Badge } from '@/components/ui/Badge';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { useEvents } from '@/hooks/useEvents';
 import { regions } from '@/data/regions';
 import { festivals, getFestivalMonths, FESTIVAL_EVENT_CATEGORY, MONTH_NAMES } from '@/data/festivals';
@@ -111,21 +111,8 @@ export const EventsPage: React.FC = () => {
   ] as const;
 
   return (
-    <div className="pt-24 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
-      {/* Header Banner */}
-      <div className="bg-[#262B32] dark:bg-[#090C11] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <Badge variant="warning" className="mb-3">
-            Festivals & Experiences
-          </Badge>
-          <h1 className="font-['Playfair_Display',serif] text-3xl sm:text-5xl font-bold mb-3">
-            Ghana Festivals & Cultural Events
-          </h1>
-          <p className="text-white/70 max-w-2xl text-sm sm:text-base">
-            Celebrate life, ancestral legacy, and creativity. Discover durbars, street art celebrations, music festivals, and traditional rites throughout the regions.
-          </p>
-        </div>
-      </div>
+    <div className="pt-20 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
+      <PageHeader title="Events and festivals" description="Upcoming events and traditional festivals across the regions, with dates, locations and travel tips." />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search & Filter Bar */}

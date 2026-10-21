@@ -63,8 +63,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-sm text-muted dark:text-white/70">
               <li>
                 <Link to="/planner" className="hover:text-[#090C11] dark:hover:text-white hover:underline transition-colors flex items-center gap-1.5">
-                  <span>AI Trip Planner</span>
-                  <span className="text-[10px] bg-[#FFD300] text-[#090C11] font-bold px-1 rounded">NEW</span>
+                  <span>Trip Planner</span>
                 </Link>
               </li>
               <li>

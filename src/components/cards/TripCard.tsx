@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Trash2, ArrowRight, Download, PartyPopper, BedDouble, Wallet } from 'lucide-react';
+import { Calendar, MapPin, Users, Trash2, ArrowRight, Download, BedDouble, Wallet, CalendarDays } from 'lucide-react';
 import type { Trip } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatDateRange } from '@/utils/formatters';
@@ -99,7 +99,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onDelete, className })
 
           {festival && (
             <div className="flex items-center gap-2">
-              <PartyPopper size={14} className="text-[#FFD300] shrink-0" />
+              <CalendarDays size={14} className="text-[#FFD300] shrink-0" />
               <span className="truncate">{festival.name}</span>
             </div>
           )}

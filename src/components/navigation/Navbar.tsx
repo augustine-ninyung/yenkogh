@@ -21,7 +21,7 @@ const navLinks = [
   { to: '/explore', label: 'Explore' },
   { to: '/events', label: 'Events' },
   { to: '/transportation', label: 'Transportation' },
-  { to: '/planner', label: 'AI Planner', badge: 'AI' },
+  { to: '/planner', label: 'Trip Planner' },
   { to: '/budget', label: 'Budget Planner' },
 ];
 
@@ -107,11 +107,6 @@ export const Navbar: React.FC = () => {
                   {({ isActive }) => (
                     <>
                       <span>{link.label}</span>
-                      {link.badge && (
-                        <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-[#FFD300] text-[#090C11] leading-none">
-                          {link.badge}
-                        </span>
-                      )}
                       {isActive && (
                         <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#FFD300] rounded-full" />
                       )}

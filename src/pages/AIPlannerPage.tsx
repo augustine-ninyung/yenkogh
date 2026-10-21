@@ -1,14 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import {
-  Sparkles,
   Calendar,
   MapPin,
   Compass,
   CheckCircle2,
   Bookmark,
   RefreshCw,
-  PartyPopper,
   BedDouble,
   Download,
   Bus,
@@ -21,6 +19,8 @@ import {
   Wallet,
   AlertTriangle,
   Database,
+  CalendarDays,
+  PenLine,
 } from 'lucide-react';
 import { aiPlannerService, MAX_PROMPT_LENGTH, MAX_TRIP_DAYS } from '@/services/aiPlannerService';
 import type { PlanResult } from '@/services/aiPlannerService';
@@ -49,7 +49,7 @@ import {
 } from '@/utils/tripPlanning';
 import { downloadTripPdf } from '@/utils/tripDownload';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { Spinner } from '@/components/ui/Spinner';
 import { Modal } from '@/components/ui/Modal';
 import { cn } from '@/utils/cn';
@@ -588,21 +588,8 @@ export const AIPlannerPage: React.FC = () => {
   );
 
   return (
-    <div className="pt-24 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
-      {/* Header Banner */}
-      <div className="bg-[#262B32] dark:bg-[#090C11] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <Badge variant="primary" className="mb-3">
-            AI-Powered Travel Intelligence
-          </Badge>
-          <h1 className="font-['Playfair_Display',serif] text-3xl sm:text-5xl font-bold mb-3">
-            Smart Ghana Trip Planner
-          </h1>
-          <p className="text-white/70 max-w-2xl text-sm sm:text-base">
-            Tell us where you want to go and what you love. Our smart planner creates a balanced, cost-effective day-by-day travel plan across Ghana with local transport, cultural dining, and timing tips.
-          </p>
-        </div>
-      </div>
+    <div className="pt-20 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
+      <PageHeader title="Trip planner" description="Describe your trip or fill in the form, and get a day-by-day plan built from the places in this guide." width="max-w-5xl" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {step === 'form' ? (
@@ -612,7 +599,7 @@ export const AIPlannerPage: React.FC = () => {
             <div className={cn(cardClass, 'border-[#FFD300]/60 dark:border-[#FFD300]/40')}>
               <div>
                 <h2 className="text-lg font-bold flex items-center gap-2">
-                  <Sparkles size={18} className="text-[#FFD300]" />
+                  <PenLine size={18} className="text-[#FFD300]" aria-hidden="true" />
                   <label htmlFor="trip-prompt">Describe your trip</label>
                 </h2>
                 <p className="text-xs sm:text-sm text-muted mt-1">
@@ -646,7 +633,6 @@ export const AIPlannerPage: React.FC = () => {
                   {tripPrompt.length} of {MAX_PROMPT_LENGTH} characters
                 </span>
                 <Button type="button" variant="primary" onClick={handleDescribe} className="font-bold">
-                  <Sparkles size={16} />
                   <span>Plan this trip</span>
                 </Button>
               </div>
@@ -661,7 +647,7 @@ export const AIPlannerPage: React.FC = () => {
             {/* Step 1: Festival */}
             <div className={cardClass}>
               <h2 className="text-lg font-bold flex items-center gap-2">
-                <PartyPopper size={18} className="text-[#FFD300]" />
+                <CalendarDays size={18} className="text-[#FFD300]" />
                 <span>1. Planning around a festival?</span>
                 <span className="text-xs font-medium text-muted">Optional</span>
               </h2>
@@ -725,7 +711,7 @@ export const AIPlannerPage: React.FC = () => {
               <div className="flex flex-wrap gap-2">
                 {festival && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#090C11] text-white dark:bg-white dark:text-[#090C11]">
-                    <PartyPopper size={12} />
+                    <CalendarDays size={12} />
                     <span>{festival.name}</span>
                   </span>
                 )}
@@ -1023,8 +1009,7 @@ export const AIPlannerPage: React.FC = () => {
             {/* Submit Button */}
             <div className="text-center pt-2">
               <Button type="submit" variant="primary" size="xl" className="px-12 font-bold shadow-xl">
-                <Sparkles size={20} />
-                <span>Generate Smart Ghana Itinerary</span>
+                <span>Create itinerary</span>
               </Button>
               <p className="mt-4 text-xs text-muted max-w-md mx-auto">
                 Your request is sent to Google's Gemini AI to write the plan, without your name or email. Please leave out personal details.
@@ -1057,7 +1042,7 @@ export const AIPlannerPage: React.FC = () => {
                     <span className="text-xs text-muted block mb-1">
                       {savedTripId ? 'Saved Trip' : 'Generated Itinerary'}
                     </span>
-                    <h2 className="font-['Playfair_Display',serif] text-2xl sm:text-3xl font-bold">
+                    <h2 className="tracking-tight text-2xl sm:text-3xl font-bold">
                       {generatedItinerary.title}
                     </h2>
                     <p className="text-xs sm:text-sm text-muted mt-1">
@@ -1106,7 +1091,7 @@ export const AIPlannerPage: React.FC = () => {
                   {festival && (
                     <div className={cardClass}>
                       <h3 className="font-bold flex items-center gap-2">
-                        <PartyPopper size={18} className="text-[#FFD300]" />
+                        <CalendarDays size={18} className="text-[#FFD300]" />
                         <span>Your festival</span>
                       </h3>
                       <div>

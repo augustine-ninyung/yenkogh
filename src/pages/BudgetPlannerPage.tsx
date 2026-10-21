@@ -15,7 +15,7 @@ import { tripService } from '@/services/tripService';
 import { formatCurrency, formatDateRange } from '@/utils/formatters';
 import { isPlanItem } from '@/utils/tripPlanning';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import type { Budget, BudgetCategoryKey, BudgetItem, Trip } from '@/types';
 
@@ -209,21 +209,8 @@ export const BudgetPlannerPage: React.FC = () => {
   };
 
   return (
-    <div className="pt-24 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
-      {/* Header Banner */}
-      <div className="bg-[#262B32] dark:bg-[#090C11] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <Badge variant="warning" className="mb-3">
-            Financial Travel Planner
-          </Badge>
-          <h1 className="font-['Playfair_Display',serif] text-3xl sm:text-5xl font-bold mb-3">
-            Ghana Travel Budget Calculator
-          </h1>
-          <p className="text-white/70 max-w-2xl text-sm sm:text-base">
-            Estimate what your trip will cost before you pack. Allocate funds across transport, hotels, meals, park entrance fees, and souvenirs in Ghana Cedis.
-          </p>
-        </div>
-      </div>
+    <div className="pt-20 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
+      <PageHeader title="Budget" description="Set a total for your trip and track what you plan to spend on transport, stays, food and entry fees." />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Which budget: one per saved trip, plus the unsaved example */}

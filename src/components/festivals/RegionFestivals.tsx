@@ -33,7 +33,7 @@ export const RegionFestivals: React.FC<RegionFestivalsProps> = ({ regionName, cl
     <div className={cn('mt-20 pt-10 border-t border-gray-200 dark:border-white/10', className)}>
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
         <div>
-          <h3 className="font-['Playfair_Display',serif] text-2xl font-bold">
+          <h3 className="tracking-tight text-2xl font-bold">
             {regionName ? `Festivals in the ${regionName} Region` : 'Festivals Across Ghana'}
           </h3>
           <p className="text-sm text-muted dark:text-white/60 mt-1">

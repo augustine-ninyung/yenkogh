@@ -6,11 +6,11 @@ import {
   Clock,
   Heart,
   Share2,
-  Sparkles,
   ShieldAlert,
   Bus,
   CheckCircle2,
   ChevronLeft,
+  CalendarDays,
 } from 'lucide-react';
 import { useDestination, useDestinations } from '@/hooks/useDestinations';
 import { useFavorites } from '@/context/useFavorites';
@@ -152,7 +152,7 @@ export const DestinationDetailPage: React.FC = () => {
             </span>
           </div>
 
-          <h1 className="font-['Playfair_Display',serif] text-3xl sm:text-5xl font-bold mb-3">
+          <h1 className="tracking-tight text-3xl sm:text-5xl font-bold mb-3">
             {destination.name}
           </h1>
 
@@ -230,7 +230,7 @@ export const DestinationDetailPage: React.FC = () => {
 
                 {destination.bestTimeToVisit && (
                   <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 flex items-start gap-3">
-                    <Sparkles className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" size={18} />
+                    <CalendarDays className="text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" size={18} aria-hidden="true" />
                     <div>
                       <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-0.5">
                         Best Time to Visit
@@ -403,7 +403,6 @@ export const DestinationDetailPage: React.FC = () => {
                   onClick={() => navigate(`/planner?destination=${destination.name}`)}
                   className="font-bold"
                 >
-                  <Sparkles size={16} />
                   <span>Plan Trip to {destination.name}</span>
                 </Button>
 
@@ -433,7 +432,7 @@ export const DestinationDetailPage: React.FC = () => {
         {/* Nearby Destinations */}
         {nearbyItems.length > 0 && (
           <div className="mt-20 pt-10 border-t border-gray-200 dark:border-white/10">
-            <h3 className="font-['Playfair_Display',serif] text-2xl font-bold mb-6">
+            <h3 className="tracking-tight text-2xl font-bold mb-6">
               Nearby Attractions
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

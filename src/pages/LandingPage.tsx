@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Compass, Bus, Brain, Wallet, Shield, Globe, Clock, ArrowRight, Pause, Play } from 'lucide-react';
+import { Compass, Bus, Brain, Wallet, Shield, Globe, Clock, ArrowRight, Pause, Play } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { Badge } from '@/components/ui/Badge';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { EventCard } from '@/components/cards/EventCard';
 import { TransportCard } from '@/components/cards/TransportCard';
@@ -150,12 +149,6 @@ export default function LandingPage() {
 
         {/* Content */}
         <div className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 pt-28 pb-16 text-white">
-          {/* Tag */}
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
-            <Sparkles className="w-4 h-4 text-white/90" />
-            <span className="text-sm font-bold tracking-wide uppercase text-white/90">Smart Tourism for Ghana</span>
-          </div>
-
           {/* Headline */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mb-7 sm:whitespace-nowrap">
             Discover Ghana.<br />
@@ -163,7 +156,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-lg sm:text-xl text-white/85 leading-relaxed mb-9">
-            Explore incredible destinations, plan unforgettable journeys, discover local experiences, and let YɛnkɔGH help you travel smarter.
+            Find places to visit, festivals to catch and how to get there, then plan your trip day by day.
           </p>
 
           {/* CTA buttons */}
@@ -240,12 +233,11 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
-              <Badge variant="primary" className="mb-3">Popular Destinations</Badge>
-              <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white">
-                Discover Ghana's Finest
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#090C11] dark:text-white">
+                Popular destinations
               </h2>
               <p className="text-muted mt-2 max-w-xl">
-                From UNESCO heritage sites to pristine national parks — explore the destinations that define Ghana.
+                Castles, national parks, waterfalls and beaches across Ghana.
               </p>
             </div>
             <Link
@@ -281,12 +273,11 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
-              <Badge variant="warning" className="mb-3">Events & Festivals</Badge>
-              <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white">
-                Upcoming Celebrations
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#090C11] dark:text-white">
+                Upcoming events
               </h2>
               <p className="text-muted mt-2 max-w-xl">
-                Immerse yourself in Ghana's vibrant festival calendar — from ancient harvest traditions to contemporary art festivals.
+                Festivals, food and arts events coming up around the country.
               </p>
             </div>
             <Link
@@ -309,12 +300,11 @@ export default function LandingPage() {
       <section className="py-20 bg-white dark:bg-[#090C11]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Badge variant="info" className="mb-3">16 Regions</Badge>
-            <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white mb-3">
-              Explore Ghana by Region
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#090C11] dark:text-white mb-3">
+              Explore by region
             </h2>
             <p className="text-muted max-w-xl mx-auto">
-              Each of Ghana's 16 regions has its own unique character, culture, and attractions. Where will you go?
+              Browse places to visit in each of Ghana's 16 regions.
             </p>
           </div>
 
@@ -358,12 +348,11 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
-              <Badge variant="success" className="mb-3">Getting Around</Badge>
-              <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white">
-                Travel Across Ghana
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#090C11] dark:text-white">
+                Getting around
               </h2>
               <p className="text-muted mt-2 max-w-xl">
-                From budget trotros to comfortable buses and domestic flights — understand your transport options.
+                How buses, trotros, taxis and domestic flights work, with typical fares.
               </p>
             </div>
             <Link
@@ -386,12 +375,11 @@ export default function LandingPage() {
       <section className="py-20 bg-white dark:bg-[#090C11]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="primary" className="mb-3">Why YɛnkɔGH?</Badge>
-            <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-4xl font-bold text-[#262B32] dark:text-white mb-3">
-              Your Complete Ghana Travel Companion
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#090C11] dark:text-white mb-3">
+              What you can do here
             </h2>
             <p className="text-muted max-w-2xl mx-auto">
-              Discover places, plan routes, and budget your trip across Ghana — all in one platform.
+              Find places, plan a route and keep a budget for your trip.
             </p>
           </div>
 
@@ -440,8 +428,8 @@ export default function LandingPage() {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-['Playfair_Display',serif] text-3xl sm:text-5xl font-bold text-white mb-6">
-            Ready to Experience Ghana?
+          <h2 className="text-2xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
+            Plan your trip
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto mb-10">
             Create a free account to plan trips, save places and keep a budget for each journey across Ghana.

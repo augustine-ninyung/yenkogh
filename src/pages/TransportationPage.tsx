@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useTransportation, useTransportSearch } from '@/hooks/useTransportation';
 import { TransportCard } from '@/components/cards/TransportCard';
-import { Badge } from '@/components/ui/Badge';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { Button } from '@/components/ui/Button';
 import type { TransportType } from '@/types';
 
@@ -64,21 +64,8 @@ export const TransportationPage: React.FC = () => {
   }, [hasSearched, routeResults, transportation, selectedType]);
 
   return (
-    <div className="pt-24 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
-      {/* Header Banner */}
-      <div className="bg-[#262B32] dark:bg-[#090C11] text-white py-12 px-4 sm:px-6 lg:px-8 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <Badge variant="success" className="mb-3">
-            Getting Around Ghana
-          </Badge>
-          <h1 className="font-['Playfair_Display',serif] text-3xl sm:text-5xl font-bold mb-3">
-            Ghana Transportation Guide
-          </h1>
-          <p className="text-white/70 max-w-2xl text-sm sm:text-base">
-            Everything you need to navigate Ghana easily. Compare travel times, pricing in Cedis, providers, and safety advice across buses, trotros, domestic flights, and taxis.
-          </p>
-        </div>
-      </div>
+    <div className="pt-20 pb-20 bg-gray-50 dark:bg-[#090C11] min-h-screen text-[#262B32] dark:text-white">
+      <PageHeader title="Getting around" description="Buses, trotros, taxis, flights and ferries: typical fares in cedis, journey times and safety tips." />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         {/* Route Search Box */}
