@@ -6,6 +6,8 @@ interface AvatarProps {
   name: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  /** Inside a control that is already labelled: hidden from assistive technology */
+  decorative?: boolean;
 }
 
 const sizeClasses = {
@@ -18,16 +20,17 @@ const sizeClasses = {
 
 // Deterministic color from name string
 const COLORS = [
-  'bg-red-500',
-  'bg-orange-500',
-  'bg-amber-500',
-  'bg-green-600',
-  'bg-teal-600',
-  'bg-cyan-600',
-  'bg-blue-600',
-  'bg-violet-600',
-  'bg-purple-600',
-  'bg-pink-600',
+  // Dark enough for white initials to meet WCAG AA (4.5:1)
+  'bg-red-700',
+  'bg-orange-700',
+  'bg-amber-700',
+  'bg-green-700',
+  'bg-teal-700',
+  'bg-cyan-700',
+  'bg-blue-700',
+  'bg-violet-700',
+  'bg-purple-700',
+  'bg-pink-700',
 ];
 
 function getColorFromName(name: string): string {
@@ -50,6 +53,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   name,
   size = 'md',
   className,
+  decorative = false,
 }) => {
   const initials = useMemo(() => getInitials(name), [name]);
   const bgColor = useMemo(() => getColorFromName(name), [name]);
@@ -67,14 +71,12 @@ export const Avatar: React.FC<AvatarProps> = ({
         !showImage && bgColor,
         className
       )}
-      aria-label={name}
-      role="img"
-      title={name}
+      {...(decorative ? { 'aria-hidden': true } : { 'aria-label': name, role: 'img', title: name })}
     >
       {showImage ? (
         <img
           src={src}
-          alt={name}
+          alt={decorative ? '' : name}
           className="w-full h-full object-cover"
           onError={() => setImgError(true)}
         />

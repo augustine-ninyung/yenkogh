@@ -131,6 +131,7 @@ export const ToastContainer: React.FC = () => {
 
   return createPortal(
     <div
+      role="region"
       aria-label="Notifications"
       className="fixed top-4 right-4 z-[9999] flex flex-col gap-3 w-full max-w-sm pointer-events-none"
     >

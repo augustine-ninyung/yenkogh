@@ -122,7 +122,7 @@ export const DashboardLayout: React.FC = () => {
       <div className="px-3 py-4 border-t border-gray-100 dark:border-white/10">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-200"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-200"
           aria-label="Log out of your account"
         >
           <LogOut size={18} className="shrink-0" />

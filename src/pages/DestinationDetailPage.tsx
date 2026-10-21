@@ -94,8 +94,9 @@ export const DestinationDetailPage: React.FC = () => {
     destination.nearbyDestinations?.includes(d.id)
   );
 
+  // The main photo leads, unless the gallery already starts with it
   const galleryImages = [
-    { url: destination.imageUrl, alt: destination.name, caption: 'Main View' },
+    ...((destination.gallery || []).some((g) => g.url === destination.imageUrl) ? [] : [{ url: destination.imageUrl, alt: destination.name }]),
     ...(destination.gallery || []).map((g) => ({
       url: g.url,
       alt: g.alt || destination.name,

@@ -63,7 +63,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, className }) => {
         {/* Pricing Badge */}
         <div className="absolute bottom-3 left-3 z-10">
           {event.isFree ? (
-            <span className="px-2.5 py-1 rounded-lg bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+            <span className="px-2.5 py-1 rounded-lg bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
               Free Entry
             </span>
           ) : (

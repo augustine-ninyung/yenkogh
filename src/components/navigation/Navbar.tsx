@@ -131,9 +131,11 @@ export const Navbar: React.FC = () => {
                   <button
                     onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                     className="flex items-center gap-2 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2"
-                    aria-label="User profile menu"
+                    aria-haspopup="menu"
+                    aria-expanded={profileDropdownOpen}
                   >
-                    <Avatar src={user.avatar} name={user.name} size="sm" />
+                    <Avatar src={user.avatar} name={user.name} size="sm" decorative />
+                    <span className="sr-only">Account menu for {user.name}</span>
                     <ChevronDown
                       size={14}
                       className={cn(

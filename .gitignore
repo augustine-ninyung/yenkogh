@@ -23,3 +23,8 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 *.local
+
+# Browser test output
+playwright-report
+dist-e2e
+test-results

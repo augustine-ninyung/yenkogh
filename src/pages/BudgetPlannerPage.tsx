@@ -311,7 +311,7 @@ export const BudgetPlannerPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <span
                 className={`text-3xl font-bold ${
-                  remaining < 0 ? 'text-red-500' : 'text-emerald-500'
+                  remaining < 0 ? 'text-red-700 dark:text-red-400' : 'text-emerald-700 dark:text-emerald-400'
                 }`}
               >
                 {formatCurrency(remaining)}

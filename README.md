@@ -109,8 +109,21 @@ supabase/
   seed.sql              Starting content (generated; do not edit by hand)
   update-*.sql          One-off updates for databases created earlier
 tests/
-  planner.test.ts       Trip planner tests
+  planner.test.ts       Trip planner and server tests
+e2e/                    Browser tests (Playwright)
 ```
+
+### Browser tests
+
+`npm run test:e2e` builds the app and drives it in Chromium, on a desktop screen and a phone screen. The app runs in demo mode (see `.env.e2e`), so tests use browser storage and never touch the live database, and requests to other sites are blocked. They cover:
+
+- **Visitors:** finding and opening destinations, legal and credits pages, the not-found page, members-only redirects, the skip link
+- **Accounts:** sign-up (including the consent requirement), wrong passwords, adding and removing a profile photo, refusing non-photo files, deleting an account
+- **Trip tools:** saving places, planning a trip from a description, adding a budget expense
+- **Admin:** keeping travellers and visitors out, moving between admin pages, getting back to the site on desktop and phone
+- **Accessibility:** automated WCAG 2.1 AA checks (axe-core) on 13 pages in light and dark themes
+
+On a failure, a screenshot and trace are saved under `test-results/`; open the report with `npx playwright show-report`.
 
 ---
 
@@ -152,7 +165,8 @@ The app opens at http://localhost:5173. With no configuration it runs in demo mo
 | `npm run build` | Type-check and production build |
 | `npm run preview` | Serve the production build |
 | `npm run lint` | ESLint |
-| `npm test` | Trip planner tests |
+| `npm test` | Trip planner and server tests |
+| `npm run test:e2e` | Browser tests of the main journeys and accessibility (first run: `npx playwright install chromium`) |
 | `npm run db:seed` | Regenerate `supabase/seed.sql` and `setup.sql` from `src/data` |
 
 ### Deploying

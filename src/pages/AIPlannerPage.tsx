@@ -287,6 +287,11 @@ export const AIPlannerPage: React.FC = () => {
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
+    // A written description comes first, as the page promises; the form fills the gaps
+    if (tripPrompt.trim()) {
+      await handleDescribe();
+      return;
+    }
     if (tripStops.length === 0) {
       addToast({
         variant: 'warning',
@@ -948,7 +953,7 @@ export const AIPlannerPage: React.FC = () => {
                         }`}
                       >
                         {tier}
-                        <span className="block text-[10px] font-medium opacity-70 normal-case">
+                        <span className="block text-[10px] font-medium normal-case">
                           about {formatCurrency(TIER_PRICE_PER_NIGHT[tier])} a night
                         </span>
                       </button>

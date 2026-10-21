@@ -217,7 +217,7 @@ export const EventsPage: React.FC = () => {
             >
               {tab.label}
               {tab.count !== null && (
-                <span className="ml-2 rounded-full bg-gray-200 dark:bg-white/10 px-2 py-0.5 text-xs font-bold">{tab.count}</span>
+                <span className="ml-2 rounded-full bg-gray-200 dark:bg-white/10 px-2 py-0.5 text-xs font-bold text-[#262B32] dark:text-white">{tab.count}</span>
               )}
             </button>
           ))}

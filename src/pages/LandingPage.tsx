@@ -463,7 +463,7 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          <p className="text-white/40 text-sm mt-8">
+          <p className="text-white/70 text-sm mt-8">
             No credit card required · Prices in Ghana Cedi (₵)
           </p>
         </div>
