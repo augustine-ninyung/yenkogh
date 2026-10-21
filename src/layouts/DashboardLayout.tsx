@@ -1,6 +1,6 @@
 import { SkipLink } from '@/components/navigation/SkipLink';
 import React, { useState, Suspense } from 'react';
-import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
+import { Outlet, NavLink, Link } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
 import { PageFallback } from '@/components/ui/PageFallback';
 import {
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/useAuth';
+import { useSession } from '@/context/useSession';
 import { Avatar } from '@/components/ui/Avatar';
 import { ToastContainer } from '@/components/ui/Toast';
 
@@ -62,13 +63,13 @@ const SidebarLink: React.FC<{
 // ─── DashboardLayout ──────────────────────────────────────────────────────────
 
 export const DashboardLayout: React.FC = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { requestSignOut } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    setMobileOpen(false);
+    requestSignOut();
   };
 
   const sidebarContent = (
@@ -123,10 +124,9 @@ export const DashboardLayout: React.FC = () => {
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-200"
-          aria-label="Log out of your account"
         >
           <LogOut size={18} className="shrink-0" />
-          <span>Log Out</span>
+          <span>Sign out</span>
         </button>
       </div>
     </div>

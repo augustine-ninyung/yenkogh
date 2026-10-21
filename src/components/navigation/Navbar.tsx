@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
 import {
   Menu,
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/useAuth';
+import { useSession } from '@/context/useSession';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Avatar } from '@/components/ui/Avatar';
 import { ButtonLink } from '@/components/ui/Button';
@@ -26,8 +27,8 @@ const navLinks = [
 ];
 
 export const Navbar: React.FC = () => {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const { requestSignOut } = useSession();
   const location = useLocation();
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -63,8 +64,8 @@ export const Navbar: React.FC = () => {
   }, [location.pathname]);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    setProfileDropdownOpen(false);
+    requestSignOut();
   };
 
   const navBackgroundClass = !isHome || isScrolled
@@ -182,7 +183,7 @@ export const Navbar: React.FC = () => {
                           className="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
                         >
                           <LogOut size={16} />
-                          <span>Sign Out</span>
+                          <span>Sign out</span>
                         </button>
                       </div>
                     </div>

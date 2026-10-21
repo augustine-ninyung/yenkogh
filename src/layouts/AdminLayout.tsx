@@ -1,6 +1,6 @@
 import { SkipLink } from '@/components/navigation/SkipLink';
 import React, { useEffect, useState, Suspense } from 'react';
-import { Outlet, NavLink, Navigate, useNavigate, Link } from 'react-router-dom';
+import { Outlet, NavLink, Navigate, Link } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
 import { PageFallback } from '@/components/ui/PageFallback';
 import {
@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/useAuth';
+import { useSession } from '@/context/useSession';
 import { Avatar } from '@/components/ui/Avatar';
 import { ToastContainer } from '@/components/ui/Toast';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
@@ -75,8 +76,8 @@ const AdminNavLink: React.FC<{
 // ─── AdminLayout ──────────────────────────────────────────────────────────────
 
 export const AdminLayout: React.FC = () => {
-  const { isAuthenticated, user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+  const { requestSignOut } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = isAuthenticated && user?.role === 'admin';
 
@@ -94,8 +95,8 @@ export const AdminLayout: React.FC = () => {
   }
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    setMobileOpen(false);
+    requestSignOut();
   };
 
   const sidebarContent = (
@@ -151,10 +152,9 @@ export const AdminLayout: React.FC = () => {
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-200"
-          aria-label="Log out of admin panel"
         >
           <LogOut size={18} className="shrink-0" />
-          <span>Log Out</span>
+          <span>Sign out</span>
         </button>
       </div>
     </div>

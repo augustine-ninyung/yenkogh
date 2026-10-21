@@ -7,6 +7,7 @@ import { SITE } from '@/config/site';
 // `grep -rn "yenkogh_" src` lists them.
 const ITEMS: { name: string; where: string; purpose: string; kept: string }[] = [
   { name: 'sb-…-auth-token', where: 'Local storage', purpose: 'Keeps you signed in (set by our sign-in provider, Supabase).', kept: 'Until you sign out' },
+  { name: 'yenkogh_last_activity', where: 'Local storage', purpose: 'Time of your last activity while signed in, so you are signed out after 10 minutes of inactivity in every open tab.', kept: 'Until you sign out or clear it' },
   { name: 'yenkogh_theme', where: 'Local storage', purpose: 'Remembers light or dark mode.', kept: 'Until cleared' },
   { name: 'yenkogh_favorites', where: 'Local storage', purpose: 'Your saved places and events on this device.', kept: 'Until cleared' },
   { name: 'yenkogh_viewed_destinations', where: 'Session storage', purpose: 'Stops one visit to a page being counted twice in the anonymous page count.', kept: 'Until the tab closes' },

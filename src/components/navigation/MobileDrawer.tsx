@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Logo } from '@/components/ui/Logo';
 import {
   X,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/useAuth';
+import { useSession } from '@/context/useSession';
 import { Avatar } from '@/components/ui/Avatar';
 import { ButtonLink } from '@/components/ui/Button';
 
@@ -33,15 +34,14 @@ const navLinks = [
 ];
 
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) => {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const { requestSignOut } = useSession();
 
   if (!isOpen) return null;
 
   const handleLogout = () => {
-    logout();
     onClose();
-    navigate('/');
+    requestSignOut();
   };
 
   return (
@@ -165,7 +165,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
               className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
             >
               <LogOut size={16} />
-              <span>Sign Out</span>
+              <span>Sign out</span>
             </button>
           ) : (
             <div className="flex flex-col gap-2">

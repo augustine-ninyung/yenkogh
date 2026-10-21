@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { FavoritesProvider } from '@/context/FavoritesContext';
 import { ToastProvider } from '@/context/ToastContext';
+import { SessionProvider } from '@/context/SessionContext';
 import { AppRoutes } from '@/routes';
 import { ScrollManager } from '@/components/navigation/ScrollManager';
 import { PageViewTracker } from '@/components/navigation/PageViewTracker';
@@ -17,7 +18,9 @@ export const App: React.FC = () => {
         <AuthProvider>
           <FavoritesProvider>
             <ToastProvider>
-              <AppRoutes />
+              <SessionProvider>
+                <AppRoutes />
+              </SessionProvider>
             </ToastProvider>
           </FavoritesProvider>
         </AuthProvider>

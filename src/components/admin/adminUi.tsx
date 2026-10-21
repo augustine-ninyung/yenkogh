@@ -1,7 +1,5 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/ui/Button';
-import { Modal } from '@/components/ui/Modal';
 
 // Small pieces shared by the admin screens.
 
@@ -66,41 +64,5 @@ export const StatusDot: React.FC<{ tone: keyof typeof DOTS }> = ({ tone }) => (
   <span aria-hidden="true" className={cn('inline-block w-2 h-2 rounded-full shrink-0', DOTS[tone])} />
 );
 
-// ─── Confirmation ─────────────────────────────────────────────────────────────
-
-interface ConfirmDialogProps {
-  isOpen: boolean;
-  title: string;
-  message: React.ReactNode;
-  confirmLabel: string;
-  /** Red confirm button, for actions that take something away */
-  danger?: boolean;
-  isWorking?: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
-}
-
-export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-  isOpen,
-  title,
-  message,
-  confirmLabel,
-  danger = false,
-  isWorking = false,
-  onConfirm,
-  onCancel,
-}) => (
-  <Modal isOpen={isOpen} onClose={onCancel} title={title} size="sm">
-    <div className="space-y-5">
-      <div className="text-sm text-muted dark:text-white/80">{message}</div>
-      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5">
-        <Button variant="ghost" onClick={onCancel} disabled={isWorking}>
-          Cancel
-        </Button>
-        <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm} isLoading={isWorking}>
-          {confirmLabel}
-        </Button>
-      </div>
-    </div>
-  </Modal>
-);
+// Shared with the rest of the app; kept exported here for the admin pages
+export { ConfirmDialog } from '@/components/ui/ConfirmDialog';
