@@ -8,8 +8,8 @@ import {
   Lock,
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/useAuth';
+import { useToast } from '@/context/useToast';
 import { budgetService } from '@/services/budgetService';
 import { tripService } from '@/services/tripService';
 import { formatCurrency, formatDateRange } from '@/utils/formatters';

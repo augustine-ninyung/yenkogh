@@ -1,16 +1,7 @@
-import React, { createContext, useContext, useCallback, useReducer, useRef } from 'react';
+import React, { useCallback, useReducer, useRef } from 'react';
+import { ToastContext, type ToastData } from './useToast';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-
-export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
-
-export interface ToastData {
-  id: string;
-  variant: ToastVariant;
-  title: string;
-  message?: string;
-  duration?: number; // ms, 0 = persist
-}
 
 interface ToastState {
   toasts: ToastData[];
@@ -32,16 +23,6 @@ function toastReducer(state: ToastState, action: ToastAction): ToastState {
       return state;
   }
 }
-
-// ─── Context ─────────────────────────────────────────────────────────────────
-
-interface ToastContextValue {
-  toasts: ToastData[];
-  addToast: (options: Omit<ToastData, 'id'>) => string;
-  removeToast: (id: string) => void;
-}
-
-const ToastContext = createContext<ToastContextValue | null>(null);
 
 // ─── Provider ────────────────────────────────────────────────────────────────
 
@@ -76,14 +57,5 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// ─── Hook ────────────────────────────────────────────────────────────────────
-
-export function useToast(): ToastContextValue {
-  const ctx = useContext(ToastContext);
-  if (!ctx) {
-    throw new Error('useToast must be used inside <ToastProvider>');
-  }
-  return ctx;
-}
 
 export default ToastProvider;

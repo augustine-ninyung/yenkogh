@@ -1,22 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useAuth } from './useAuth';
+import { FavoritesContext } from './useFavorites';
 import { userService } from '@/services/userService';
 
 interface FavoritesState {
   savedDestinations: string[];
   savedEvents: string[];
 }
-
-interface FavoritesContextType {
-  savedDestinations: string[];
-  savedEvents: string[];
-  toggleDestination: (id: string) => void;
-  toggleEvent: (id: string) => void;
-  isDestinationSaved: (id: string) => boolean;
-  isEventSaved: (id: string) => boolean;
-}
-
-const FavoritesContext = createContext<FavoritesContextType | null>(null);
 
 const STORAGE_KEY = 'yenkogh_favorites';
 
@@ -63,19 +53,28 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   // so they are never written onto the account that has just signed in.
   const awaitingSeed = useRef(true);
 
-  // Re-seed from the user profile whenever auth state changes (login / logout).
+  // The latest profile, for the effect below to read without re-running every
+  // time the profile object changes (it changes whenever favourites are saved).
+  const latestUser = useRef(user);
+  useEffect(() => {
+    latestUser.current = user;
+  });
+
+  // Re-seed from the user profile when a different person signs in or out.
+  const userId = user?.id;
   useEffect(() => {
     awaitingSeed.current = true;
-    if (user) {
+    const current = latestUser.current;
+    if (current) {
       setState({
-        savedDestinations: user.savedDestinations ?? [],
-        savedEvents: user.savedEvents ?? [],
+        savedDestinations: current.savedDestinations ?? [],
+        savedEvents: current.savedEvents ?? [],
       });
     } else {
       // User logged out — clear to localStorage defaults.
       setState(readFromStorage());
     }
-  }, [user?.id]); // only re-run when the user identity changes
+  }, [userId]);
 
   // Persist to localStorage on every state change.
   useEffect(() => {
@@ -143,10 +142,4 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       {children}
     </FavoritesContext.Provider>
   );
-}
-
-export function useFavorites(): FavoritesContextType {
-  const ctx = useContext(FavoritesContext);
-  if (!ctx) throw new Error('useFavorites must be used within FavoritesProvider');
-  return ctx;
 }

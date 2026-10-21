@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { Flag } from 'lucide-react';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/useAuth';
+import { useToast } from '@/context/useToast';
 import { ApiError, FEEDBACK_MESSAGE_LIMITS, feedbackApi, type FeedbackKind, type FeedbackSubject } from '@/services/adminApi';
 
 interface FeedbackDialogProps {

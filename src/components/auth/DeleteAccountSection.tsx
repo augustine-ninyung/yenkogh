@@ -1,8 +1,8 @@
 import React, { useId, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/useAuth';
+import { useToast } from '@/context/useToast';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 

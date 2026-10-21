@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Camera, Trash2 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/useAuth';
+import { useToast } from '@/context/useToast';
 import { userService } from '@/services/userService';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import {
   Save,
 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { useFavorites } from '@/context/FavoritesContext';
+import { useAuth } from '@/context/useAuth';
+import { useFavorites } from '@/context/useFavorites';
 import { useDestinations } from '@/hooks/useDestinations';
 import { useEvents } from '@/hooks/useEvents';
 import { userService } from '@/services/userService';
-import { useToast } from '@/context/ToastContext';
+import { useToast } from '@/context/useToast';
 import { AvatarEditor } from '@/components/auth/AvatarEditor';
 import { DestinationCard } from '@/components/cards/DestinationCard';
 import { EventCard } from '@/components/cards/EventCard';

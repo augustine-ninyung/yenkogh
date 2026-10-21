@@ -6,8 +6,8 @@ import {
   ArrowRight,
   Plus,
 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { useFavorites } from '@/context/FavoritesContext';
+import { useAuth } from '@/context/useAuth';
+import { useFavorites } from '@/context/useFavorites';
 import { useDestinations } from '@/hooks/useDestinations';
 import { useUpcomingEvents } from '@/hooks/useEvents';
 import { tripService } from '@/services/tripService';

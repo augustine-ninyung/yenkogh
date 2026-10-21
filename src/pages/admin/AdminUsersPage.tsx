@@ -5,8 +5,8 @@ import { AdminPageHeader, ConfirmDialog, StatusPill } from '@/components/admin/a
 import { formatAdminDate } from '@/components/admin/adminFormat';
 import { Avatar } from '@/components/ui/Avatar';
 import { Modal } from '@/components/ui/Modal';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/useAuth';
+import { useToast } from '@/context/useToast';
 import { usePagedList } from '@/hooks/usePagedList';
 import { usersApi, type AdminUser } from '@/services/adminApi';
 

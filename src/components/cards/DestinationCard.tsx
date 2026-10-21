@@ -4,7 +4,7 @@ import { Star, MapPin, Heart, ArrowRight } from 'lucide-react';
 import type { Destination } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatCurrency } from '@/utils/formatters';
-import { useFavorites } from '@/context/FavoritesContext';
+import { useFavorites } from '@/context/useFavorites';
 
 interface DestinationCardProps {
   destination: Destination;

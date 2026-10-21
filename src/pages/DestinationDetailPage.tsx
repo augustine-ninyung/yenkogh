@@ -13,8 +13,8 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { useDestination, useDestinations } from '@/hooks/useDestinations';
-import { useFavorites } from '@/context/FavoritesContext';
-import { useToast } from '@/context/ToastContext';
+import { useFavorites } from '@/context/useFavorites';
+import { useToast } from '@/context/useToast';
 import { formatCurrency } from '@/utils/formatters';
 import { ImageGallery } from '@/components/ui/ImageGallery';
 import { DestinationCard } from '@/components/cards/DestinationCard';

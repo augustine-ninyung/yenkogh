@@ -4,7 +4,7 @@ import { Calendar, MapPin, Heart, ArrowRight } from 'lucide-react';
 import type { Event } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
-import { useFavorites } from '@/context/FavoritesContext';
+import { useFavorites } from '@/context/useFavorites';
 
 interface EventCardProps {
   event: Event;

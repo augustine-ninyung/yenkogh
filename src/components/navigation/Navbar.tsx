@@ -10,7 +10,7 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/useAuth';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Avatar } from '@/components/ui/Avatar';
 import { ButtonLink } from '@/components/ui/Button';

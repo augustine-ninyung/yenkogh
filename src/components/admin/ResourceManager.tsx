@@ -4,7 +4,7 @@ import { Archive, ArchiveRestore, ExternalLink, Eye, EyeOff, Pencil, Plus, Star 
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { useToast } from '@/context/ToastContext';
+import { useToast } from '@/context/useToast';
 import { usePagedList } from '@/hooks/usePagedList';
 import { ApiError, contentApi, type ListParams } from '@/services/adminApi';
 import { slugify, type ContentStatus } from '@/services/content/resources';

@@ -3,7 +3,7 @@ import { Lock } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { AuthField } from '@/components/auth/AuthField';
 import { PasswordChecklist } from '@/components/auth/PasswordChecklist';
-import { useToast } from '@/context/ToastContext';
+import { useToast } from '@/context/useToast';
 import { validatePassword, validateConfirmPassword } from '@/utils/validators';
 import { authService } from '@/services/authService';
 

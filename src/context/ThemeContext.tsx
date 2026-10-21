@@ -1,14 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-
-type Theme = 'light' | 'dark';
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-  isDark: boolean;
-}
-
-const ThemeContext = createContext<ThemeContextType | null>(null);
+import React, { useState, useEffect, useCallback } from 'react';
+import { ThemeContext, type Theme } from './useTheme';
 
 const STORAGE_KEY = 'yenkogh_theme';
 
@@ -56,10 +47,4 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme(): ThemeContextType {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
-  return ctx;
 }

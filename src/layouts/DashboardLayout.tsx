@@ -17,7 +17,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/useAuth';
 import { Avatar } from '@/components/ui/Avatar';
 import { ToastContainer } from '@/components/ui/Toast';
 

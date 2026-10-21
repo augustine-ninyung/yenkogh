@@ -13,8 +13,8 @@ import {
 } from 'lucide-react';
 import { useEvent } from '@/hooks/useEvents';
 import { getFestivalForEvent } from '@/data/festivals';
-import { useFavorites } from '@/context/FavoritesContext';
-import { useToast } from '@/context/ToastContext';
+import { useFavorites } from '@/context/useFavorites';
+import { useToast } from '@/context/useToast';
 import { formatDateRange, formatCurrency } from '@/utils/formatters';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, CheckCircle2, XCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { useToast, type ToastData, type ToastVariant } from '@/context/ToastContext';
+import { useToast, type ToastData, type ToastVariant } from '@/context/useToast';
 import { createPortal } from 'react-dom';
 
 // ─── Variant config ───────────────────────────────────────────────────────────

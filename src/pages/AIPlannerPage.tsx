@@ -26,8 +26,8 @@ import { aiPlannerService, MAX_PROMPT_LENGTH, MAX_TRIP_DAYS } from '@/services/a
 import type { PlanResult } from '@/services/aiPlannerService';
 import { tripService } from '@/services/tripService';
 import { budgetService } from '@/services/budgetService';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/context/useAuth';
+import { useToast } from '@/context/useToast';
 import { destinations } from '@/data/destinations';
 import { festivals, getFestivalById } from '@/data/festivals';
 import { regions } from '@/data/regions';

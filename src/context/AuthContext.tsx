@@ -1,17 +1,8 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import type { User, AuthState } from '@/types';
+import React, { useEffect, useState, useCallback } from 'react';
+import type { User } from '@/types';
+import { AuthContext } from './useAuth';
 import { authService } from '@/services/authService';
 import { supabase, isBackendConfigured } from '@/lib/supabase';
-
-interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
-  deleteAccount: () => Promise<void>;
-  updateUser: (user: User) => void;
-}
-
-export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(() => authService.getCurrentUser());
@@ -111,10 +102,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
 }
