@@ -518,3 +518,43 @@ test('the database only accepts a profile photo from the owner\'s own folder', a
     'javascript:alert(1)',
   ]) assert.equal(rule(me).test(bad), false, bad);
 });
+
+// ─── Anonymous traffic counts ─────────────────────────────────────────────────
+
+test('page addresses are reduced to page types, and admin pages are not counted', async () => {
+  const { pageViewPath } = await import('@/utils/pageView');
+  assert.equal(pageViewPath('/'), '/');
+  assert.equal(pageViewPath('/explore/'), '/explore');
+  assert.equal(pageViewPath('/explore/kakum-national-park'), '/explore/:id');
+  assert.equal(pageViewPath('/festivals/homowo'), '/festivals/:id');
+  assert.equal(pageViewPath('/events/chale-wote-2026'), '/events/:id');
+  assert.equal(pageViewPath('/explore/a/b'), '(not found)');
+  assert.equal(pageViewPath('/nothing-here'), '(not found)');
+  assert.equal(pageViewPath('/admin'), null);
+  assert.equal(pageViewPath('/admin/users'), null);
+});
+
+test('referrers keep only the site\'s domain, and screen sizes only a class', async () => {
+  const { referrerSource, deviceClass, prefersNoTracking } = await import('@/utils/pageView');
+  assert.equal(referrerSource('https://www.google.com/search?q=private+words', 'yenkogh.vercel.app'), 'google.com');
+  assert.equal(referrerSource('https://yenkogh.vercel.app/explore', 'yenkogh.vercel.app'), 'direct');
+  assert.equal(referrerSource('', 'yenkogh.vercel.app'), 'direct');
+  assert.equal(referrerSource('not a url', 'yenkogh.vercel.app'), 'direct');
+  assert.equal(referrerSource(`https://${'a'.repeat(70)}.example.com/`, 'yenkogh.vercel.app'), 'other');
+  assert.equal(deviceClass(390), 'mobile');
+  assert.equal(deviceClass(800), 'tablet');
+  assert.equal(deviceClass(1440), 'desktop');
+  assert.equal(prefersNoTracking({ doNotTrack: '1' } as Navigator), true);
+  assert.equal(prefersNoTracking({ globalPrivacyControl: true } as Navigator & { globalPrivacyControl: boolean }), true);
+  assert.equal(prefersNoTracking({ doNotTrack: null } as Navigator), false);
+});
+
+test('the database accepts exactly the page types the site sends', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { PAGE_PATHS } = await import('@/utils/pageView');
+  const sql = readFileSync('supabase/update-2026-10-traffic.sql', 'utf8');
+  const list = sql.match(/p_path = any \(array\[([\s\S]*?)\]\)/);
+  assert.ok(list, 'the allowlist is found in the migration');
+  const accepted = [...list[1].matchAll(/'([^']+)'/g)].map((m) => m[1]).sort();
+  assert.deepEqual(accepted, [...PAGE_PATHS, '(not found)'].sort());
+});

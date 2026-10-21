@@ -30,6 +30,7 @@ Planning a trip in Ghana usually means jumping between many websites for attract
 ### Administrators
 
 - Dashboard with content, usage and feedback statistics
+- Traffic page: page views per day, most opened pages, where visits came from and screen sizes, over 7, 30 or 90 days
 - Create, edit, publish and archive destinations, events, festivals, regions and transport options
 - Image upload to storage
 - User management (roles, suspension)
@@ -181,8 +182,9 @@ The project deploys to Vercel as-is ([vercel.json](vercel.json) sets the build, 
 - Row Level Security on every table; administrator actions are checked in the database and recorded in an audit log
 - The AI key stays server-side; planner requests are size-limited and validated
 - Security headers: HSTS, `X-Frame-Options: DENY`, `nosniff`, a strict referrer policy and a permissions policy
-- No analytics, advertising or tracking; fonts are self-hosted; no third-party cookies
-- Minimal data collection: planner runs keep counts, not request text; page views are anonymous daily totals
+- No third-party analytics, advertising or tracking; fonts are self-hosted; no cookies
+- Minimal data collection: planner runs keep counts, not request text
+- Site traffic (admin Traffic page) is kept as anonymous daily totals of page type, referring domain and screen-size class, with no IP address, account or identifier; browsers sending Global Privacy Control or Do Not Track are not counted
 - Users can delete their account and all linked data from their profile
 - Privacy Policy, Terms of Use and Cookie Policy pages at `/privacy`, `/terms` and `/cookies`, written against Ghana's Data Protection Act, 2012 (Act 843)
 

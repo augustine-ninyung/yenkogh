@@ -54,12 +54,15 @@ const sections: LegalSection[] = [
           </li>
         </ul>
         <p>
-          We also count how many times each destination page is opened per day. That count is not linked to you
-          or your device.
+          We also keep anonymous daily totals of how the site is used: which kind of page was opened (for
+          example &ldquo;a destination page&rdquo;), the website a visit came from, and whether the screen is phone,
+          tablet or computer sized. These are added straight into totals with no IP address, account, cookie or
+          identifier, so they cannot be linked to you or your device. If your browser sends Global Privacy
+          Control or Do Not Track, nothing is counted. Totals are kept for about 13 months.
         </p>
         <p>
           We do <strong>not</strong> collect payment details, your location, or your contacts. We do not use
-          advertising, analytics or tracking tools, and we do not sell or rent personal data.
+          advertising, third-party analytics or tracking tools, and we do not sell or rent personal data.
         </p>
       </>
     ),
@@ -162,7 +165,7 @@ const sections: LegalSection[] = [
     title: 'Cookies and browser storage',
     body: (
       <p>
-        We do not use advertising or tracking cookies. The site keeps a few items in your browser so that sign-in,
+        We do not use advertising, analytics or tracking cookies. The site keeps a few items in your browser so that sign-in,
         your theme and your saved places work. The <Link to="/cookies">Cookie Policy</Link> lists them all.
       </p>
     ),

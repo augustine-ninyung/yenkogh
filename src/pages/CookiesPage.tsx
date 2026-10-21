@@ -20,8 +20,8 @@ const sections: LegalSection[] = [
     title: 'Summary',
     body: (
       <p>
-        {SITE.name} sets <strong>no cookies</strong> of its own and uses <strong>no advertising, analytics or tracking</strong>{' '}
-        technology. It stores a few items in your browser that are strictly needed for features you use, such as
+        {SITE.name} sets <strong>no cookies</strong> of its own and uses <strong>no advertising or tracking</strong>{' '}
+        technology. Our anonymous page counts (see the Privacy Policy) set no cookies and store nothing in your browser. It stores a few items in your browser that are strictly needed for features you use, such as
         staying signed in. These do not need consent, so you will not see a cookie banner here.
       </p>
     ),
@@ -82,7 +82,7 @@ const sections: LegalSection[] = [
     title: 'Changes and contact',
     body: (
       <p>
-        If we ever add analytics or anything that needs your consent, we will ask first and update this page.
+        If we ever add anything that needs your consent, we will ask first and update this page.
         Questions? Contact us at <ContactLine />, or see the <Link to="/privacy">Privacy Policy</Link>.
       </p>
     ),

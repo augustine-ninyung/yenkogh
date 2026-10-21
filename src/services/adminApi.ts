@@ -4,7 +4,7 @@ import { authService } from '@/services/authService';
 import { hydrateContent } from '@/services/content/contentStore';
 import { localDb, type LocalFeedbackRow } from '@/services/content/localDb';
 import type { ContentStatus, ContentTable, RowByTable } from '@/services/content/resources';
-import { localDestinationViews } from '@/services/viewService';
+import { localDestinationViews, localPageViews } from '@/services/viewService';
 import { localPlannerRuns } from '@/services/aiPlannerService';
 
 // Everything the admin area asks of the backend, and the feedback form on the
@@ -776,6 +776,56 @@ export const statsApi = {
     }
     requireLocalAdmin();
     return localStats();
+  },
+};
+
+// ─── Traffic ──────────────────────────────────────────────────────────────────
+
+export interface TrafficStats {
+  days: { day: string; views: number; visits: number }[];
+  pages: { path: string; views: number }[];
+  referrers: { source: string; visits: number }[];
+  devices: { device: 'mobile' | 'tablet' | 'desktop'; views: number }[];
+}
+
+/** The same totals as admin_traffic_stats, from this browser's local counts. */
+function localTraffic(days: number): TrafficStats {
+  const span = Math.min(Math.max(days, 1), 400);
+  const dayKeys = Array.from({ length: span }, (_, i) => new Date(Date.now() - (span - 1 - i) * 86400000).toISOString().slice(0, 10));
+  const rows = localPageViews().filter((r) => r.day >= dayKeys[0]);
+  const sum = <K extends string>(key: (r: (typeof rows)[number]) => K | null) => {
+    const totals = new Map<K, number>();
+    for (const r of rows) {
+      const k = key(r);
+      if (k !== null) totals.set(k, (totals.get(k) ?? 0) + r.views);
+    }
+    return [...totals].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])));
+  };
+  return {
+    days: dayKeys.map((day) => {
+      const today = rows.filter((r) => r.day === day);
+      return {
+        day,
+        views: today.reduce((n, r) => n + r.views, 0),
+        visits: today.filter((r) => r.referrer !== 'internal').reduce((n, r) => n + r.views, 0),
+      };
+    }),
+    pages: sum((r) => r.path).map(([path, views]) => ({ path, views })),
+    referrers: sum((r) => (r.referrer === 'internal' ? null : r.referrer)).slice(0, 15).map(([source, visits]) => ({ source, visits })),
+    devices: sum((r) => r.device).map(([device, views]) => ({ device, views })),
+  };
+}
+
+export const trafficApi = {
+  /** Anonymous page-view totals for the last `days` days (7, 30 or 90 on the Traffic page). */
+  async stats(days: number): Promise<TrafficStats> {
+    if (supabase) {
+      const { data, error } = await supabase.rpc('admin_traffic_stats', { p_days: days });
+      if (error) throw toApiError(error);
+      return data as TrafficStats;
+    }
+    requireLocalAdmin();
+    return localTraffic(days);
   },
 };
 

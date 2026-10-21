@@ -46,6 +46,7 @@ const AdminRegionsPage = lazyPage(() => import('@/pages/admin/AdminRegionsPage')
 const AdminFestivalsPage = lazyPage(() => import('@/pages/admin/AdminFestivalsPage'));
 const AdminFeedbackPage = lazyPage(() => import('@/pages/admin/AdminFeedbackPage'));
 const AdminAuditPage = lazyPage(() => import('@/pages/admin/AdminAuditPage'));
+const AdminTrafficPage = lazyPage(() => import('@/pages/admin/AdminTrafficPage'));
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -102,6 +103,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="festivals" element={<AdminFestivalsPage />} />
           <Route path="users" element={<AdminUsersPage />} />
           <Route path="feedback" element={<AdminFeedbackPage />} />
+          <Route path="traffic" element={<AdminTrafficPage />} />
           <Route path="audit" element={<AdminAuditPage />} />
         </Route>
       </Route>

@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   ShieldCheck,
+  TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuth } from '@/context/useAuth';
@@ -37,6 +38,7 @@ const adminNavItems = [
   { to: '/admin/transportation', label: 'Transportation', icon: Truck },
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/feedback', label: 'Feedback', icon: MessageSquareWarning },
+  { to: '/admin/traffic', label: 'Traffic', icon: TrendingUp },
   { to: '/admin/audit', label: 'Audit log', icon: ScrollText },
 ];
 

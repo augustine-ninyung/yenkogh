@@ -11,11 +11,14 @@
 @theme {
   --color-muted: #656b71;
   --color-accent-ink: #806500;
+  /* Single-series chart bars: 3:1 against the chart surface in each theme */
+  --color-chart-mark: #806500;
 }
 
 .dark {
   --color-muted: #9aa0a6;
   --color-accent-ink: #ffd300;
+  --color-chart-mark: #b08c00;
 }
 
 @layer base {
