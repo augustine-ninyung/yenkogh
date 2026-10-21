@@ -115,7 +115,7 @@ e2e/                    Browser tests (Playwright)
 
 ### Browser tests
 
-`npm run test:e2e` builds the app and drives it in Chromium, on a desktop screen and a phone screen. The app runs in demo mode (see `.env.e2e`), so tests use browser storage and never touch the live database, and requests to other sites are blocked. They cover:
+`npm run test:e2e` builds the app and drives it in Chromium, on a desktop screen and a phone screen. The app runs in demo mode (its backend settings are blanked in `playwright.config.ts`), so tests use browser storage and never touch the live database, and requests to other sites are blocked. They cover:
 
 - **Visitors:** finding and opening destinations, legal and credits pages, the not-found page, members-only redirects, the skip link
 - **Accounts:** sign-up (including the consent requirement), wrong passwords, adding and removing a profile photo, refusing non-photo files, deleting an account
