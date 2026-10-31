@@ -17,6 +17,7 @@ import {
   LogOut,
   Menu,
   X,
+  BadgeCheck,
   ShieldCheck,
   TrendingUp,
 } from 'lucide-react';
@@ -37,6 +38,7 @@ const adminNavItems = [
   { to: '/admin/festivals', label: 'Festivals', icon: CalendarDays },
   { to: '/admin/events', label: 'Events', icon: Calendar },
   { to: '/admin/transportation', label: 'Transportation', icon: Truck },
+  { to: '/admin/guides', label: 'Tour guides', icon: BadgeCheck },
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/feedback', label: 'Feedback', icon: MessageSquareWarning },
   { to: '/admin/traffic', label: 'Traffic', icon: TrendingUp },
@@ -244,7 +246,8 @@ export const AdminLayout: React.FC = () => {
                   </p>
                   <p className="text-xs text-muted capitalize">{user.role}</p>
                 </div>
-                <Avatar src={user.avatar} name={user.name} size="sm" />
+                {/* The slide-out menu shows the account on phones, where this would not fit */}
+                <Avatar src={user.avatar} name={user.name} size="sm" className="hidden sm:flex" />
               </>
             )}
           </div>

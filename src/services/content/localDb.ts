@@ -27,6 +27,8 @@ const SEED: { [T in ContentTable]: RowByTable[T][] } = {
   events: events.map((e, i) => eventToRow(e, i, regions)),
   festivals: festivals.map((f, i) => festivalToRow(f, i, regions)),
   transport_options: transportation.map((t, i) => transportToRow(t, i)),
+  // Guides are real people, so none ship with the app: administrators add them
+  tour_guides: [],
 };
 
 const tableKey = (table: ContentTable) => `yenkogh_db_${table}`;

@@ -22,6 +22,7 @@ const navLinks = [
   { to: '/explore', label: 'Explore' },
   { to: '/events', label: 'Events' },
   { to: '/transportation', label: 'Transportation' },
+  { to: '/guides', label: 'Tour Guides' },
   { to: '/planner', label: 'Trip Planner' },
   { to: '/budget', label: 'Budget Planner' },
 ];
@@ -88,7 +89,7 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+            <nav className="hidden lg:flex items-center gap-1 lg:gap-2">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.to}
@@ -205,7 +206,7 @@ export const Navbar: React.FC = () => {
               <button
                 onClick={() => setMobileDrawerOpen(true)}
                 className={cn(
-                  'md:hidden p-2 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2',
+                  'lg:hidden p-2 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFD300] focus-visible:ring-offset-2',
                   (!isHome || isScrolled)
                     ? 'text-[#262B32] dark:text-white hover:bg-gray-100 dark:hover:bg-white/10'
                     : 'text-white hover:bg-white/10'

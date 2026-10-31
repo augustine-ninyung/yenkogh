@@ -7,6 +7,7 @@ import {
   Calendar,
   Bus,
   Route,
+  UserRound,
   Wallet,
   LayoutDashboard,
   User,
@@ -29,6 +30,7 @@ const navLinks = [
   { to: '/explore', label: 'Explore Destinations', icon: Compass },
   { to: '/events', label: 'Events & Festivals', icon: Calendar },
   { to: '/transportation', label: 'Transportation Guide', icon: Bus },
+  { to: '/guides', label: 'Tour Guides', icon: UserRound },
   { to: '/planner', label: 'Trip Planner', icon: Route },
   { to: '/budget', label: 'Budget Planner', icon: Wallet },
 ];
@@ -45,7 +47,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 md:hidden">
+    <div className="fixed inset-0 z-50 lg:hidden">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"

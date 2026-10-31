@@ -135,6 +135,20 @@ export interface TransportRoute {
   notes?: string;
 }
 
+/** A licensed tour guide listed on the site. Only verified guides are public. */
+export interface TourGuide {
+  id: string;
+  name: string;
+  region: string;
+  bio: string;
+  licenceNumber: string;
+  verifiedOn: string;
+  languages: string[];
+  specialties: string[];
+  phone?: string;
+  email?: string;
+}
+
 export interface Transportation {
   id: string;
   type: TransportType;

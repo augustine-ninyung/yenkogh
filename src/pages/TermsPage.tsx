@@ -51,6 +51,18 @@ const sections: LegalSection[] = [
     ),
   },
   {
+    id: 'guides',
+    title: 'Tour guides',
+    body: (
+      <p>
+        Guides on the site are independent and are not employed by {SITE.name}. Before listing a guide we check their
+        licence and ask for their agreement, but we do not supervise their work or guarantee it. You arrange dates,
+        prices and payment directly with the guide, and any agreement is between you and them. Please check a guide's
+        licence is still current before you travel.
+      </p>
+    ),
+  },
+  {
     id: 'accounts',
     title: 'Your account',
     body: (

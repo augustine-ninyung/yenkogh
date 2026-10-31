@@ -20,6 +20,7 @@ const EventsPage = lazyPage(() => import('@/pages/EventsPage'));
 const EventDetailPage = lazyPage(() => import('@/pages/EventDetailPage'));
 const FestivalDetailPage = lazyPage(() => import('@/pages/FestivalDetailPage'));
 const TransportationPage = lazyPage(() => import('@/pages/TransportationPage'));
+const GuidesPage = lazyPage(() => import('@/pages/GuidesPage'));
 const AIPlannerPage = lazyPage(() => import('@/pages/AIPlannerPage'));
 const BudgetPlannerPage = lazyPage(() => import('@/pages/BudgetPlannerPage'));
 const LoginPage = lazyPage(() => import('@/pages/LoginPage'));
@@ -47,6 +48,7 @@ const AdminFestivalsPage = lazyPage(() => import('@/pages/admin/AdminFestivalsPa
 const AdminFeedbackPage = lazyPage(() => import('@/pages/admin/AdminFeedbackPage'));
 const AdminAuditPage = lazyPage(() => import('@/pages/admin/AdminAuditPage'));
 const AdminTrafficPage = lazyPage(() => import('@/pages/admin/AdminTrafficPage'));
+const AdminGuidesPage = lazyPage(() => import('@/pages/admin/AdminGuidesPage'));
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -60,6 +62,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="events/:id" element={<EventDetailPage />} />
         <Route path="festivals" element={<Navigate to="/events?view=festivals" replace />} />
         <Route path="festivals/:id" element={<FestivalDetailPage />} />
+        <Route path="guides" element={<GuidesPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
@@ -103,6 +106,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="festivals" element={<AdminFestivalsPage />} />
           <Route path="users" element={<AdminUsersPage />} />
           <Route path="feedback" element={<AdminFeedbackPage />} />
+          <Route path="guides" element={<AdminGuidesPage />} />
           <Route path="traffic" element={<AdminTrafficPage />} />
           <Route path="audit" element={<AdminAuditPage />} />
         </Route>

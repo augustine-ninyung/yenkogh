@@ -7,6 +7,7 @@ const PASSWORD_RULES: { label: string; test: (p: string) => boolean }[] = [
   { label: '8 or more characters', test: (p) => p.length >= 8 },
   { label: 'A letter', test: (p) => /[a-zA-Z]/.test(p) },
   { label: 'A number', test: (p) => /[0-9]/.test(p) },
+  { label: 'A symbol', test: (p) => /[^a-zA-Z0-9]/.test(p) },
 ];
 
 /** The password rules, each ticking green as the password being typed meets it. */

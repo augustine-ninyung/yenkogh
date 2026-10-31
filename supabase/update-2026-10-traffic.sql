@@ -40,7 +40,7 @@ declare
 begin
   if p_path is null or not (p_path = any (array[
     '/', '/explore', '/explore/:id', '/events', '/events/:id', '/festivals/:id',
-    '/transportation', '/planner', '/budget', '/login', '/register',
+    '/transportation', '/guides', '/planner', '/budget', '/login', '/register',
     '/forgot-password', '/reset-password', '/privacy', '/terms', '/cookies',
     '/credits', '/dashboard', '/dashboard/trips', '/dashboard/saved',
     '/dashboard/budget', '/dashboard/profile', '/dashboard/settings', '/profile',

@@ -558,3 +558,42 @@ test('the database accepts exactly the page types the site sends', async () => {
   const accepted = [...list[1].matchAll(/'([^']+)'/g)].map((m) => m[1]).sort();
   assert.deepEqual(accepted, [...PAGE_PATHS, '(not found)'].sort());
 });
+
+// ─── Passwords, tour guides and contact links ─────────────────────────────────
+
+test('passwords need a letter, a number and a symbol', async () => {
+  const { validatePassword } = await import('@/utils/validators');
+  assert.match(validatePassword('short1!') ?? '', /8 characters/);
+  assert.match(validatePassword('12345678!') ?? '', /letter/);
+  assert.match(validatePassword('password!') ?? '', /number/);
+  assert.match(validatePassword('password1') ?? '', /symbol/);
+  assert.equal(validatePassword('Str0ng!pass'), null);
+});
+
+test('only phone numbers and email addresses become contact links', async () => {
+  const { telLink, mailLink } = await import('@/utils/contactLinks');
+  assert.equal(telLink('+233 24 000 0000'), 'tel:+233240000000');
+  assert.equal(telLink('javascript:alert(1)'), undefined);
+  assert.equal(telLink('12'), undefined);
+  assert.equal(mailLink('guide@example.com'), 'mailto:guide@example.com');
+  assert.equal(mailLink('javascript:alert(1)'), undefined);
+  assert.equal(mailLink('a@b.com?bcc=everyone@example.com'), undefined);
+});
+
+test('a guide cannot be public until verified and agreed, in the app and in the database', async () => {
+  const { guidePublishProblem } = await import('@/services/content/resources');
+  const ready = { status: 'published' as const, verified: true, verified_on: '2026-10-31', consent_confirmed: true, licence_number: 'GTA-1' };
+  assert.equal(guidePublishProblem(ready), null);
+  assert.ok(guidePublishProblem({ ...ready, verified: false }));
+  assert.ok(guidePublishProblem({ ...ready, verified_on: null }));
+  assert.ok(guidePublishProblem({ ...ready, licence_number: ' ' }));
+  assert.ok(guidePublishProblem({ ...ready, consent_confirmed: false }));
+  assert.equal(guidePublishProblem({ ...ready, status: 'draft', verified: false }), null);
+
+  const { readFileSync } = await import('node:fs');
+  for (const file of ['supabase/admin.sql', 'supabase/update-2026-10-guides.sql']) {
+    const sql = readFileSync(file, 'utf8');
+    assert.match(sql, /constraint tour_guides_publish_check check \(\s*status <> 'published'\s*or \(verified and verified_on is not null and btrim\(licence_number\) <> '' and consent_confirmed\)/);
+    assert.match(sql, /revoke delete on public\.tour_guides from anon, authenticated/);
+  }
+});

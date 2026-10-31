@@ -23,6 +23,7 @@ const PAGE_NAMES: Record<string, string> = {
   '/events/:id': 'An event page',
   '/festivals/:id': 'A festival page',
   '/transportation': 'Getting around',
+  '/guides': 'Tour guides',
   '/planner': 'Trip planner',
   '/budget': 'Budget',
   '/login': 'Sign in',

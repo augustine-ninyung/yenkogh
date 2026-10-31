@@ -20,6 +20,7 @@ Planning a trip in Ghana usually means jumping between many websites for attract
 - Destination discovery with search, filters by region and type, and detail pages
 - Festival and event listings, including a catalogue of over 100 traditional festivals with cited sources
 - Transportation guide: trotro, STC/VIP buses, ride-hailing, domestic flights and ferries, with a route search
+- Tour guide directory: licensed guides checked by administrators, searchable by name, language, specialty and region
 - Budget planner with spending categories and charts
 - AI trip planner: describe a trip in plain words or use the form, and get a day-by-day itinerary
 - Save destinations and events, save trips, download itineraries as PDF
@@ -30,6 +31,7 @@ Planning a trip in Ghana usually means jumping between many websites for attract
 ### Administrators
 
 - Dashboard with content, usage and feedback statistics
+- Add and verify tour guides; the database refuses to publish a guide who is unverified or has not agreed to be listed
 - Traffic page: page views per day, most opened pages, where visits came from and screen sizes, over 7, 30 or 90 days
 - Create, edit, publish and archive destinations, events, festivals, regions and transport options
 - Image upload to storage

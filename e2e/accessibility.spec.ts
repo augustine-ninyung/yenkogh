@@ -5,7 +5,7 @@ import { test, expect, DEMO, signIn } from './fixtures';
 // These catch a large share of problems (contrast, names, labels, structure),
 // though not everything: keyboard and screen-reader checks by hand still matter.
 
-const PUBLIC_PAGES = ['/', '/explore', '/explore/kakum-national-park', '/events', '/login', '/register', '/privacy', '/credits'];
+const PUBLIC_PAGES = ['/', '/explore', '/explore/kakum-national-park', '/events', '/guides', '/login', '/register', '/privacy', '/credits'];
 const MEMBER_PAGES = ['/dashboard', '/profile', '/planner', '/budget', '/transportation'];
 
 async function audit(page: import('@playwright/test').Page) {

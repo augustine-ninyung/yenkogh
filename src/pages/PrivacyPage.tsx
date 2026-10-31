@@ -54,6 +54,12 @@ const sections: LegalSection[] = [
           </li>
         </ul>
         <p>
+          <strong>Tour guides:</strong> for guides listed on the site we keep their name, region, languages,
+          specialties, licence number and the contact details they agree to publish, plus when we checked their
+          licence. We list a guide only with their agreement, and they can ask us to change or remove the listing at
+          any time. The licence number and contact details are visible to everyone who opens the Tour guides page.
+        </p>
+        <p>
           We also keep anonymous daily totals of how the site is used: which kind of page was opened (for
           example &ldquo;a destination page&rdquo;), the website a visit came from, and whether the screen is phone,
           tablet or computer sized. These are added straight into totals with no IP address, account, cookie or

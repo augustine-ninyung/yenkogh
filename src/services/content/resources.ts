@@ -1,4 +1,4 @@
-import type { Destination, Event, Festival, Region, Transportation } from '@/types';
+import type { Destination, Event, Festival, Region, TourGuide, Transportation } from '@/types';
 
 // The content tables and how their rows map to the objects the site renders.
 //
@@ -6,7 +6,7 @@ import type { Destination, Event, Festival, Region, Transportation } from '@/typ
 // the rest of the page content in a `details` JSON column. This module is pure
 // (no network, no browser APIs) so the seed script can share it.
 
-export type ContentTable = 'regions' | 'destinations' | 'events' | 'festivals' | 'transport_options';
+export type ContentTable = 'regions' | 'destinations' | 'events' | 'festivals' | 'transport_options' | 'tour_guides';
 
 export type ContentStatus = 'draft' | 'published' | 'archived';
 
@@ -75,7 +75,15 @@ export interface TransportRow extends PublishableRow {
   type: Transportation['type'];
 }
 
-export type ContentRow = RegionRow | DestinationRow | EventRow | FestivalRow | TransportRow;
+export interface TourGuideRow extends PublishableRow {
+  region_id: string;
+  licence_number: string;
+  verified: boolean;
+  verified_on: string | null;
+  consent_confirmed: boolean;
+}
+
+export type ContentRow = RegionRow | DestinationRow | EventRow | FestivalRow | TransportRow | TourGuideRow;
 
 export interface RowByTable {
   regions: RegionRow;
@@ -83,6 +91,7 @@ export interface RowByTable {
   events: EventRow;
   festivals: FestivalRow;
   transport_options: TransportRow;
+  tour_guides: TourGuideRow;
 }
 
 // ─── Entity → row (used to seed the database and the local fallback) ──────────
@@ -233,6 +242,35 @@ export const rowToRegion = (row: RegionRow, destinationCount: number): Region =>
   color: row.color,
   destinationCount,
 });
+
+/**
+ * Why a guide cannot be public, or null when they can. The same rule is a check
+ * constraint on the table, which is what actually enforces it.
+ */
+export const guidePublishProblem = (row: Pick<TourGuideRow, 'status' | 'verified' | 'verified_on' | 'consent_confirmed' | 'licence_number'>): string | null => {
+  if (row.status !== 'published') return null;
+  if (!row.verified || !row.verified_on || !row.licence_number.trim()) {
+    return 'Record the licence number, tick Verified and give the date checked before publishing this guide.';
+  }
+  if (!row.consent_confirmed) return 'Confirm the guide has agreed to be listed before publishing them.';
+  return null;
+};
+
+export const rowToTourGuide = (row: TourGuideRow, regionName: string): TourGuide => {
+  const d = row.details ?? {};
+  return {
+    id: row.id,
+    name: row.name,
+    region: regionName,
+    bio: row.description,
+    licenceNumber: row.licence_number,
+    verifiedOn: row.verified_on ?? '',
+    languages: list<string>(d.languages),
+    specialties: list<string>(d.specialties),
+    phone: optionalText(d.phone),
+    email: optionalText(d.email),
+  };
+};
 
 type RegionLookup = Pick<RegionRow, 'id' | 'name' | 'code'>[];
 const regionOf = (regions: RegionLookup, id: string) =>

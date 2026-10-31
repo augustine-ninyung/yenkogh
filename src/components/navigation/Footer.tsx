@@ -43,6 +43,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/guides" className="hover:text-[#090C11] dark:hover:text-white hover:underline transition-colors">
+                  Tour Guides
+                </Link>
+              </li>
+              <li>
                 <Link to="/explore?type=historical" className="hover:text-[#090C11] dark:hover:text-white hover:underline transition-colors">
                   Heritage Castles
                 </Link>

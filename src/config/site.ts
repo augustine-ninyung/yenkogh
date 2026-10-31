@@ -17,5 +17,5 @@ export const SITE = {
   /** Data Protection Commission registration number, once registered */
   dpcRegistration: '',
   /** Date the legal pages were last changed (YYYY-MM-DD) */
-  legalUpdated: '2026-10-21',
+  legalUpdated: '2026-10-31',
 } as const;

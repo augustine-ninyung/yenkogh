@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { authService } from '@/services/authService';
 import { hydrateContent } from '@/services/content/contentStore';
 import { localDb, type LocalFeedbackRow } from '@/services/content/localDb';
-import type { ContentStatus, ContentTable, RowByTable } from '@/services/content/resources';
+import { guidePublishProblem, type ContentStatus, type ContentTable, type RowByTable, type TourGuideRow } from '@/services/content/resources';
 import { localDestinationViews, localPageViews } from '@/services/viewService';
 import { localPlannerRuns } from '@/services/aiPlannerService';
 
@@ -46,6 +46,10 @@ function toApiError(error: BackendError): ApiError {
     case '23503':
       return new ApiError('invalid', 'That refers to a record that does not exist.', 'region_id');
     case '23514':
+      if (message.includes('tour_guides_publish_check')) {
+        return new ApiError('invalid', 'A guide can only be public once their licence is recorded and verified, and they have agreed to be listed.');
+      }
+      return new ApiError('invalid', 'One of the values is not allowed. Check the form and try again.');
     case '22023':
     case '22P02':
     case '23502':
@@ -233,6 +237,11 @@ export const contentApi = {
       throw new ApiError('invalid', 'That region does not exist.', 'region_id');
     }
 
+    if (table === 'tour_guides') {
+      const problem = guidePublishProblem(row as unknown as TourGuideRow);
+      if (problem) throw new ApiError('invalid', problem);
+    }
+
     const now = new Date().toISOString();
     const created = {
       position: 1000,
@@ -273,6 +282,10 @@ export const contentApi = {
     if (table !== 'regions') {
       const wasArchived = (before as StatusRow).status === 'archived';
       after.archived_at = after.status === 'archived' ? (wasArchived ? (before as { archived_at: string | null }).archived_at : now) : null;
+    }
+    if (table === 'tour_guides') {
+      const problem = guidePublishProblem(after as unknown as TourGuideRow);
+      if (problem) throw new ApiError('invalid', problem);
     }
     localDb.write(table, rows.map((r) => (r.id === id ? after : r)));
     localDb.addAudit({
